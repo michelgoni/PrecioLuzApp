@@ -20,6 +20,8 @@
 - Si la `Pull Request` contiene código, el CI mínimo en `GitHub Actions` debe incluir al menos `build` y ejecución de tests, y ambos deben estar en verde antes del merge.
 - Si la `Pull Request` es solo documental, no requiere `build` Xcode, pero sí debe pasar cualquier check documental configurado.
 - Si todavía no existe workflow de CI en `GitHub Actions`, la feature no debe considerarse lista para merge; esa ausencia debe quedar señalada explícitamente como bloqueo de integración.
+- Cada feature o hito debe registrarse en el backlog del proyecto en `https://github.com/users/michelgoni/projects/3/views/1?system_template=kanban`.
+- Antes de aprobar una `Pull Request`, debe existir en ese backlog una tarjeta o item que identifique y enlace esa `Pull Request`.
 
 ## Límites de alcance
 - No introducir backend propio en el alcance base.

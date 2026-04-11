@@ -74,6 +74,8 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Si la `Pull Request` contiene código, el CI mínimo en `GitHub Actions` debe ejecutar al menos `build` y tests, y ambos deben estar en verde antes del merge.
 - Si la `Pull Request` es solo documental, no exige `build` Xcode, pero sí debe superar los checks documentales o de formato que existan.
 - Si el workflow de CI todavía no existe, dejar constancia explícita de esa limitación y tratar la integración en `main` como bloqueada.
+- Cada feature o hito debe registrarse como item del backlog en el GitHub Project del proyecto.
+- Antes de aprobar una `Pull Request`, el backlog debe contener una tarjeta o item que identifique esa `Pull Request`.
 
 ## Higiene de cambios
 - No renombrar archivos, mover directorios o reorganizar estructura sin necesidad directa.
