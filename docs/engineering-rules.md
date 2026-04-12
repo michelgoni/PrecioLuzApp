@@ -24,6 +24,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Antes de implementar, revisar `AGENTS.md` y los documentos de `docs/` que afecten a la tarea.
 - Si la tarea es de producto o comportamiento, revisar `docs/product-spec.md`.
 - Si la tarea afecta arquitectura, estado, dependencias o persistencia, revisar `docs/ios-architecture.md`.
+- La estructura por carpetas y la responsabilidad de cada área se toman de `docs/ios-architecture.md` y no deben reorganizarse sin necesidad directa.
 - Si la tarea afecta UI, navegación o estética, revisar `docs/ui-direction.md`.
 - Si la tarea es ambigua en ejecución, usar `docs/codex-project-prompt.md` como apoyo, nunca como sustituto del marco principal.
 
@@ -31,26 +32,26 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - No introducir dependencias nuevas sin justificarlo de forma explícita.
 - Antes de añadir una dependencia, comprobar si el stack aprobado ya cubre el caso.
 - Si una dependencia nueva parece necesaria, explicar:
-  - por qué no basta con Apple frameworks o dependencias ya aprobadas,
-  - qué problema concreto resuelve,
-  - qué coste de mantenimiento introduce.
+  - por qué no basta con Apple frameworks o dependencias ya aprobadas
+  - qué problema concreto resuelve
+  - qué coste de mantenimiento introduce
 - No sustituir `TCA` ni `sqlite-data` por alternativas sin petición explícita.
 
 ## Cambios en código
 - Mantener la lógica de negocio fuera de la vista.
 - Todo el código debe escribirse en inglés:
-  - nombres de tipos,
-  - clases,
-  - structs,
-  - enums,
-  - protocolos,
-  - propiedades,
-  - métodos,
-  - reducers, states y actions.
+  - nombres de tipos
+  - clases
+  - structs
+  - enums
+  - protocolos
+  - propiedades
+  - métodos
+  - reducers, states y actions
 - Los textos visibles para usuario pueden estar en español; los identificadores de código no.
 - En features TCA:
-  - introducir cambios primero en `State`, `Action`, `Reducer` y dependencias,
-  - después ajustar la vista y el wiring mínimo necesario.
+  - introducir cambios primero en `State`, `Action`, `Reducer` y dependencias
+  - después ajustar la vista y el wiring mínimo necesario
 - Preferir `async/await` para efectos y clientes.
 - Evitar callbacks salvo integración imprescindible.
 - Evitar `UIKit` salvo integración necesaria y aislada.
@@ -58,14 +59,14 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 
 ## Validación mínima obligatoria
 - Tras cambios de documentación:
-  - revisar consistencia terminológica,
-  - verificar enlaces o referencias internas,
-  - confirmar que no se contradice `AGENTS.md`.
+  - revisar consistencia terminológica
+  - verificar enlaces o referencias internas
+  - confirmar que no se contradice `AGENTS.md`
 - Tras cambios de código sin impacto visual:
-  - ejecutar la validación mínima disponible, preferiblemente compilación o tests del área afectada.
+  - ejecutar la validación mínima disponible, preferiblemente compilación o tests del área afectada
 - Tras cambios de UI, navegación o comportamiento visible:
-  - si existe proyecto Xcode, validar con `build` y simulador mediante `XcodeBuildMCP`,
-  - si aplica, inspeccionar UI y recoger screenshot o logs.
+  - si existe proyecto Xcode, validar con `build` y simulador mediante `XcodeBuildMCP`
+  - si aplica, inspeccionar UI y recoger screenshot o logs
 - Si no existe proyecto Xcode o no es posible validar, dejar constancia explícita y no presentar la validación como realizada.
 
 ## Integración y entrega
@@ -85,8 +86,8 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 
 ## Criterio de cierre
 - La tarea no se considera cerrada hasta que:
-  - el entregable pedido existe,
-  - el cambio está alineado con `AGENTS.md`,
-  - se ha ejecutado la validación mínima posible,
-  - se ha dejado claro el estado de integración por `Pull Request` y CI cuando aplique,
-  - cualquier limitación o supuesto queda explicado de forma explícita.
+  - el entregable pedido existe
+  - el cambio está alineado con `AGENTS.md`
+  - se ha ejecutado la validación mínima posible
+  - se ha dejado claro el estado de integración por `Pull Request` y CI cuando aplique
+  - cualquier limitación o supuesto queda explicado de forma explícita
