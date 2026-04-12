@@ -1,10 +1,10 @@
-# AhorraLuzApp ⚡📱
+# PrecioLuzApp ⚡📱
 
 > A native iPhone app to understand electricity prices at a glance, explore daily trends, and get smart local alerts before expensive hours hit.
 
 ## ✨ What is this project?
 
-`AhorraLuzApp` is an iPhone-first app focused on Spanish hourly electricity pricing.
+`PrecioLuzApp` is an iPhone-first app focused on Spanish hourly electricity pricing.
 
 The goal is simple:
 
@@ -64,30 +64,9 @@ The project documentation currently defines this stack:
 - `The Composable Architecture`
 - `sqlite-data`
 
-Key engineering rules already established:
-
-- 📝 all code identifiers must be in English
-- 🚫 no direct merges to `main`
-- 🔀 every feature must go through a Pull Request
-- ✅ code PRs must pass CI (`build` + tests) before merge
-- 📋 every feature or milestone must also be tracked in the project backlog
-
-## 📚 Documentation map
-
-The repository is currently documentation-first.
-
-If you want the full project definition, start here:
-
-- `AGENTS.md` — project governance, boundaries, and priorities
-- `docs/product-spec.md` — functional product contract
-- `docs/ios-architecture.md` — technical structure and TCA direction
-- `docs/engineering-rules.md` — execution rules for implementation work
-- `docs/ui-direction.md` — visual and UX direction
-- `docs/codex-project-prompt.md` — lightweight execution prompt template
-
 ## 🚧 Current status
 
-This repository is at the **foundation stage**.
+The repository is still in the documentation and planning stage.
 
 Right now it contains:
 
@@ -96,6 +75,8 @@ Right now it contains:
 - ✅ architecture decisions
 - ✅ engineering rules
 - ✅ UI direction
+- ✅ implementation roadmap
+- ✅ planned feature-folder responsibilities
 
 Not included yet:
 
@@ -105,21 +86,17 @@ Not included yet:
 - ❌ tests
 - ❌ simulator-validated UI
 
-## 🎯 Next logical milestones
+## 📚 Documentation map
 
-- 1. Create the Xcode project and initial app target
-- 2. Set up TCA root structure
-- 3. Add the first GitHub Actions workflow
-- 4. Implement the `Prices` feature
-- 5. Add persistence and notifications
-- 6. Validate flows on simulator
+If you want the full project definition, start here:
 
-## 💛 Why this project exists
-
-This app is meant to be both:
-
-- a useful product for understanding electricity pricing
-- a well-documented native iOS reference project for building with modern Apple APIs and TCA
+- `AGENTS.md` — project governance, boundaries, and priorities
+- `docs/product-spec.md` — functional product contract
+- `docs/ios-architecture.md` — technical structure and planned folder responsibilities
+- `docs/engineering-rules.md` — execution rules for implementation work
+- `docs/ui-direction.md` — visual and UX direction
+- `docs/implementation-roadmap.md` — step-by-step delivery roadmap
+- `docs/codex-project-prompt.md` — lightweight execution prompt template
 
 ---
 

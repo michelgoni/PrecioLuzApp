@@ -1,7 +1,13 @@
 # iOS Architecture
 
 ## Resumen técnico
-La app debe construirse como una base `iPhone-first` en `iOS 26+`, con `SwiftUI` y APIs modernas de Apple. La arquitectura debe favorecer lectura clara, cambios pequeños y validación frecuente en simulador. La gestión de estado y composición debe apoyarse en `The Composable Architecture` (`TCA`) porque este proyecto también sirve como base de aprendizaje de esa arquitectura, aunque el dominio inicial sea pequeño.
+La app se construye como una base `iPhone-first` en `iOS 26+`, con `SwiftUI` y APIs modernas de Apple. La arquitectura favorece lectura clara, cambios pequeños y validación frecuente en simulador. La gestión de estado y composición se apoya en `The Composable Architecture` (`TCA`) para mantener features pequeñas, efectos explícitos y testing desde el arranque.
+
+## Estado actual del repositorio
+- El repositorio sigue en fase documental y de planificación.
+- La estructura de carpetas descrita aquí es una propuesta de implementación acordada, no una materialización existente en el árbol.
+- Todavía no hay proyecto Xcode, código fuente de la app ni CI operativa en el repo.
+- La implementación funcional de producto sigue pendiente por hitos y debe llegar por `Pull Request`.
 
 ## Stack base
 - UI: `SwiftUI`
@@ -24,14 +30,6 @@ La app debe construirse como una base `iPhone-first` en `iOS 26+`, con `SwiftUI`
 - Regla general: Apple-first.
 - Dependencia externa aprobada en el alcance base: `pointfreeco/swift-composable-architecture`.
 - Dependencia externa aprobada en el alcance base: `pointfreeco/sqlite-data`.
-- Motivo de la excepción para `TCA`:
-  - el proyecto se usará también para aprender y practicar esta arquitectura,
-  - aporta una estructura consistente basada en `State`, `Action`, `Reducer` y `Store`,
-  - mejora la composición por features, efectos y testing desde el principio.
-- Motivo de la excepción para `sqlite-data`:
-  - persiste histórico local de `30 días` sin inventar una capa propia de almacenamiento,
-  - encaja bien con un modelo local-first,
-  - permite crecimiento posterior sin comprometer la UI inicial.
 - No introducir nuevas dependencias sin una justificación concreta de producto o mantenimiento.
 
 ## Principios de TCA para este proyecto
@@ -42,112 +40,145 @@ La app debe construirse como una base `iPhone-first` en `iOS 26+`, con `SwiftUI`
 - Los flujos importantes deben poder probarse con `TestStore`.
 - La composición debe hacerse por feature y no por capas globales monolíticas.
 
+## Estructura de proyecto documentada
+
+### `App`
+- Punto de entrada de la app, composición raíz, lifecycle y montaje del `Store` principal.
+- No contiene lógica de negocio específica de features.
+- Esta carpeta no existe todavía; se creará cuando arranque el bootstrap real del proyecto iOS.
+
+### `Features`
+- Contenedor de features verticales del producto.
+- Cada subcarpeta agrupa `State`, `Action`, `Reducer`, `View` y wiring mínimo de una capacidad concreta.
+- La organización es por vertical funcional, no por capas técnicas.
+
+### `Features/AppFeature`
+- Orquestación raíz del `TabView`, selección de tab y scopes hacia features hijas.
+- No debe absorber lógica de dominio específica.
+
+### `Features/PricesFeature`
+- Estado y UI del tab `Precios`: cards de resumen, lista horaria, selección de franja y apertura del flujo de cálculo.
+
+### `Features/CostCalculationFeature`
+- Flujo aislado del modal de cálculo: preset, duración y resultado.
+- Recibe la franja seleccionada desde `PricesFeature`.
+
+### `Features/ChartFeature`
+- Estado y UI del tab `Gráfica`: tramo activo, datos filtrados y estado de inspección del gráfico.
+
+### `Features/SettingsFeature`
+- Estado y UI del tab `Ajustes`: permisos, toggles, umbral y sincronización con preferencias/notificaciones.
+
+### `Domain`
+- Modelos y reglas puras del negocio: `HourlyPrice`, `PriceSummary`, `Daypart`, `AppliancePreset`, `CostCalculation`, `NotificationSettings`.
+- Sin dependencias de UI ni detalles de infraestructura.
+
+### `Clients`
+- Interfaces inyectables y variantes `live`, `test` y `preview` de dependencias externas.
+- Aquí viven `PricingClient`, `PersistenceClient`, `NotificationClient` y `DateClient`.
+
+### `Persistence`
+- Modelado de almacenamiento local con `sqlite-data`, mapeos persistentes, repositorios locales y poda del histórico.
+- No debe contener presentación ni reducers de UI.
+
+### `UIShared`
+- Componentes `SwiftUI` reutilizables, estilo visual, formateadores y utilidades de presentación comunes.
+- Solo reutilización real; evitar meter aquí vistas de feature disfrazadas de genéricas.
+
+### `Resources`
+- Assets, strings y recursos estáticos de la app.
+- Preparado para español inicial y localización futura.
+
+### `Tests`
+- Tests unitarios, de reducers e integración ligera.
+- Estructura paralela por dominio/feature para que cada área pruebe su comportamiento sin ambigüedad.
+- Esta carpeta queda definida a nivel de diseño, pero no debe materializarse hasta que se abra el hito de bootstrap técnico.
+
 ## Organización lógica mínima
 
 ### 1. Datos de precios
 Responsabilidades:
-- Descargar y transformar datos `ESIOS/PVPC`.
-- Persistir el día actual y el histórico de `30 días`.
-- Exponer resúmenes diarios, precios horarios y clasificación relativa.
-
-Entradas:
-- respuesta de red,
-- caché local persistida,
-- fecha actual en zona horaria local.
-
-Salidas:
-- precios por hora,
-- resumen del día,
-- histórico para consultas y futura comparación.
+- descargar y transformar datos `ESIOS/PVPC`
+- persistir el día actual y el histórico de `30 días`
+- exponer resúmenes diarios, precios horarios y clasificación relativa
 
 ### 2. Notificaciones
 Responsabilidades:
-- Solicitar permisos locales.
-- Construir avisos del mínimo, máximo y umbral.
-- Reprogramar avisos al cargar los datos del día.
-
-Restricciones:
-- Solo notificaciones locales.
-- Solo horas futuras del mismo día.
-- Sin `APS`, sin backend, sin sincronización remota.
+- solicitar permisos locales
+- construir avisos del mínimo, máximo y umbral
+- reprogramar avisos al cargar los datos del día
 
 ### 3. Settings
 Responsabilidades:
-- Guardar flags de notificaciones.
-- Guardar el umbral personalizado.
-- Exponer estado legible para la UI.
+- guardar flags de notificaciones
+- guardar el umbral personalizado
+- exponer estado legible para la UI
 
 ### 4. Cálculo de coste
 Responsabilidades:
-- Resolver presets cerrados.
-- Calcular coste estimado desde hora seleccionada y duración.
-- Formatear resultado listo para UI.
+- resolver presets cerrados
+- calcular coste estimado desde hora seleccionada y duración
+- formatear resultado listo para UI
 
 ### 5. Presentación/UI
 Responsabilidades:
-- Tabs principales.
-- Cards de resumen.
-- Lista horaria.
-- Modal de cálculo.
-- Gráfica segmentada por tramos.
-- Pantalla de ajustes.
+- tabs principales
+- cards de resumen
+- lista horaria
+- flujo de cálculo
+- gráfica segmentada por tramos
+- pantalla de ajustes
 
-## Estructura recomendada por features
+## Features raíz recomendadas
 
 ### `AppFeature`
-- Coordina el `TabView` principal.
-- Mantiene el estado de navegación raíz.
-- Hace `scope` a `PricesFeature`, `ChartFeature` y `SettingsFeature`.
+- coordina el `TabView` principal
+- mantiene el estado de navegación raíz
+- hace `scope` a `PricesFeature`, `ChartFeature` y `SettingsFeature`
 
 ### `PricesFeature`
-- Gestiona resumen diario, lista horaria y selección de franja.
-- Presenta el modal de cálculo con estado hijo.
+- gestiona resumen diario, lista horaria y selección de franja
+- presenta el flujo de cálculo con estado hijo
 
 ### `CostCalculationFeature`
-- Gestiona preset elegido, duración y resultado del cálculo.
-- Recibe la hora/precio seleccionados desde `PricesFeature`.
+- gestiona preset elegido, duración y resultado del cálculo
+- recibe la hora/precio seleccionados desde `PricesFeature`
 
 ### `ChartFeature`
-- Gestiona el tramo activo del día y los datos necesarios para la gráfica.
+- gestiona el tramo activo del día y los datos necesarios para la gráfica
 
 ### `SettingsFeature`
-- Gestiona permisos, toggles de notificación y umbral personalizado.
+- gestiona permisos, toggles de notificación y umbral personalizado
 
-### Dependencias de dominio
-- `PricingClient`: obtención y transformación de datos `ESIOS/PVPC`.
-- `PersistenceClient`: lectura y escritura del histórico local mediante `sqlite-data`.
-- `NotificationClient`: autorización y programación de avisos locales.
-- `DateClient` o dependencia equivalente: fecha/hora actual y calendario.
+## Dependencias de dominio
+- `PricingClient`: obtención y transformación de datos `ESIOS/PVPC`
+- `PersistenceClient`: lectura y escritura del histórico local mediante `sqlite-data`
+- `NotificationClient`: autorización y programación de avisos locales
+- `DateClient`: fecha y calendario del sistema
 
 ## Tipos de dominio que deben existir
 
 ### `HourlyPrice`
-- `date`: fecha-hora exacta de la franja.
-- `priceEURPerKWh`: valor en `€/kWh`.
-- `classification`: `cheap | mid | expensive`.
-- `daypart`: `overnight | morning | afternoon | night`.
-- `isCurrentHour`: marca opcional derivada para presentación.
+- `date`: fecha-hora exacta de la franja
+- `priceEURPerKWh`: valor en `€/kWh`
+- `classification`: `cheap | mid | expensive`
+- `daypart`: `overnight | morning | afternoon | night`
+- `isCurrentHour`: marca derivada para presentación
 
 ### `PriceSummary`
-- `current`: precio actual si existe.
-- `average`: media del día.
-- `minimum`: precio mínimo del día.
-- `minimumHour`: hora del mínimo.
-- `maximum`: precio máximo del día.
-- `maximumHour`: hora del máximo.
+- `current`: precio actual si existe
+- `average`: media del día
+- `minimum`: precio mínimo del día
+- `minimumHour`: hora del mínimo
+- `maximum`: precio máximo del día
+- `maximumHour`: hora del máximo
 
 ### `AppliancePreset`
-- `id`
 - `kind`
 - `powerKW`
 - `symbolName`
-- `displayNameKey`
-- `shortDescriptionKey`
-
-Valores base v1:
-- `washer`, `washer`, `2.0`, `washer`, `appliance.washer.title`, `appliance.washer.description`
-- `cooktop`, `cooktop`, `1.8`, `frying.pan`, `appliance.cooktop.title`, `appliance.cooktop.description`
-- `airConditioner`, `airConditioner`, `1.2`, `wind`, `appliance.air_conditioner.title`, `appliance.air_conditioner.description`
+- `displayName`
+- `shortDescription`
 
 ### `CostCalculation`
 - `selectedHour`
@@ -182,42 +213,41 @@ Valores base v1:
 - Mantener la lógica de clasificación, resumen y scheduling fuera de la vista.
 - Centralizar formateadores de moneda, energía y hora para evitar inconsistencias.
 - Preparar los textos para localización, aunque la primera UI salga en español.
-- Usar `@Dependency` para clientes de red, persistencia, calendario y notificaciones.
-- Reservar `@ObservableState` al modelo de estado de TCA en vez de mezclar varios patrones de observación.
+- Usar `@Dependency` o `DependencyValues` para clientes de red, persistencia, calendario y notificaciones.
 
 ## Estrategia de persistencia
-- `sqlite-data` guarda:
-  - precios horarios,
-  - resúmenes diarios materializados o derivables,
-  - metadatos básicos de sincronización local.
-- `UserDefaults` o `AppStorage` guardan:
-  - settings de notificación,
-  - umbral personalizado,
-  - preferencias ligeras de UI si aparecen.
+- `sqlite-data` guardará:
+  - precios horarios
+  - snapshots diarios
+  - metadatos básicos de sincronización local
+- `UserDefaults` o `AppStorage` guardarán:
+  - settings de notificación
+  - umbral personalizado
+  - preferencias ligeras de UI si aparecen
 
 ## Estrategia de pruebas
 - Unit tests para:
-  - clasificación relativa del día,
-  - resumen diario,
-  - asignación de `Daypart`,
-  - cálculo de coste,
-  - construcción de notificaciones,
-  - poda del histórico a `30 días`.
+  - clasificación relativa del día
+  - resumen diario
+  - asignación de `Daypart`
+  - cálculo de coste
+  - construcción de notificaciones
+  - poda del histórico a `30 días`
 - Tests de reducers con `TestStore` para:
-  - carga del día actual,
-  - apertura y cierre del modal de cálculo,
-  - cambio de tramo en la gráfica,
-  - toggles y persistencia de ajustes,
-  - programación de efectos y respuestas de dependencias.
+  - carga del día actual
+  - apertura y cierre del flujo de cálculo
+  - cambio de tramo en la gráfica
+  - toggles y persistencia de ajustes
+  - programación de efectos y respuestas de dependencias
 - Tests de integración para:
-  - parsing y transformación de `ESIOS/PVPC`,
-  - persistencia y lectura de caché.
-- Tests de UI cuando la base del proyecto exista para tabs, modal y pantalla de ajustes.
+  - parsing y transformación de `ESIOS/PVPC`
+  - persistencia y lectura de caché
+- Tests de UI cuando la base del proyecto exista para tabs, cálculo y pantalla de ajustes
 
 ## Fuera de alcance base
-- `APS` remotas.
-- Backend propio.
-- Cuenta de usuario o sincronización en nube.
-- Soporte iPad, macOS, watchOS o widgets en esta primera documentación.
-- Configuración manual de franjas horarias.
-- Cálculo libre sin preset como flujo principal.
+- `APS` remotas
+- backend propio
+- cuenta de usuario o sincronización en nube
+- soporte `iPad`, `macOS`, `watchOS` o widgets en esta primera fase
+- configuración manual de franjas horarias
+- cálculo libre sin preset como flujo principal
