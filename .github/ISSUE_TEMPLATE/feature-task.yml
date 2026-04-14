@@ -1,0 +1,98 @@
+name: Feature Task
+description: Feature task with explicit dependencies
+title: "[Feature] "
+labels:
+  - feature
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Problem statement and business/product objective.
+      placeholder: |
+        Problem or opportunity:
+        Product/business goal:
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Explicitly define what is included and excluded.
+      placeholder: |
+        Includes:
+        - ...
+        Excludes:
+        - ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: definition-of-done
+    attributes:
+      label: Definition of Done
+      description: Concrete completion criteria.
+      placeholder: |
+        - [ ] Deliverable implemented and documented
+        - [ ] Technical validation executed (build/lint/tests/logs/UI when applicable)
+        - [ ] PR opened and linked to this issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-validation
+    attributes:
+      label: Expected Validation
+      description: Commands/checks expected to pass for this task.
+      placeholder: |
+        Build:
+        Lint:
+        Tests:
+        Logs:
+        UI:
+    validations:
+      required: true
+
+  - type: textarea
+    id: depends-on
+    attributes:
+      label: Depends on
+      description: Blocking issues that must be completed first.
+      placeholder: |
+        #123
+        #456
+    validations:
+      required: true
+
+  - type: textarea
+    id: blocks
+    attributes:
+      label: Blocks
+      description: Downstream issues that depend on this issue.
+      placeholder: |
+        #789
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: Verifiable outcomes for this feature.
+      placeholder: |
+        - [ ] Criterion 1
+        - [ ] Criterion 2
+    validations:
+      required: true
+
+  - type: textarea
+    id: links
+    attributes:
+      label: Links
+      description: Related pull requests and docs.
+      placeholder: |
+        PR:
+        Documentation:
+    validations:
+      required: false

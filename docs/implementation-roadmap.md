@@ -3,12 +3,48 @@
 ## Goal
 Convert the documentation-first repository into a production-ready native iPhone app through small, reversible milestones.
 
+## DoD transversal
+- Para hitos con código (`Hito 1` en adelante), el cierre se evalúa con el checklist ejecutable definido en `docs/engineering-rules.md` (compilación, lint, tests, logs y validación visual cuando aplique).
+- `Hito 0` es documental y se valida con su DoD específico.
+
+## Dependencias entre hitos
+- `Hito 0 -> Hito 1`
+- `Hito 1 -> Hito 2`
+- `Hito 2 -> Hito 3`
+- `Hito 3 -> Hito 4`
+- `Hito 3 -> Hito 6`
+- `Hito 3 -> Hito 7`
+- `Hito 4 -> Hito 5`
+- `Hito 4 -> Hito 8`
+- `Hito 5 -> Hito 8`
+- `Hito 6 -> Hito 8`
+- `Hito 7 -> Hito 8`
+
+## Estados de cierre por hito
+- `Done-Local`: entregable implementado y DoD técnico superado en la rama de trabajo.
+- `Done-Integrated`: `Pull Request` mergeada en `main`, CI en verde y todas sus dependencias previas también en `Done-Integrated`.
+
+## Regla de secuencia para trabajo paralelo
+- Un hito no puede marcarse como `Done-Integrated` si su hito previo en la cadena de dependencias no está en `Done-Integrated`.
+- Para evitar huecos de planificación, no cerrar un hito como "final" sin tener el siguiente hito de la cadena creado como `GitHub Issue` (aunque quede en estado `Blocked`).
+- En trabajo con múltiples worktrees, cada `Issue` y cada PR deben declarar de forma explícita su `Depends on` (hito/issue/PR previo) y su `Blocks` o `Unblocks` (hito/issue/PR siguiente) cuando aplique.
+
 ## Milestones
 
 ### Hito 0 — Coherencia del repo
 - unificar naming del producto
 - preparar `.gitignore` para Xcode y SwiftPM
 - documentar la estructura futura del proyecto
+
+#### Definition of Done (DoD)
+- todo artefacto de documentación y repo raíz usa `PrecioLuzApp` como nombre canónico del producto
+- `.gitignore` incluye entradas mínimas para Xcode y SwiftPM
+- existe documentación explícita de la estructura futura del proyecto en `docs/ios-architecture.md`
+
+#### Validación mínima obligatoria
+- ejecutar `rg -n "(AhorraLuz|PrecioLuz)" .` y confirmar que no quedan nombres de producto antiguos fuera de contexto histórico o referencias externas justificadas
+- inspeccionar `.gitignore` y verificar presencia de patrones de Xcode (`DerivedData`, `.xcworkspace/xcuserdata`, `.xcodeproj/xcuserdata`) y SwiftPM (`.build`, `.swiftpm`)
+- revisar `docs/ios-architecture.md` y confirmar que la estructura de carpetas propuesta está descrita y alineada con `AGENTS.md`
 
 ### Hito 1 — Bootstrap técnico
 - crear proyecto Xcode `iPhone`
