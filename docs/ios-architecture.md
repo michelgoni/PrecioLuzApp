@@ -7,6 +7,7 @@ La app se construye como una base `iPhone-first` en `iOS 26+`, con `SwiftUI` y A
 - Existe bootstrap técnico inicial del `Hito 1`:
   - proyecto Xcode `iPhone` generado desde `project.yml` (XcodeGen)
   - shell de tabs `SwiftUI` con placeholders `EmptyView` en `Precios`, `Gráfica` y `Ajustes`
+  - localización base preparada (`es` y `en`) para títulos del shell
   - `TCA` y `sqlite-data` integrados como dependencias base para evolución de features
   - tests base del shell y prueba smoke de `TCA`
   - workflow inicial de `GitHub Actions` con `build` + `test`

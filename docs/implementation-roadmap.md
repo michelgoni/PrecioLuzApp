@@ -52,7 +52,8 @@ Convert the documentation-first repository into a production-ready native iPhone
 - crear shell base con tabs y tests mínimos
   - tabs iniciales: `Precios`, `Gráfica`, `Ajustes`
   - iconografía de tabs con `SF Symbols` (`eurosign.circle`, `chart.xyaxis.line`, `gearshape`)
-  - contenido inicial de cada tab: `EmptyView`
+  - contenido inicial de cada tab: placeholder mínimo
+  - títulos de tabs preparados para localización (`Localizable.strings`)
 - configurar CI inicial de `build` y `test`
 
 ### Hito 2 — Núcleo de dominio y dependencias

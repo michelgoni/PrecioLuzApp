@@ -8,22 +8,22 @@ enum AppTab: Hashable {
   var title: String {
     switch self {
     case .prices:
-      return "Precios"
+      String(localized: "tab.prices.title", defaultValue: "Precios")
     case .chart:
-      return "Gráfica"
+      String(localized: "tab.chart.title", defaultValue: "Gráfica")
     case .settings:
-      return "Ajustes"
+      String(localized: "tab.settings.title", defaultValue: "Ajustes")
     }
   }
 
   var systemImage: String {
     switch self {
     case .prices:
-      return "eurosign.circle"
+      "eurosign.circle"
     case .chart:
-      return "chart.xyaxis.line"
+      "chart.xyaxis.line"
     case .settings:
-      return "gearshape"
+      "gearshape"
     }
   }
 }
