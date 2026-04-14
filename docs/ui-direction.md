@@ -1,5 +1,33 @@
 # UI Direction
 
+## Gate de consenso (Issue #13)
+- Este documento actúa como contrato de diseño para la `Issue #13` (`[Design] Define and approve app visual design baseline`).
+- Las tareas con implementación visual deben tratar este baseline como prerequisito de ejecución.
+- Dependencias actuales de trazabilidad:
+  - `Depends on`: `#4` (Technical Bootstrap)
+  - `Blocks`: `#6`, `#7`, `#8`, `#9`, `#10`
+- Ninguna issue de UI debe cerrarse sin referenciar este contrato y sus decisiones cerradas.
+
+## Entregables mínimos de consenso
+- Tokenización base cerrada:
+  - roles de color (`cheap`, `mid`, `expensive`, fondos y superficies)
+  - jerarquía tipográfica
+  - reglas de spacing, radius y elevación visual
+- Patrones de pantalla cerrados para:
+  - resumen diario
+  - lista horaria
+  - interacción de gráfica
+  - ajustes y notificaciones locales
+- Criterios mínimos de accesibilidad listos para validación en implementación:
+  - contraste suficiente
+  - semántica no dependiente solo de color
+  - touch targets cómodos
+  - formatos `es-ES`
+- Registro de decisiones:
+  - decisiones cerradas
+  - decisiones abiertas
+  - fecha y responsable de cada cierre
+
 ## Intención visual
 La app debe transmitir control, claridad y rapidez de lectura. La referencia es un producto iPhone oscuro, contemporáneo y claramente nativo, con información energética legible de un vistazo.
 
