@@ -72,7 +72,8 @@ The project documentation currently defines this stack:
 - ✅ `TCA` + `sqlite-data` dependencies integrated
 - ✅ base `TabView` shell with `Precios`, `Gráfica`, `Ajustes`
 - ✅ SF Symbols configured for tabs (`eurosign.circle`, `chart.xyaxis.line`, `gearshape`)
-- ✅ placeholder `EmptyView` content for each tab
+- ✅ localized tab titles via `Localizable.strings` (`es` and `en`)
+- ✅ minimal placeholder content for each tab
 - ✅ baseline shell tests + TCA smoke test
 - ✅ GitHub Actions CI workflow for `build` + `test`
 

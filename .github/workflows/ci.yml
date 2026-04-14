@@ -14,19 +14,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Select first available iPhone simulator
-        id: simulator
-        shell: bash
-        run: |
-          set -euo pipefail
-          SIMULATOR_ID="$(xcrun simctl list devices available iOS | sed -n 's/^[[:space:]]*iPhone.* (\([0-9A-F-]\{36\}\)) (.*$/\1/p' | head -n 1)"
-          if [[ -z "$SIMULATOR_ID" ]]; then
-            echo "No available iPhone simulator found"
-            exit 1
-          fi
-          echo "id=$SIMULATOR_ID" >> "$GITHUB_OUTPUT"
-          echo "Using simulator id: $SIMULATOR_ID"
-
       - name: Resolve Swift packages
         run: xcodebuild -resolvePackageDependencies -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp
 
@@ -35,7 +22,7 @@ jobs:
           xcodebuild \
             -project PrecioLuzApp.xcodeproj \
             -scheme PrecioLuzApp \
-            -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.id }}" \
+            -destination "platform=iOS Simulator" \
             build
 
       - name: Test
@@ -43,5 +30,5 @@ jobs:
           xcodebuild \
             -project PrecioLuzApp.xcodeproj \
             -scheme PrecioLuzApp \
-            -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.id }}" \
+            -destination "platform=iOS Simulator" \
             test
