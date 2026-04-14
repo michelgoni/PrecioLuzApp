@@ -63,11 +63,32 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - verificar enlaces o referencias internas
   - confirmar que no se contradice `AGENTS.md`
 - Tras cambios de código sin impacto visual:
-  - ejecutar la validación mínima disponible, preferiblemente compilación o tests del área afectada
+  - ejecutar compilación del target/scheme afectado
+  - ejecutar `SwiftLint` en modo estricto
+  - ejecutar tests automáticos del área afectada (o suite completa si no hay filtrado útil)
 - Tras cambios de UI, navegación o comportamiento visible:
   - si existe proyecto Xcode, validar con `build` y simulador mediante `XcodeBuildMCP`
-  - si aplica, inspeccionar UI y recoger screenshot o logs
+  - arrancar la app y revisar logs de ejecución para detectar errores no visibles
+  - realizar chequeo visual básico del flujo tocado y recoger evidencia mínima (screenshot o logs)
 - Si no existe proyecto Xcode o no es posible validar, dejar constancia explícita y no presentar la validación como realizada.
+
+### Checklist ejecutable (DoD transversal para tareas con código)
+- Compilación:
+  - `xcodebuild -project <Project>.xcodeproj -scheme <Scheme> -destination 'platform=iOS Simulator,name=<Device>' build`
+- Lint:
+  - `swiftlint lint --strict`
+- Tests:
+  - `xcodebuild -project <Project>.xcodeproj -scheme <Scheme> -destination 'platform=iOS Simulator,name=<Device>' test`
+- Logs en ejecución:
+  - `xcrun simctl spawn booted log stream --style compact --level error --predicate 'process == "<AppBinaryName>"'`
+- Evidencia visual mínima (si hay cambio visible):
+  - `xcrun simctl io booted screenshot /tmp/precioluzapp-validation.png`
+
+### Reglas de aplicabilidad del checklist
+- Si el cambio es solo documental, no aplicar compilación/lint/tests/UI; aplicar únicamente validación documental.
+- Si no existe proyecto Xcode todavía, ejecutar lo que sí esté disponible y reportar explícitamente la limitación restante.
+- Si `SwiftLint` no está instalado, tratar la validación como incompleta hasta instalarlo o dejar el bloqueo documentado.
+- En el alcance base actual no existe backend propio; revisión de logs backend no aplica salvo que se añada un servicio en el repo.
 
 ## Integración y entrega
 - No mergear trabajo directamente en `main`.
@@ -75,8 +96,22 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Si la `Pull Request` contiene código, el CI mínimo en `GitHub Actions` debe ejecutar al menos `build` y tests, y ambos deben estar en verde antes del merge.
 - Si la `Pull Request` es solo documental, no exige `build` Xcode, pero sí debe superar los checks documentales o de formato que existan.
 - Si el workflow de CI todavía no existe, dejar constancia explícita de esa limitación y tratar la integración en `main` como bloqueada.
-- Cada feature o hito debe registrarse como item del backlog en el GitHub Project del proyecto.
-- Antes de aprobar una `Pull Request`, el backlog debe contener una tarjeta o item que identifique esa `Pull Request`.
+- Cada tarea debe existir primero como `GitHub Issue` descriptiva.
+- Cada `Pull Request` debe enlazar su `Issue` de origen (`Closes #...` o `Refs #...`).
+- En trabajo paralelo con múltiples `worktrees`, cada `Issue` y cada `Pull Request` deben incluir trazabilidad de dependencias (`Depends on` / `Blocks` o `Unblocks`) para evitar merges fuera de secuencia.
+
+## Flujo de features con GitHub Issues
+- Unidad de planificación: una tarea = un `GitHub Issue`.
+- Unidad de implementación: una feature branch por issue.
+- Convención de rama recomendada: `feature/<issue-id>-<slug-corto>`.
+- Contenido mínimo obligatorio de cada issue:
+  - contexto y objetivo
+  - alcance y fuera de alcance
+  - Definition of Done aplicable
+  - validación esperada
+  - `Depends on` (issues bloqueantes)
+  - `Blocks` o `Unblocks` (issues dependientes)
+- Un issue no puede pasar a cerrado si sus `Depends on` no están cerradas.
 
 ## Higiene de cambios
 - No renombrar archivos, mover directorios o reorganizar estructura sin necesidad directa.
@@ -90,4 +125,6 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - el cambio está alineado con `AGENTS.md`
   - se ha ejecutado la validación mínima posible
   - se ha dejado claro el estado de integración por `Pull Request` y CI cuando aplique
+  - se ha indicado explícitamente su dependencia respecto a hitos/PR previos y siguientes cuando forme parte de una cadena
+  - no se marca como integrada si depende de hitos/PR todavía no integrados
   - cualquier limitación o supuesto queda explicado de forma explícita
