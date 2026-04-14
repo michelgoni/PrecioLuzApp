@@ -93,6 +93,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 ## Integración y entrega
 - No mergear trabajo directamente en `main`.
 - Cada feature debe llegar a `main` a través de una `Pull Request`.
+- El título y la descripción de la `Pull Request` deben estar en inglés.
 - Si la `Pull Request` contiene código, el CI mínimo en `GitHub Actions` debe ejecutar al menos `build` y tests, y ambos deben estar en verde antes del merge.
 - Si la `Pull Request` es solo documental, no exige `build` Xcode, pero sí debe superar los checks documentales o de formato que existan.
 - Si el workflow de CI todavía no existe, dejar constancia explícita de esa limitación y tratar la integración en `main` como bloqueada.

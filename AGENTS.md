@@ -17,6 +17,7 @@
 - Si existe proyecto Xcode, cualquier cambio que afecte UI, navegación o comportamiento visible debe validarse con `build` y simulador mediante `XcodeBuildMCP`.
 - Si todavía no existe proyecto Xcode o no es posible validar, deja constancia explícita de la limitación y no presentes la validación como realizada.
 - Cada feature debe integrarse en `main` a través de una `Pull Request`; no hacer merge directo a `main`.
+- El título y la descripción de cada `Pull Request` deben redactarse en inglés.
 - Si la `Pull Request` contiene código, el CI mínimo en `GitHub Actions` debe incluir al menos `build` y ejecución de tests, y ambos deben estar en verde antes del merge.
 - Si la `Pull Request` es solo documental, no requiere `build` Xcode, pero sí debe pasar cualquier check documental configurado.
 - Si todavía no existe workflow de CI en `GitHub Actions`, la feature no debe considerarse lista para merge; esa ausencia debe quedar señalada explícitamente como bloqueo de integración.
