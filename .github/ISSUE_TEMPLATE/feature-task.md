@@ -1,41 +1,41 @@
 ---
 name: "Feature Task"
-about: "Tarea de feature con dependencias explícitas"
+about: "Feature task with explicit dependencies"
 title: "[Feature] "
 labels: ["feature"]
 assignees: []
 ---
 
-## Contexto
-- Problema u oportunidad:
-- Objetivo de negocio/producto:
+## Context
+- Problem or opportunity:
+- Product/business goal:
 
-## Alcance
-- Incluye:
-- No incluye:
+## Scope
+- Includes:
+- Excludes:
 
 ## Definition of Done
-- [ ] Entregable implementado y documentado
-- [ ] Validación técnica ejecutada (build/lint/tests/logs/UI si aplica)
-- [ ] PR abierta y enlazada a esta issue
+- [ ] Deliverable implemented and documented
+- [ ] Technical validation executed (build/lint/tests/logs/UI when applicable)
+- [ ] PR opened and linked to this issue
 
-## Validación esperada
+## Expected Validation
 - Build:
 - Lint:
 - Tests:
 - Logs:
 - UI:
 
-## Dependencias
+## Dependencies
 - Depends on:
   - #
 - Blocks:
   - #
 
-## Criterios de aceptación
-- [ ] Criterio 1
-- [ ] Criterio 2
+## Acceptance Criteria
+- [ ] Criterion 1
+- [ ] Criterion 2
 
-## Enlaces
+## Links
 - PR:
-- Documentación:
+- Documentation:

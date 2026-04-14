@@ -22,6 +22,7 @@
 - Si la `Pull Request` es solo documental, no requiere `build` Xcode, pero sí debe pasar cualquier check documental configurado.
 - Si todavía no existe workflow de CI en `GitHub Actions`, la feature no debe considerarse lista para merge; esa ausencia debe quedar señalada explícitamente como bloqueo de integración.
 - Cada tarea debe crearse como `GitHub Issue` descriptiva antes de iniciar implementación.
+- El título y la descripción de cada `GitHub Issue` deben redactarse en inglés.
 - Cada `GitHub Issue` debe documentar dependencias explícitas (`Depends on` y `Blocks`) cuando aplique.
 - Cada tarea debe implementarse en una feature branch asociada a su issue.
 - Cada `Pull Request` debe enlazar su `Issue` de origen y respetar sus dependencias declaradas.

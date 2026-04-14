@@ -98,6 +98,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Si la `Pull Request` es solo documental, no exige `build` Xcode, pero sí debe superar los checks documentales o de formato que existan.
 - Si el workflow de CI todavía no existe, dejar constancia explícita de esa limitación y tratar la integración en `main` como bloqueada.
 - Cada tarea debe existir primero como `GitHub Issue` descriptiva.
+- El título y la descripción de cada `GitHub Issue` deben estar en inglés.
 - Cada `Pull Request` debe enlazar su `Issue` de origen (`Closes #...` o `Refs #...`).
 - En trabajo paralelo con múltiples `worktrees`, cada `Issue` y cada `Pull Request` deben incluir trazabilidad de dependencias (`Depends on` / `Blocks` o `Unblocks`) para evitar merges fuera de secuencia.
 
