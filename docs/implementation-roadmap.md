@@ -6,10 +6,12 @@ Convert the documentation-first repository into a production-ready native iPhone
 ## DoD transversal
 - Para hitos con código (`Hito 1` en adelante), el cierre se evalúa con el checklist ejecutable definido en `docs/engineering-rules.md` (compilación, lint, tests, logs y validación visual cuando aplique).
 - `Hito 0` es documental y se valida con su DoD específico.
+- `Hito 1.5` es documental y se valida con su DoD específico.
 
 ## Dependencias entre hitos
 - `Hito 0 -> Hito 1`
-- `Hito 1 -> Hito 2`
+- `Hito 1 -> Hito 1.5`
+- `Hito 1.5 -> Hito 2`
 - `Hito 2 -> Hito 3`
 - `Hito 3 -> Hito 4`
 - `Hito 3 -> Hito 6`
@@ -51,6 +53,21 @@ Convert the documentation-first repository into a production-ready native iPhone
 - añadir `TCA` y `sqlite-data`
 - crear shell base con tabs y tests mínimos
 - configurar CI inicial de `build` y `test`
+
+### Hito 1.5 — Consenso de diseño visual
+- issue objetivo: `#13`
+- cerrar contrato visual de implementación en `docs/ui-direction.md`
+- fijar tokens, semántica y patrones UI mínimos antes de empezar features visuales
+- dejar trazabilidad explícita de dependencias `Depends on` y `Blocks` para issues de UI
+
+#### Definition of Done (DoD)
+- `Issue #13` cerrada con consenso explícito documentado
+- `docs/ui-direction.md` define baseline accionable para ejecución iOS
+- hitos/issues de UI referencian la dependencia de consenso visual
+
+#### Validación mínima obligatoria
+- revisar consistencia con `AGENTS.md`, `docs/product-spec.md` y `docs/ios-architecture.md`
+- verificar que la secuencia de dependencias del roadmap impide saltar directamente de bootstrap a implementación UI
 
 ### Hito 2 — Núcleo de dominio y dependencias
 - modelar tipos base de negocio

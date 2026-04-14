@@ -114,6 +114,8 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - `Depends on` (issues bloqueantes)
   - `Blocks` o `Unblocks` (issues dependientes)
 - Un issue no puede pasar a cerrado si sus `Depends on` no están cerradas.
+- Para tareas de UI, no empezar implementación visual sin cerrar antes el issue de consenso de diseño vigente en el roadmap (`Issue #13`) o su sucesor explícito.
+- Las PR de UI deben incluir una referencia trazable a ese issue de consenso (`Depends on` o `Refs`), además del issue funcional de la tarea.
 
 ## Higiene de cambios
 - No renombrar archivos, mover directorios o reorganizar estructura sin necesidad directa.
