@@ -50,6 +50,9 @@ Convert the documentation-first repository into a production-ready native iPhone
 - crear proyecto Xcode `iPhone`
 - añadir `TCA` y `sqlite-data`
 - crear shell base con tabs y tests mínimos
+  - tabs iniciales: `Precios`, `Gráfica`, `Ajustes`
+  - iconografía de tabs con `SF Symbols` (`eurosign.circle`, `chart.xyaxis.line`, `gearshape`)
+  - contenido inicial de cada tab: `EmptyView`
 - configurar CI inicial de `build` y `test`
 
 ### Hito 2 — Núcleo de dominio y dependencias

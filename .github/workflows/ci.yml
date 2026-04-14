@@ -1,0 +1,47 @@
+name: iOS CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select first available iPhone simulator
+        id: simulator
+        shell: bash
+        run: |
+          set -euo pipefail
+          SIMULATOR_NAME="$(xcrun simctl list devices available | sed -n 's/^[[:space:]]*\([[:alnum:] ].*iPhone.*\) (.*$/\1/p' | head -n 1)"
+          if [[ -z "$SIMULATOR_NAME" ]]; then
+            echo "No available iPhone simulator found"
+            exit 1
+          fi
+          echo "name=$SIMULATOR_NAME" >> "$GITHUB_OUTPUT"
+          echo "Using simulator: $SIMULATOR_NAME"
+
+      - name: Resolve Swift packages
+        run: xcodebuild -resolvePackageDependencies -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp
+
+      - name: Build
+        run: |
+          xcodebuild \
+            -project PrecioLuzApp.xcodeproj \
+            -scheme PrecioLuzApp \
+            -destination "platform=iOS Simulator,name=${{ steps.simulator.outputs.name }}" \
+            build
+
+      - name: Test
+        run: |
+          xcodebuild \
+            -project PrecioLuzApp.xcodeproj \
+            -scheme PrecioLuzApp \
+            -destination "platform=iOS Simulator,name=${{ steps.simulator.outputs.name }}" \
+            test

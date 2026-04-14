@@ -1,0 +1,512 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		32965E2DB2F87CDF4A850149 /* AppFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20AF13249077EB2D15ECE90 /* AppFeatureTests.swift */; };
+		628CD71F5793AFE56AFA1109 /* TCASmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43BF8A9E6F9D897404A6074 /* TCASmokeTests.swift */; };
+		800D4B667AA0009EDF34F4A4 /* SQLiteData in Frameworks */ = {isa = PBXBuildFile; productRef = 4188B8C7C367C21C44A8C549 /* SQLiteData */; };
+		85ABD8BD485CCA4876B101A7 /* SettingsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CBEA5E1ECD0491F94E0DBA /* SettingsFeature.swift */; };
+		9B13DE84E95AAB6D55816805 /* PricesFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A349262256B13A6827F96952 /* PricesFeature.swift */; };
+		C38E3205CBA69E8FEEC1230F /* ChartFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC5C7E5F151FC11C56A3D19 /* ChartFeature.swift */; };
+		CE2C0DE70A00C8DB9F34406B /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = B05968D2E8CFF8E01B748541 /* ComposableArchitecture */; };
+		D4F2BDEAF0E519BD8DCB871B /* PrecioLuzAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA85C7AECFB312B3FB9D051 /* PrecioLuzAppApp.swift */; };
+		E4A687F3008BBA0F8B3C409C /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288DF63F4693A0161011B4A4 /* AppFeature.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		72DB069B628BCA23C0B79553 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3C6A2D67EBB3CA36D5B7363B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 46AA7BEDF322E624DE3D0B75;
+			remoteInfo = PrecioLuzApp;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		07E8C05629B788AE315B0D11 /* PrecioLuzAppTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PrecioLuzAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FC5C7E5F151FC11C56A3D19 /* ChartFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartFeature.swift; sourceTree = "<group>"; };
+		288DF63F4693A0161011B4A4 /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
+		741F0D1CD612C8F05168C6B2 /* PrecioLuzApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PrecioLuzApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		85CBEA5E1ECD0491F94E0DBA /* SettingsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFeature.swift; sourceTree = "<group>"; };
+		9EA85C7AECFB312B3FB9D051 /* PrecioLuzAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrecioLuzAppApp.swift; sourceTree = "<group>"; };
+		A20AF13249077EB2D15ECE90 /* AppFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeatureTests.swift; sourceTree = "<group>"; };
+		A349262256B13A6827F96952 /* PricesFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesFeature.swift; sourceTree = "<group>"; };
+		C43BF8A9E6F9D897404A6074 /* TCASmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCASmokeTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		557C490DCEE95B75D383FFA1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				800D4B667AA0009EDF34F4A4 /* SQLiteData in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D5B29FC16A8D6E7CE1EC77A8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE2C0DE70A00C8DB9F34406B /* ComposableArchitecture in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		145FDD60AB67EA3614CCA713 /* PricesFeature */ = {
+			isa = PBXGroup;
+			children = (
+				A349262256B13A6827F96952 /* PricesFeature.swift */,
+			);
+			path = PricesFeature;
+			sourceTree = "<group>";
+		};
+		1C019852C6CE9F0C775EB817 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				741F0D1CD612C8F05168C6B2 /* PrecioLuzApp.app */,
+				07E8C05629B788AE315B0D11 /* PrecioLuzAppTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		275054B9F4F96A724F4116AA /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				71088751C04036CD9D54835A /* App */,
+				C5FBB96D19C4A3102F3B2C86 /* Features */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		4884844405D5BBEEAAC9A183 = {
+			isa = PBXGroup;
+			children = (
+				275054B9F4F96A724F4116AA /* Sources */,
+				DA6AA6158E4981E3EAB7B4E6 /* Tests */,
+				1C019852C6CE9F0C775EB817 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		66119059AC9CAC55BF93D1D0 /* SettingsFeature */ = {
+			isa = PBXGroup;
+			children = (
+				85CBEA5E1ECD0491F94E0DBA /* SettingsFeature.swift */,
+			);
+			path = SettingsFeature;
+			sourceTree = "<group>";
+		};
+		684053EE052D29F6F64B571B /* ChartFeature */ = {
+			isa = PBXGroup;
+			children = (
+				1FC5C7E5F151FC11C56A3D19 /* ChartFeature.swift */,
+			);
+			path = ChartFeature;
+			sourceTree = "<group>";
+		};
+		71088751C04036CD9D54835A /* App */ = {
+			isa = PBXGroup;
+			children = (
+				9EA85C7AECFB312B3FB9D051 /* PrecioLuzAppApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		C5FBB96D19C4A3102F3B2C86 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				ED1ECC1C6F8A1C31D20423AA /* AppFeature */,
+				684053EE052D29F6F64B571B /* ChartFeature */,
+				145FDD60AB67EA3614CCA713 /* PricesFeature */,
+				66119059AC9CAC55BF93D1D0 /* SettingsFeature */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		DA6AA6158E4981E3EAB7B4E6 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				A20AF13249077EB2D15ECE90 /* AppFeatureTests.swift */,
+				C43BF8A9E6F9D897404A6074 /* TCASmokeTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		ED1ECC1C6F8A1C31D20423AA /* AppFeature */ = {
+			isa = PBXGroup;
+			children = (
+				288DF63F4693A0161011B4A4 /* AppFeature.swift */,
+			);
+			path = AppFeature;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		46AA7BEDF322E624DE3D0B75 /* PrecioLuzApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 96CDDC63FEBE6DA7AE22B029 /* Build configuration list for PBXNativeTarget "PrecioLuzApp" */;
+			buildPhases = (
+				E4CBDD10F852FD4BB575CBBA /* Sources */,
+				557C490DCEE95B75D383FFA1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PrecioLuzApp;
+			packageProductDependencies = (
+				4188B8C7C367C21C44A8C549 /* SQLiteData */,
+			);
+			productName = PrecioLuzApp;
+			productReference = 741F0D1CD612C8F05168C6B2 /* PrecioLuzApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7875C704CB96C4EF901A5325 /* PrecioLuzAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0F3CDBE861B3396C75F0DF5B /* Build configuration list for PBXNativeTarget "PrecioLuzAppTests" */;
+			buildPhases = (
+				EFE359D821683D6F02A5BE33 /* Sources */,
+				D5B29FC16A8D6E7CE1EC77A8 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				920CEEEA5024FA024D236EDF /* PBXTargetDependency */,
+			);
+			name = PrecioLuzAppTests;
+			packageProductDependencies = (
+				B05968D2E8CFF8E01B748541 /* ComposableArchitecture */,
+			);
+			productName = PrecioLuzAppTests;
+			productReference = 07E8C05629B788AE315B0D11 /* PrecioLuzAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3C6A2D67EBB3CA36D5B7363B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 8EB1EA652AF1EAED259FD075 /* Build configuration list for PBXProject "PrecioLuzApp" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 4884844405D5BBEEAAC9A183;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				0FDEA251C6FA6D692292341D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				EC3D920470079938231681F7 /* XCRemoteSwiftPackageReference "sqlite-data" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 1C019852C6CE9F0C775EB817 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				46AA7BEDF322E624DE3D0B75 /* PrecioLuzApp */,
+				7875C704CB96C4EF901A5325 /* PrecioLuzAppTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E4CBDD10F852FD4BB575CBBA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4A687F3008BBA0F8B3C409C /* AppFeature.swift in Sources */,
+				C38E3205CBA69E8FEEC1230F /* ChartFeature.swift in Sources */,
+				D4F2BDEAF0E519BD8DCB871B /* PrecioLuzAppApp.swift in Sources */,
+				9B13DE84E95AAB6D55816805 /* PricesFeature.swift in Sources */,
+				85ABD8BD485CCA4876B101A7 /* SettingsFeature.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EFE359D821683D6F02A5BE33 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				32965E2DB2F87CDF4A850149 /* AppFeatureTests.swift in Sources */,
+				628CD71F5793AFE56AFA1109 /* TCASmokeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		920CEEEA5024FA024D236EDF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 46AA7BEDF322E624DE3D0B75 /* PrecioLuzApp */;
+			targetProxy = 72DB069B628BCA23C0B79553 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		12014D0C2702B20EB2BC8DE2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrecioLuzApp.app/PrecioLuzApp";
+			};
+			name = Debug;
+		};
+		34A90CE9B48E2161416EF1BE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrecioLuzApp.app/PrecioLuzApp";
+			};
+			name = Release;
+		};
+		7A662013F017281E28CAA71B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		A8D0CE691CED97227609137D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.michelgoni.PrecioLuzApp;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		E040439AD367AC0DFCF293B0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		FB06B89154F5636A17941736 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.michelgoni.PrecioLuzApp;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0F3CDBE861B3396C75F0DF5B /* Build configuration list for PBXNativeTarget "PrecioLuzAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				12014D0C2702B20EB2BC8DE2 /* Debug */,
+				34A90CE9B48E2161416EF1BE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8EB1EA652AF1EAED259FD075 /* Build configuration list for PBXProject "PrecioLuzApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E040439AD367AC0DFCF293B0 /* Debug */,
+				7A662013F017281E28CAA71B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		96CDDC63FEBE6DA7AE22B029 /* Build configuration list for PBXNativeTarget "PrecioLuzApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FB06B89154F5636A17941736 /* Debug */,
+				A8D0CE691CED97227609137D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0FDEA251C6FA6D692292341D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.9.3;
+			};
+		};
+		EC3D920470079938231681F7 /* XCRemoteSwiftPackageReference "sqlite-data" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/sqlite-data";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.6.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4188B8C7C367C21C44A8C549 /* SQLiteData */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC3D920470079938231681F7 /* XCRemoteSwiftPackageReference "sqlite-data" */;
+			productName = SQLiteData;
+		};
+		B05968D2E8CFF8E01B748541 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0FDEA251C6FA6D692292341D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 3C6A2D67EBB3CA36D5B7363B /* Project object */;
+}
