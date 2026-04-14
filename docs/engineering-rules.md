@@ -80,7 +80,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Tests:
   - `xcodebuild -project <Project>.xcodeproj -scheme <Scheme> -destination 'platform=iOS Simulator,name=<Device>' test`
 - Logs en ejecución:
-  - `xcrun simctl spawn booted log stream --style compact --level error --predicate 'process == "<AppBinaryName>"'`
+  - `xcrun simctl spawn booted log show --style compact --last 5m --predicate 'process == "<AppBinaryName>" AND messageType == error'`
 - Evidencia visual mínima (si hay cambio visible):
   - `xcrun simctl io booted screenshot /tmp/precioluzapp-validation.png`
 
