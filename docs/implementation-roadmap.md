@@ -4,7 +4,7 @@
 Convert the documentation-first repository into a production-ready native iPhone app through small, reversible milestones.
 
 ## DoD transversal
-- Para hitos con código (`Hito 2` en adelante), el cierre se evalúa con el checklist ejecutable definido en `docs/engineering-rules.md` (compilación, lint, tests, logs y validación visual cuando aplique).
+- Para hitos con código (`Hito 1` en adelante), el cierre se evalúa con el checklist ejecutable definido en `docs/engineering-rules.md` (compilación, lint, tests, logs y validación visual cuando aplique).
 - `Hito 0` es documental y se valida con su DoD específico.
 - `Hito 1.5` es documental y se valida con su DoD específico.
 
