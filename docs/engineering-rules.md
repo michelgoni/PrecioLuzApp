@@ -20,6 +20,18 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Si una tarea exige tocar archivos adyacentes por compilación, wiring o tests, limita el cambio a lo estrictamente necesario.
 - No hacer refactors oportunistas mientras se resuelve otra tarea.
 
+## Guardrail de rama y worktree (obligatorio)
+- Antes de cualquier edición, verificar explícitamente:
+  - rama activa (`git branch --show-current`)
+  - worktree/carpeta activa (`pwd`)
+  - issue/PR objetivo de la tarea
+- Si rama o worktree no coinciden con la feature objetivo:
+  - detener cambios
+  - guardar estado con `git stash -u` si hay modificaciones locales
+  - moverse al worktree/rama correctos y solo entonces continuar
+- No aplicar cambios de una feature en ramas de documentación, soporte o ramas no asociadas al issue activo.
+- Si se detecta desalineación después de haber editado, no continuar implementando hasta dejar trazabilidad clara del estado guardado y retomar desde la rama correcta.
+
 ## Lectura mínima antes de cambiar código
 - Antes de implementar, revisar `AGENTS.md` y los documentos de `docs/` que afecten a la tarea.
 - Si la tarea es de producto o comportamiento, revisar `docs/product-spec.md`.
