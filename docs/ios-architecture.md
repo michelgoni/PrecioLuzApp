@@ -4,10 +4,14 @@
 La app se construye como una base `iPhone-first` en `iOS 26+`, con `SwiftUI` y APIs modernas de Apple. La arquitectura favorece lectura clara, cambios pequeños y validación frecuente en simulador. La gestión de estado y composición se apoya en `The Composable Architecture` (`TCA`) para mantener features pequeñas, efectos explícitos y testing desde el arranque.
 
 ## Estado actual del repositorio
-- El repositorio sigue en fase documental y de planificación.
-- La estructura de carpetas descrita aquí es una propuesta de implementación acordada, no una materialización existente en el árbol.
-- Todavía no hay proyecto Xcode, código fuente de la app ni CI operativa en el repo.
-- La implementación funcional de producto sigue pendiente por hitos y debe llegar por `Pull Request`.
+- Existe bootstrap técnico inicial del `Hito 1`:
+  - proyecto Xcode `iPhone` generado desde `project.yml` (XcodeGen)
+  - shell de tabs `SwiftUI` con placeholders mínimos para `Precios`, `Gráfica` y `Ajustes`
+  - localización base preparada (`es` y `en`) para títulos del shell mediante `Localizable.strings`
+  - `TCA` y `sqlite-data` integrados como dependencias base para evolución de features
+  - tests base del shell y prueba smoke de `TCA`
+  - workflow inicial de `GitHub Actions` con `build` + `test`
+- La implementación funcional de producto sigue pendiente por hitos posteriores y debe llegar por `Pull Request`.
 
 ## Stack base
 - UI: `SwiftUI`
@@ -92,7 +96,7 @@ La app se construye como una base `iPhone-first` en `iOS 26+`, con `SwiftUI` y A
 ### `Tests`
 - Tests unitarios, de reducers e integración ligera.
 - Estructura paralela por dominio/feature para que cada área pruebe su comportamiento sin ambigüedad.
-- Esta carpeta queda definida a nivel de diseño, pero no debe materializarse hasta que se abra el hito de bootstrap técnico.
+- La carpeta ya está materializada con pruebas mínimas de bootstrap y crecerá por feature en hitos siguientes.
 
 ## Organización lógica mínima
 

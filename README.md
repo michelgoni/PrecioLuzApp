@@ -66,25 +66,22 @@ The project documentation currently defines this stack:
 
 ## 🚧 Current status
 
-The repository is still in the documentation and planning stage.
+`Milestone 1` bootstrap is in place:
 
-Right now it contains:
+- ✅ iPhone Xcode project generated via `project.yml` (`XcodeGen`)
+- ✅ `TCA` + `sqlite-data` dependencies integrated
+- ✅ base `TabView` shell with `Precios`, `Gráfica`, `Ajustes`
+- ✅ SF Symbols configured for tabs (`eurosign.circle`, `chart.xyaxis.line`, `gearshape`)
+- ✅ localized tab titles via `Localizable.strings` (`es` and `en`)
+- ✅ minimal placeholder content for each tab
+- ✅ baseline shell tests + TCA smoke test
+- ✅ GitHub Actions CI workflow for `build` + `test`
 
-- ✅ project-level guidance
-- ✅ product scope
-- ✅ architecture decisions
-- ✅ engineering rules
-- ✅ UI direction
-- ✅ implementation roadmap
-- ✅ planned feature-folder responsibilities
+Still pending (next milestones):
 
-Not included yet:
-
-- ❌ Xcode project bootstrap
-- ❌ app implementation
-- ❌ GitHub Actions workflow
-- ❌ tests
-- ❌ simulator-validated UI
+- ⏳ product feature implementation (prices, chart behavior, settings behavior)
+- ⏳ domain and client layers
+- ⏳ persistence and notifications flows
 
 ## 📚 Documentation map
 

@@ -1,0 +1,61 @@
+name: iOS CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Allow Swift macros in CI
+        shell: bash
+        run: |
+          # Some SPM dependencies (e.g. swift-perception, swift-structured-queries) ship Swift macros.
+          # On clean CI machines Xcode may require explicit user approval for these macros.
+          # We skip macro fingerprint validation to keep CI deterministic for trusted OSS deps.
+          defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
+
+      - name: Resolve Swift packages
+        run: xcodebuild -resolvePackageDependencies -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp
+
+      - name: Build
+        run: |
+          xcodebuild \
+            -project PrecioLuzApp.xcodeproj \
+            -scheme PrecioLuzApp \
+            -destination "generic/platform=iOS Simulator" \
+            -skipMacroValidation \
+            build
+
+      - name: Select concrete simulator for tests
+        id: test-destination
+        shell: bash
+        run: |
+          set -euo pipefail
+          TEST_DESTINATION="$(
+            xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -showdestinations 2>/dev/null \
+            | sed -n 's/.*platform:iOS Simulator, arch:[^,]*, id:\([^,]*\), OS:[^,]*, name:iPhone[^}]*}.*/platform=iOS Simulator,id=\1/p' \
+            | head -n 1
+          )"
+          if [[ -z "$TEST_DESTINATION" ]]; then
+            echo "No concrete iPhone simulator destination found for tests"
+            exit 1
+          fi
+          echo "value=$TEST_DESTINATION" >> "$GITHUB_OUTPUT"
+          echo "Using test destination: $TEST_DESTINATION"
+
+      - name: Test
+        run: |
+          xcodebuild \
+            -project PrecioLuzApp.xcodeproj \
+            -scheme PrecioLuzApp \
+            -destination "${{ steps.test-destination.outputs.value }}" \
+            -skipMacroValidation \
+            test

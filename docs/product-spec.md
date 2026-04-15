@@ -21,6 +21,7 @@ La fuente de verdad inicial es `ESIOS/PVPC`. La primera versión trabaja con el 
 - App orientada solo a `iPhone`.
 - Datos del día actual con persistencia de `30 días`.
 - Tres tabs: `Precios`, `Gráfica`, `Ajustes`.
+- Navegación preparada para localización de títulos de tabs mediante `Localizable.strings` (idioma inicial `es`).
 - Notificaciones locales por mínimo, máximo y umbral personalizado.
 - Sin login, sin backend propio, sin notificaciones push remotas.
 

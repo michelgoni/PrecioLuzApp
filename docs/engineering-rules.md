@@ -70,6 +70,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - si existe proyecto Xcode, validar con `build` y simulador mediante `XcodeBuildMCP`
   - arrancar la app y revisar logs de ejecución para detectar errores no visibles
   - realizar chequeo visual básico del flujo tocado y recoger evidencia mínima (screenshot o logs)
+  - guardar al menos un screenshot por feature tocada dentro de `docs/` y referenciar su ruta en el resumen final de la tarea/PR
 - Si no existe proyecto Xcode o no es posible validar, dejar constancia explícita y no presentar la validación como realizada.
 
 ### Checklist ejecutable (DoD transversal para tareas con código)
@@ -83,6 +84,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - `xcrun simctl spawn booted log show --style compact --last 5m --predicate 'process == "<AppBinaryName>" AND messageType == error'`
 - Evidencia visual mínima (si hay cambio visible):
   - `xcrun simctl io booted screenshot /tmp/precioluzapp-validation.png`
+  - mover el archivo a una ruta versionada en el repo, por ejemplo `docs/evidence-<issue>-<feature>.png`
 
 ### Reglas de aplicabilidad del checklist
 - Si el cambio es solo documental, no aplicar compilación/lint/tests/UI; aplicar únicamente validación documental.
