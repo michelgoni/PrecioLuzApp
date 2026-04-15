@@ -34,11 +34,28 @@ jobs:
             -skipMacroValidation \
             build
 
+      - name: Select concrete simulator for tests
+        id: test-destination
+        shell: bash
+        run: |
+          set -euo pipefail
+          TEST_DESTINATION="$(
+            xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -showdestinations 2>/dev/null \
+            | sed -n 's/.*platform:iOS Simulator, arch:[^,]*, id:\([^,]*\), OS:[^,]*, name:iPhone[^}]*}.*/platform=iOS Simulator,id=\1/p' \
+            | head -n 1
+          )"
+          if [[ -z "$TEST_DESTINATION" ]]; then
+            echo "No concrete iPhone simulator destination found for tests"
+            exit 1
+          fi
+          echo "value=$TEST_DESTINATION" >> "$GITHUB_OUTPUT"
+          echo "Using test destination: $TEST_DESTINATION"
+
       - name: Test
         run: |
           xcodebuild \
             -project PrecioLuzApp.xcodeproj \
             -scheme PrecioLuzApp \
-            -destination "generic/platform=iOS Simulator" \
+            -destination "${{ steps.test-destination.outputs.value }}" \
             -skipMacroValidation \
             test
