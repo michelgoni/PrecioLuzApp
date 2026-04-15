@@ -14,6 +14,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Allow Swift macros in CI
+        shell: bash
+        run: |
+          # Some SPM dependencies (e.g. swift-perception, swift-structured-queries) ship Swift macros.
+          # On clean CI machines Xcode may require explicit user approval for these macros.
+          # We skip macro fingerprint validation to keep CI deterministic for trusted OSS deps.
+          defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
+
       - name: Resolve Swift packages
         run: xcodebuild -resolvePackageDependencies -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp
 
@@ -23,6 +31,7 @@ jobs:
             -project PrecioLuzApp.xcodeproj \
             -scheme PrecioLuzApp \
             -destination "generic/platform=iOS Simulator" \
+            -skipMacroValidation \
             build
 
       - name: Test
@@ -31,4 +40,5 @@ jobs:
             -project PrecioLuzApp.xcodeproj \
             -scheme PrecioLuzApp \
             -destination "generic/platform=iOS Simulator" \
+            -skipMacroValidation \
             test
