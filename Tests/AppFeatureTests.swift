@@ -1,11 +1,12 @@
-import XCTest
+import Testing
 
 @testable import PrecioLuzApp
 
-final class AppFeatureTests: XCTestCase {
-  func testTabSymbolsAreConfigured() {
-    XCTAssertEqual(AppTab.prices.systemImage, "eurosign.circle")
-    XCTAssertEqual(AppTab.chart.systemImage, "chart.xyaxis.line")
-    XCTAssertEqual(AppTab.settings.systemImage, "gearshape")
+struct AppFeatureTests {
+  @Test("App tabs expose expected SF Symbols")
+  func tabSymbolsAreConfigured() {
+    #expect(AppTab.prices.systemImage == "eurosign.circle")
+    #expect(AppTab.chart.systemImage == "chart.xyaxis.line")
+    #expect(AppTab.settings.systemImage == "gearshape")
   }
 }

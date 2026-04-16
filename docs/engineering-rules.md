@@ -63,6 +63,13 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Evitar `UIKit` salvo integración necesaria y aislada.
 - No introducir abstracciones genéricas o reutilización prematura si el flujo base aún no existe.
 
+## Política de tests (obligatoria)
+- No usar `XCTest` en este proyecto salvo bloqueo técnico explícito y temporal.
+- Los tests deben implementarse con el framework `Testing` (`import Testing`, `@Test`, `#expect`, `#require`).
+- Para reducers y efectos en `TCA`, seguir el enfoque oficial con `TestStore` descrito en la documentación de TCA:
+  - https://pointfreeco.github.io/swift-composable-architecture/1.9.0/documentation/composablearchitecture/testing/
+- Si una suite existente usa `XCTest`, migrarla de forma incremental en el siguiente cambio que toque esa suite.
+
 ## Validación mínima obligatoria
 - Tras cambios de documentación:
   - revisar consistencia terminológica

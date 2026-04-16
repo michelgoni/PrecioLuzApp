@@ -42,6 +42,7 @@ La app se construye como una base `iPhone-first` en `iOS 26+`, con `SwiftUI` y A
 - Los efectos asíncronos deben expresarse desde el reducer.
 - Las dependencias de red, persistencia, notificaciones y fecha deben inyectarse mediante el sistema de dependencias de TCA.
 - Los flujos importantes deben poder probarse con `TestStore`.
+- El marco de tests del proyecto es `Testing` (no `XCTest`), manteniendo el patrón de `TestStore` para reducers/efectos.
 - La composición debe hacerse por feature y no por capas globales monolíticas.
 
 ## Estructura de proyecto documentada
@@ -230,6 +231,11 @@ Responsabilidades:
   - preferencias ligeras de UI si aparecen
 
 ## Estrategia de pruebas
+- Framework base:
+  - usar `Testing` con `@Test`, `#expect` y `#require`
+  - no introducir suites nuevas con `XCTest`
+  - para testing de TCA, seguir la guía oficial:
+    - https://pointfreeco.github.io/swift-composable-architecture/1.9.0/documentation/composablearchitecture/testing/
 - Unit tests para:
   - clasificación relativa del día
   - resumen diario
