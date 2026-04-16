@@ -8,6 +8,12 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Prefiere el cambio más pequeño que resuelva el problema de forma mantenible.
 - Si una decisión obliga a ampliar alcance, deja el motivo explícito en la respuesta final.
 
+## Preflight de sincronización (obligatorio)
+- Antes de cualquier edición, verificar rama activa y estado de sincronización con remoto.
+- Si la rama activa es `main`, ejecutar `git pull --ff-only origin main` antes de empezar.
+- Si la rama activa es una feature branch, ejecutar `git fetch origin` y comprobar que la base esperada existe y está alineada con `origin/main` antes de editar.
+- Si la sincronización falla (conflictos, red, permisos o historial no fast-forward), bloquear la implementación y no continuar sobre un estado desactualizado.
+
 ## Disciplina de alcance
 - No modificar más de una capa técnica a la vez salvo petición explícita o necesidad directa de integración.
 - Capas típicas en este proyecto:

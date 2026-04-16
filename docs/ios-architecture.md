@@ -49,7 +49,7 @@ La app se construye como una base `iPhone-first` en `iOS 26+`, con `SwiftUI` y A
 ### `App`
 - Punto de entrada de la app, composición raíz, lifecycle y montaje del `Store` principal.
 - No contiene lógica de negocio específica de features.
-- Esta carpeta no existe todavía; se creará cuando arranque el bootstrap real del proyecto iOS.
+- Esta carpeta ya existe en `Sources/App` como parte del bootstrap técnico inicial y evolucionará con los hitos funcionales.
 
 ### `Features`
 - Contenedor de features verticales del producto.
