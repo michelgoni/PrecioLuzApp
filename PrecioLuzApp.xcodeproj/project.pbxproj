@@ -8,9 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		0707733D9FC9E87DBB20DE2B /* PersistenceClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8560ED2DC8C618B58A3BF47D /* PersistenceClient.swift */; };
+		0F51D007FF797C2528199A19 /* DailyPricingSnapshotPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1E5EE190D8DB8B3B216D13 /* DailyPricingSnapshotPipelineTests.swift */; };
 		324A8B65E4B3AE6929DAC3AF /* PricingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD7FDA5CB1305816A882113 /* PricingClient.swift */; };
 		32965E2DB2F87CDF4A850149 /* AppFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20AF13249077EB2D15ECE90 /* AppFeatureTests.swift */; };
 		4C0BAE6A4CB9433F43182C37 /* DomainModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75905F6274FE9F8BFD18AA70 /* DomainModels.swift */; };
+		5E5746E4E23EC6B3BD28CE34 /* DailyPricingSnapshotPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BBD1FCB478C16D91769556 /* DailyPricingSnapshotPipeline.swift */; };
 		628CD71F5793AFE56AFA1109 /* TCASmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43BF8A9E6F9D897404A6074 /* TCASmokeTests.swift */; };
 		693300BDC4A7882348CC27BB /* SQLiteData in Frameworks */ = {isa = PBXBuildFile; productRef = 4188B8C7C367C21C44A8C549 /* SQLiteData */; };
 		800D4B667AA0009EDF34F4A4 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C64AB47F534C3EF47DA37C60 /* ComposableArchitecture */; };
@@ -38,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		07E8C05629B788AE315B0D11 /* PrecioLuzAppTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PrecioLuzAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A1E5EE190D8DB8B3B216D13 /* DailyPricingSnapshotPipelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyPricingSnapshotPipelineTests.swift; sourceTree = "<group>"; };
 		1FC5C7E5F151FC11C56A3D19 /* ChartFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartFeature.swift; sourceTree = "<group>"; };
 		2747995B05A5F06C74D942BF /* DomainModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainModelsTests.swift; sourceTree = "<group>"; };
 		288DF63F4693A0161011B4A4 /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
@@ -53,6 +56,7 @@
 		A2868808D917525D9B949780 /* ClientDependenciesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientDependenciesTests.swift; sourceTree = "<group>"; };
 		A349262256B13A6827F96952 /* PricesFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesFeature.swift; sourceTree = "<group>"; };
 		C43BF8A9E6F9D897404A6074 /* TCASmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCASmokeTests.swift; sourceTree = "<group>"; };
+		F2BBD1FCB478C16D91769556 /* DailyPricingSnapshotPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyPricingSnapshotPipeline.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +168,7 @@
 			children = (
 				A20AF13249077EB2D15ECE90 /* AppFeatureTests.swift */,
 				A2868808D917525D9B949780 /* ClientDependenciesTests.swift */,
+				1A1E5EE190D8DB8B3B216D13 /* DailyPricingSnapshotPipelineTests.swift */,
 				2747995B05A5F06C74D942BF /* DomainModelsTests.swift */,
 				C43BF8A9E6F9D897404A6074 /* TCASmokeTests.swift */,
 			);
@@ -181,6 +186,7 @@
 		FC9E4DC28FEBF626F3076DB2 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				F2BBD1FCB478C16D91769556 /* DailyPricingSnapshotPipeline.swift */,
 				75905F6274FE9F8BFD18AA70 /* DomainModels.swift */,
 			);
 			path = Domain;
@@ -271,6 +277,7 @@
 			files = (
 				E4A687F3008BBA0F8B3C409C /* AppFeature.swift in Sources */,
 				C38E3205CBA69E8FEEC1230F /* ChartFeature.swift in Sources */,
+				5E5746E4E23EC6B3BD28CE34 /* DailyPricingSnapshotPipeline.swift in Sources */,
 				BE6F8B2F22DC95595232845A /* DateClient.swift in Sources */,
 				4C0BAE6A4CB9433F43182C37 /* DomainModels.swift in Sources */,
 				FFD909BEA040F73D5FEDDC2D /* NotificationClient.swift in Sources */,
@@ -288,6 +295,7 @@
 			files = (
 				32965E2DB2F87CDF4A850149 /* AppFeatureTests.swift in Sources */,
 				D5C9D8D8D1D9B4387E66B778 /* ClientDependenciesTests.swift in Sources */,
+				0F51D007FF797C2528199A19 /* DailyPricingSnapshotPipelineTests.swift in Sources */,
 				9DF2CCB727E5BE82950696DA /* DomainModelsTests.swift in Sources */,
 				628CD71F5793AFE56AFA1109 /* TCASmokeTests.swift in Sources */,
 			);
@@ -390,6 +398,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
@@ -470,6 +479,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;

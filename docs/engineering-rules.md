@@ -73,6 +73,13 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - Cada tipo debe tener un propósito principal claro y verificable en su API pública.
   - Evitar funciones con intención opaca o ambigua; el nombre debe explicar la acción y el contexto de dominio (`classifyHourlyPrices`, `buildDailySummary`, `estimateApplianceCost`, etc.).
   - Si una función empieza a concentrar varias intenciones, dividirla en funciones más pequeñas con nombres explícitos.
+- Control de acceso Swift (obligatorio):
+  - Ser explícitos y escrupulosos con el nivel de acceso de cada tipo y miembro (`private`, `fileprivate`, `internal`, `public`, `open`).
+  - Aplicar el principio de mínimo acceso necesario: usar el nivel más restrictivo que permita cumplir el caso.
+  - Preferir `private` para detalles de implementación y helpers internos al tipo.
+  - Elevar a `internal` solo cuando exista uso real entre archivos/módulos dentro del target.
+  - Usar `public`/`open` únicamente con una necesidad clara de API externa y justificación explícita en el cambio.
+  - En revisiones, tratar como deuda cualquier símbolo más visible de lo necesario.
 - En features TCA:
   - introducir cambios primero en `State`, `Action`, `Reducer` y dependencias
   - después ajustar la vista y el wiring mínimo necesario
