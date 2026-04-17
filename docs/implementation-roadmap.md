@@ -77,6 +77,11 @@ Convert the documentation-first repository into a production-ready native iPhone
 - modelar tipos base de negocio
 - crear clientes inyectables para precios, persistencia, fecha y notificaciones
 - preparar pipeline de snapshot diario y caché
+- dejar evaluada la estrategia de modularización por capas (`Domain -> Clients -> Persistence`) como paso previo al siguiente hito
+
+#### Regla de transición `Hito 2 -> Hito 3`
+- Antes de iniciar `Hito 3`, revisar explícitamente si conviene extraer Swift Packages por capas.
+- No modularizar por feature UI en esta transición salvo necesidad técnica fuerte y justificada.
 
 ### Hito 3 — Shell de aplicación y estados raíz
 - consolidar `AppFeature`

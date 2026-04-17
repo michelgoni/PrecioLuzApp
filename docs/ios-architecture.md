@@ -220,6 +220,15 @@ Responsabilidades:
 - Preparar los textos para localización, aunque la primera UI salga en español.
 - Usar `@Dependency` o `DependencyValues` para clientes de red, persistencia, calendario y notificaciones.
 
+## Estrategia de modularización (SPM)
+- La modularización con Swift Package Manager se planifica por capas estables, no por feature de UI en primera instancia.
+- Orden recomendado de extracción cuando toque modularizar:
+  - `Domain` (modelos y reglas puras)
+  - `Clients` (contratos y dependencias inyectables)
+  - `Persistence` (implementaciones de almacenamiento)
+- Evitar partir `Prices`, `Chart` o `Settings` en paquetes independientes hasta que el flujo base esté estabilizado y las fronteras de API sean claras.
+- Revisar esta decisión al cerrar la capa actual (`Hito 2`) y antes de iniciar la siguiente (`Hito 3`).
+
 ## Estrategia de persistencia
 - `sqlite-data` guardará:
   - precios horarios
