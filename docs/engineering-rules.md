@@ -8,6 +8,12 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Prefiere el cambio más pequeño que resuelva el problema de forma mantenible.
 - Si una decisión obliga a ampliar alcance, deja el motivo explícito en la respuesta final.
 
+## Preflight de sincronización (obligatorio)
+- Antes de cualquier edición, verificar rama activa y estado de sincronización con remoto.
+- Si la rama activa es `main`, ejecutar `git pull --ff-only origin main` antes de empezar.
+- Si la rama activa es una feature branch, ejecutar `git fetch origin` y comprobar que la base esperada existe y está alineada con `origin/main` antes de editar.
+- Si la sincronización falla (conflictos, red, permisos o historial no fast-forward), bloquear la implementación y no continuar sobre un estado desactualizado.
+
 ## Disciplina de alcance
 - No modificar más de una capa técnica a la vez salvo petición explícita o necesidad directa de integración.
 - Capas típicas en este proyecto:
@@ -49,6 +55,32 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - métodos
   - reducers, states y actions
 - Los textos visibles para usuario pueden estar en español; los identificadores de código no.
+- Orden y consistencia (cuando aplique):
+  - Ordenar alfabéticamente `import`s.
+  - Ordenar alfabéticamente las propiedades en `struct`s y `class`es si no existe un orden semántico más claro.
+  - Ordenar alfabéticamente los `case` en `enum`s.
+  - Excepción: mantener orden semántico cuando mejore la lectura del dominio (por ejemplo `Daypart`, o enums que representan un flujo temporal).
+- Regla de seguridad (anti-crash, obligatoria):
+  - Evitar crashes en runtime como requisito no negociable.
+  - Nunca indexar arrays/colecciones sin garantías de rango (out-of-bounds). Preferir iteración segura (`for element in ...`, `enumerated()`), `first/last`, o checks explícitos.
+  - Evitar `!` (force unwrap) y `as!` salvo que el valor esté previamente validado con `guard`/`if let` y la invariantes estén claras.
+  - Evitar `fatalError`, `preconditionFailure` y `assertionFailure` en código de producto salvo casos excepcionales y documentados.
+- Legibilidad y formato (obligatorio):
+  - Preferir firmas de funciones en una sola línea cuando sea razonable para lectura (evitar saltos justo después del nombre de la función).
+  - Mantener indentación consistente; al tocar un archivo en Xcode, re-indentar con `Control+i` (Editor > Structure > Re-Indent) antes de considerar el cambio listo.
+- Diseño y claridad de intención (obligatorio):
+  - No mezclar responsabilidades distintas dentro del mismo tipo (`class`, `struct`, `enum` o `actor`). Separar clasificación, agregación, cálculo, persistencia y orquestación cuando corresponda.
+  - Cada tipo debe tener un propósito principal claro y verificable en su API pública.
+  - Evitar funciones con intención opaca o ambigua; el nombre debe explicar la acción y el contexto de dominio (`classifyHourlyPrices`, `buildDailySummary`, `estimateApplianceCost`, etc.).
+  - Si una función empieza a concentrar varias intenciones, dividirla en funciones más pequeñas con nombres explícitos.
+  - Evitar duplicidades o redundancias en código: no implementar dos veces la misma responsabilidad o comportamiento.
+- Control de acceso Swift (obligatorio):
+  - Ser explícitos y escrupulosos con el nivel de acceso de cada tipo y miembro (`private`, `fileprivate`, `internal`, `public`, `open`).
+  - Aplicar el principio de mínimo acceso necesario: usar el nivel más restrictivo que permita cumplir el caso.
+  - Preferir `private` para detalles de implementación y helpers internos al tipo.
+  - Elevar a `internal` solo cuando exista uso real entre archivos/módulos dentro del target.
+  - Usar `public`/`open` únicamente con una necesidad clara de API externa y justificación explícita en el cambio.
+  - En revisiones, tratar como deuda cualquier símbolo más visible de lo necesario.
 - En features TCA:
   - introducir cambios primero en `State`, `Action`, `Reducer` y dependencias
   - después ajustar la vista y el wiring mínimo necesario
@@ -56,6 +88,17 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Evitar callbacks salvo integración imprescindible.
 - Evitar `UIKit` salvo integración necesaria y aislada.
 - No introducir abstracciones genéricas o reutilización prematura si el flujo base aún no existe.
+
+## Política de tests (obligatoria)
+- No usar `XCTest` en este proyecto salvo bloqueo técnico explícito y temporal.
+- Los tests deben implementarse con el framework `Testing` (`import Testing`, `@Test`, `#expect`, `#require`).
+- Para reducers y efectos en `TCA`, seguir el enfoque oficial con `TestStore` descrito en la documentación de TCA:
+  - https://pointfreeco.github.io/swift-composable-architecture/1.9.0/documentation/composablearchitecture/testing/
+- Si una suite existente usa `XCTest`, migrarla de forma incremental en el siguiente cambio que toque esa suite.
+- Evitar tests redundantes:
+  - cada test debe cubrir una intención diferente y aportar señal nueva;
+  - no duplicar en aceptación los mismos asserts detallados que ya están cubiertos en unit tests;
+  - mantener tests de aceptación en flujo integrado y tests unitarios en lógica puntual.
 
 ## Validación mínima obligatoria
 - Tras cambios de documentación:
@@ -96,6 +139,10 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - No mergear trabajo directamente en `main`.
 - Cada feature debe llegar a `main` a través de una `Pull Request`.
 - El título y la descripción de la `Pull Request` deben estar en inglés.
+- Gestión de comentarios de review en PR (obligatorio):
+  - responder siempre a cada comentario de review con el contexto del cambio aplicado o la justificación técnica;
+  - tras aplicar el fix, marcar el hilo como resuelto;
+  - no dejar comentarios accionables sin respuesta ni hilos abiertos por omisión.
 - Si la `Pull Request` contiene código, el CI mínimo en `GitHub Actions` debe ejecutar al menos `build` y tests, y ambos deben estar en verde antes del merge.
 - Si la `Pull Request` es solo documental, no exige `build` Xcode, pero sí debe superar los checks documentales o de formato que existan.
 - Si el workflow de CI todavía no existe, dejar constancia explícita de esa limitación y tratar la integración en `main` como bloqueada.

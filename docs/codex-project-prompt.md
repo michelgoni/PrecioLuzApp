@@ -27,6 +27,12 @@ Documentos a revisar:
 - docs/ui-direction.md (si aplica)
 </task_context>
 
+<preflight_sync>
+- Si estás en `main`, ejecuta `git pull --ff-only origin main`.
+- Si estás en feature branch, ejecuta `git fetch origin` y confirma alineación/base contra `origin/main`.
+- Si falla la sincronización, no implementes sobre estado desactualizado; deja el bloqueo explícito.
+</preflight_sync>
+
 <execution_focus>
 - Limita el cambio al alcance pedido.
 - No toques archivos no relacionados.

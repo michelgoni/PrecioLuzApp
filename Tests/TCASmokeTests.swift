@@ -1,5 +1,5 @@
 import ComposableArchitecture
-import XCTest
+import Testing
 
 private struct CounterFeature: Reducer {
   struct State: Equatable {
@@ -21,9 +21,10 @@ private struct CounterFeature: Reducer {
   }
 }
 
-@MainActor
-final class TCASmokeTests: XCTestCase {
-  func testIncrement() async {
+struct TCASmokeTests {
+  @MainActor
+  @Test("CounterFeature increments count after increment action")
+  func increment() async {
     let store = TestStore(initialState: CounterFeature.State()) {
       CounterFeature()
     }

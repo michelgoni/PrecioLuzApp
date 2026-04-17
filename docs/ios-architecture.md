@@ -42,6 +42,7 @@ La app se construye como una base `iPhone-first` en `iOS 26+`, con `SwiftUI` y A
 - Los efectos asíncronos deben expresarse desde el reducer.
 - Las dependencias de red, persistencia, notificaciones y fecha deben inyectarse mediante el sistema de dependencias de TCA.
 - Los flujos importantes deben poder probarse con `TestStore`.
+- El marco de tests del proyecto es `Testing` (no `XCTest`), manteniendo el patrón de `TestStore` para reducers/efectos.
 - La composición debe hacerse por feature y no por capas globales monolíticas.
 
 ## Estructura de proyecto documentada
@@ -49,7 +50,7 @@ La app se construye como una base `iPhone-first` en `iOS 26+`, con `SwiftUI` y A
 ### `App`
 - Punto de entrada de la app, composición raíz, lifecycle y montaje del `Store` principal.
 - No contiene lógica de negocio específica de features.
-- Esta carpeta no existe todavía; se creará cuando arranque el bootstrap real del proyecto iOS.
+- Esta carpeta ya existe en `Sources/App` como parte del bootstrap técnico inicial y evolucionará con los hitos funcionales.
 
 ### `Features`
 - Contenedor de features verticales del producto.
@@ -219,6 +220,15 @@ Responsabilidades:
 - Preparar los textos para localización, aunque la primera UI salga en español.
 - Usar `@Dependency` o `DependencyValues` para clientes de red, persistencia, calendario y notificaciones.
 
+## Estrategia de modularización (SPM)
+- La modularización con Swift Package Manager se planifica por capas estables, no por feature de UI en primera instancia.
+- Orden recomendado de extracción cuando toque modularizar:
+  - `Domain` (modelos y reglas puras)
+  - `Clients` (contratos y dependencias inyectables)
+  - `Persistence` (implementaciones de almacenamiento)
+- Evitar partir `Prices`, `Chart` o `Settings` en paquetes independientes hasta que el flujo base esté estabilizado y las fronteras de API sean claras.
+- Revisar esta decisión al cerrar la capa actual (`Hito 2`) y antes de iniciar la siguiente (`Hito 3`).
+
 ## Estrategia de persistencia
 - `sqlite-data` guardará:
   - precios horarios
@@ -230,6 +240,11 @@ Responsabilidades:
   - preferencias ligeras de UI si aparecen
 
 ## Estrategia de pruebas
+- Framework base:
+  - usar `Testing` con `@Test`, `#expect` y `#require`
+  - no introducir suites nuevas con `XCTest`
+  - para testing de TCA, seguir la guía oficial:
+    - https://pointfreeco.github.io/swift-composable-architecture/1.9.0/documentation/composablearchitecture/testing/
 - Unit tests para:
   - clasificación relativa del día
   - resumen diario
