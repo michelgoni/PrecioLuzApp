@@ -125,6 +125,49 @@ struct DailyPricingSnapshotPipelineTests {
     #expect(result == .failed)
   }
 
+  @Test("Pipeline still returns fresh when persistence operations fail")
+  func persistenceFailuresDoNotPreventFreshResult() async throws {
+    enum TestError: Error { case diskFailure }
+
+    let recorder = PersistenceRecorder()
+    let now = Date(timeIntervalSince1970: 1_700_000_000)
+    let dateClient = makeDateClient(now: now)
+    let timeZone = dateClient.timeZone()
+    var calendar = dateClient.calendar()
+    calendar.timeZone = timeZone
+    let dayStart = calendar.startOfDay(for: now)
+    let rawPrices = makeRawPrices(dayStart: dayStart, timeZone: timeZone)
+
+    let pricingClient = PricingClient { _, _ in rawPrices }
+    let persistenceClient = PersistenceClient(
+      loadSnapshot: { _, _ in
+        await recorder.recordLoad()
+        return nil
+      },
+      saveSnapshot: { _ in
+        throw TestError.diskFailure
+      },
+      pruneSnapshots: { _ in
+        throw TestError.diskFailure
+      }
+    )
+    let pipeline = DailyPricingSnapshotPipeline(
+      dateClient: dateClient,
+      persistenceClient: persistenceClient,
+      pricingClient: pricingClient
+    )
+
+    let result = await pipeline.load()
+    guard case let .fresh(payload) = result else {
+      Issue.record("Expected fresh result despite persistence failures.")
+      return
+    }
+
+    #expect(payload.dayStart == dayStart)
+    #expect(payload.hourlyPrices.count == rawPrices.count)
+    #expect(await recorder.loadCount == 0)
+  }
+
   private func makeDateClient(now: Date) -> DateClient {
     DateClient(
       now: { now },

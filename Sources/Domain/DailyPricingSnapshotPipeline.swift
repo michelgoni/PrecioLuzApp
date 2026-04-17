@@ -32,26 +32,9 @@ struct DailyPricingSnapshotPipeline: Sendable {
         let targetDay = day ?? now
         let dayStart = calendar.startOfDay(for: targetDay)
 
+        let rawHourlyPrices: RawPrices
         do {
-            let rawHourlyPrices = try await pricingClient.fetchDailyPrices(dayStart, timeZone)
-            let payload = makePayload(
-                dayStart: dayStart,
-                fetchedAt: now,
-                now: now,
-                rawPrices: rawHourlyPrices,
-                calendar: calendar
-            )
-
-            try await persistenceClient.saveSnapshot(
-                .init(
-                    dayStart: dayStart,
-                    fetchedAt: now,
-                    hourlyPrices: rawHourlyPrices
-                )
-            )
-            try await persistenceClient.pruneSnapshots(Self.retentionDays)
-
-            return .fresh(payload)
+            rawHourlyPrices = try await pricingClient.fetchDailyPrices(dayStart, timeZone)
         } catch {
             return await loadCachedResult(
                 dayStart: dayStart,
@@ -60,6 +43,16 @@ struct DailyPricingSnapshotPipeline: Sendable {
                 calendar: calendar
             )
         }
+
+        let payload = makePayload(
+            dayStart: dayStart,
+            fetchedAt: now,
+            now: now,
+            rawPrices: rawHourlyPrices,
+            calendar: calendar
+        )
+        await persistSnapshot(dayStart: dayStart, fetchedAt: now, rawPrices: rawHourlyPrices)
+        return .fresh(payload)
     }
 
     private func loadCachedResult(dayStart: Date, now: Date, timeZone: TimeZone, calendar: Calendar)
@@ -92,5 +85,19 @@ struct DailyPricingSnapshotPipeline: Sendable {
             hourlyPrices: hourlyPrices,
             summary: summary
         )
+    }
+
+    private func persistSnapshot(dayStart: Date, fetchedAt: Date, rawPrices: RawPrices) async {
+        do {
+            try await persistenceClient.saveSnapshot(
+                .init(
+                    dayStart: dayStart,
+                    fetchedAt: fetchedAt,
+                    hourlyPrices: rawPrices
+                )
+            )
+            try await persistenceClient.pruneSnapshots(Self.retentionDays)
+        } catch {
+        }
     }
 }
