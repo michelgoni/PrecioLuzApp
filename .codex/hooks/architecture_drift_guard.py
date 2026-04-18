@@ -228,8 +228,8 @@ def emit_stop(violations: list[Violation]) -> None:
         return
     summary = render_summary(violations, max_items=8)
     payload = {
-        "continue": False,
-        "stopReason": "Architectural drift guard found violations.",
+        "decision": "block",
+        "reason": "Architectural drift guard found violations.",
         "systemMessage": (
             "Architectural drift guard blocked turn completion until the architectural issues are reviewed.\n" + summary
         )
