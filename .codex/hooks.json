@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/architecture_drift_guard.py\"",
+            "statusMessage": "Checking architectural drift after Bash command",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/architecture_drift_guard.py\"",
+            "statusMessage": "Validating architectural boundaries before finishing turn",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}
