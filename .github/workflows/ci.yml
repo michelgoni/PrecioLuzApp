@@ -59,3 +59,13 @@ jobs:
             -destination "${{ steps.test-destination.outputs.value }}" \
             -skipMacroValidation \
             test
+
+      - name: UI Smoke Test
+        run: |
+          xcodebuild \
+            -project PrecioLuzApp.xcodeproj \
+            -scheme PrecioLuzApp \
+            -destination "${{ steps.test-destination.outputs.value }}" \
+            -skipMacroValidation \
+            -only-testing:PrecioLuzAppUITests/PrecioLuzAppUITests \
+            test

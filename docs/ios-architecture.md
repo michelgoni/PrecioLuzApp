@@ -34,6 +34,7 @@ La app se construye como una base `iPhone-first` en `iOS 26+`, con `SwiftUI` y A
 - Regla general: Apple-first.
 - Dependencia externa aprobada en el alcance base: `pointfreeco/swift-composable-architecture`.
 - Dependencia externa aprobada en el alcance base: `pointfreeco/sqlite-data`.
+- Dependencia externa aprobada para tests visuales: `pointfreeco/swift-snapshot-testing`.
 - No introducir nuevas dependencias sin una justificación concreta de producto o mantenimiento.
 
 ## Principios de TCA para este proyecto
@@ -42,7 +43,7 @@ La app se construye como una base `iPhone-first` en `iOS 26+`, con `SwiftUI` y A
 - Los efectos asíncronos deben expresarse desde el reducer.
 - Las dependencias de red, persistencia, notificaciones y fecha deben inyectarse mediante el sistema de dependencias de TCA.
 - Los flujos importantes deben poder probarse con `TestStore`.
-- El marco de tests del proyecto es `Testing` (no `XCTest`), manteniendo el patrón de `TestStore` para reducers/efectos.
+- El marco de tests del proyecto es `Testing` para unit/integration, `SnapshotTesting` para regresión visual y `XCUITest` para smoke E2E, manteniendo `TestStore` en reducers/efectos.
 - La composición debe hacerse por feature y no por capas globales monolíticas.
 
 ## Estructura de proyecto documentada
@@ -229,6 +230,26 @@ Responsabilidades:
 - Evitar partir `Prices`, `Chart` o `Settings` en paquetes independientes hasta que el flujo base esté estabilizado y las fronteras de API sean claras.
 - Revisar esta decisión al cerrar la capa actual (`Hito 2`) y antes de iniciar la siguiente (`Hito 3`).
 
+## Estrategia de pruebas
+- Framework base:
+  - usar `Testing` con `@Test`, `#expect` y `#require`
+  - no introducir suites nuevas de unit/integration con `XCTest`
+  - para testing de TCA, seguir la guía oficial:
+    - https://pointfreeco.github.io/swift-composable-architecture/1.9.0/documentation/composablearchitecture/testing/
+- Unit/integration tests con `Testing + TestStore`:
+  - lógica de dominio, reducers y efectos
+  - contratos de dependencias y flujos de integración no visuales
+- UI visual tests con `SnapshotTesting`:
+  - regresión visual de vistas y estados de UI en pruebas deterministas
+  - baseline de pantallas/estados principales desde hitos de shell
+- UI smoke E2E con `XCUITest`:
+  - validar wiring visible mínimo (arranque, tabs, transición de estado, no-crash)
+  - cobertura acotada y estable para evitar duplicidad con snapshots
+- Regla anti-duplicidad:
+  - no repetir en snapshots la lógica de negocio ya cubierta por `TestStore`
+  - no repetir en `XCUITest` la matriz visual ya cubierta por snapshots
+  - usar cada capa de test para su objetivo principal
+
 ## Estrategia de persistencia
 - `sqlite-data` guardará:
   - precios horarios
@@ -238,30 +259,6 @@ Responsabilidades:
   - settings de notificación
   - umbral personalizado
   - preferencias ligeras de UI si aparecen
-
-## Estrategia de pruebas
-- Framework base:
-  - usar `Testing` con `@Test`, `#expect` y `#require`
-  - no introducir suites nuevas con `XCTest`
-  - para testing de TCA, seguir la guía oficial:
-    - https://pointfreeco.github.io/swift-composable-architecture/1.9.0/documentation/composablearchitecture/testing/
-- Unit tests para:
-  - clasificación relativa del día
-  - resumen diario
-  - asignación de `Daypart`
-  - cálculo de coste
-  - construcción de notificaciones
-  - poda del histórico a `30 días`
-- Tests de reducers con `TestStore` para:
-  - carga del día actual
-  - apertura y cierre del flujo de cálculo
-  - cambio de tramo en la gráfica
-  - toggles y persistencia de ajustes
-  - programación de efectos y respuestas de dependencias
-- Tests de integración para:
-  - parsing y transformación de `ESIOS/PVPC`
-  - persistencia y lectura de caché
-- Tests de UI cuando la base del proyecto exista para tabs, cálculo y pantalla de ajustes
 
 ## Fuera de alcance base
 - `APS` remotas

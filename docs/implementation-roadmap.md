@@ -87,6 +87,8 @@ Convert the documentation-first repository into a production-ready native iPhone
 - consolidar `AppFeature`
 - introducir estados `loading`, `empty`, `error` y `cached`
 - centralizar formato visual y utilidades compartidas
+- establecer baseline de `UI smoke tests` (`XCUITest`) para shell y navegación raíz
+- establecer baseline de snapshots visuales (`SnapshotTesting`) para estados raíz del shell
 
 ### Hito 4 — Feature `Prices`
 - cards de resumen
@@ -111,5 +113,5 @@ Convert the documentation-first repository into a production-ready native iPhone
 
 ### Hito 8 — QA y preparación de entrega
 - endurecer offline/caché/error
-- ampliar tests
+- ampliar cobertura de tests (incluyendo expansión de snapshots visuales y `UI E2E` sobre baseline smoke)
 - validar simulador y CI antes de merge por PR

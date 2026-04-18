@@ -18,6 +18,7 @@
 		693300BDC4A7882348CC27BB /* SQLiteData in Frameworks */ = {isa = PBXBuildFile; productRef = 4188B8C7C367C21C44A8C549 /* SQLiteData */; };
 		800D4B667AA0009EDF34F4A4 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C64AB47F534C3EF47DA37C60 /* ComposableArchitecture */; };
 		85ABD8BD485CCA4876B101A7 /* SettingsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CBEA5E1ECD0491F94E0DBA /* SettingsFeature.swift */; };
+		87A27EA53BFD0397DBAE5371 /* PrecioLuzAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51625C05A57E37064CEBE3EF /* PrecioLuzAppUITests.swift */; };
 		9B13DE84E95AAB6D55816805 /* PricesFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A349262256B13A6827F96952 /* PricesFeature.swift */; };
 		9DF2CCB727E5BE82950696DA /* DomainModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2747995B05A5F06C74D942BF /* DomainModelsTests.swift */; };
 		BE6F8B2F22DC95595232845A /* DateClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98F488EF3222A15A96E4F3CF /* DateClient.swift */; };
@@ -26,6 +27,7 @@
 		D4F2BDEAF0E519BD8DCB871B /* PrecioLuzAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA85C7AECFB312B3FB9D051 /* PrecioLuzAppApp.swift */; };
 		D5C9D8D8D1D9B4387E66B778 /* ClientDependenciesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2868808D917525D9B949780 /* ClientDependenciesTests.swift */; };
 		E4A687F3008BBA0F8B3C409C /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288DF63F4693A0161011B4A4 /* AppFeature.swift */; };
+		E6E7A2E30ED90CDEB11D9C79 /* RootStatusBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3602E82D1AA957F3DBC53EB5 /* RootStatusBanner.swift */; };
 		FFD909BEA040F73D5FEDDC2D /* NotificationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DEBD7F1E386956FE512E3D6 /* NotificationClient.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,16 +39,26 @@
 			remoteGlobalIDString = 46AA7BEDF322E624DE3D0B75;
 			remoteInfo = PrecioLuzApp;
 		};
+		EC84DC7AFEDEA1153E989889 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3C6A2D67EBB3CA36D5B7363B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 46AA7BEDF322E624DE3D0B75;
+			remoteInfo = PrecioLuzApp;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		07E8C05629B788AE315B0D11 /* PrecioLuzAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrecioLuzAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		07E8C05629B788AE315B0D11 /* PrecioLuzAppTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PrecioLuzAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A1E5EE190D8DB8B3B216D13 /* DailyPricingSnapshotPipelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyPricingSnapshotPipelineTests.swift; sourceTree = "<group>"; };
 		1FC5C7E5F151FC11C56A3D19 /* ChartFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartFeature.swift; sourceTree = "<group>"; };
 		2747995B05A5F06C74D942BF /* DomainModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainModelsTests.swift; sourceTree = "<group>"; };
 		288DF63F4693A0161011B4A4 /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
+		3602E82D1AA957F3DBC53EB5 /* RootStatusBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootStatusBanner.swift; sourceTree = "<group>"; };
+		51625C05A57E37064CEBE3EF /* PrecioLuzAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrecioLuzAppUITests.swift; sourceTree = "<group>"; };
 		5CD7FDA5CB1305816A882113 /* PricingClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingClient.swift; sourceTree = "<group>"; };
-		741F0D1CD612C8F05168C6B2 /* PrecioLuzApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrecioLuzApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7107E689FEBFDF0CE85B5766 /* PrecioLuzAppUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PrecioLuzAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		741F0D1CD612C8F05168C6B2 /* PrecioLuzApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PrecioLuzApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75905F6274FE9F8BFD18AA70 /* DomainModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainModels.swift; sourceTree = "<group>"; };
 		8560ED2DC8C618B58A3BF47D /* PersistenceClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceClient.swift; sourceTree = "<group>"; };
 		85CBEA5E1ECD0491F94E0DBA /* SettingsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFeature.swift; sourceTree = "<group>"; };
@@ -95,6 +107,7 @@
 			children = (
 				741F0D1CD612C8F05168C6B2 /* PrecioLuzApp.app */,
 				07E8C05629B788AE315B0D11 /* PrecioLuzAppTests.xctest */,
+				7107E689FEBFDF0CE85B5766 /* PrecioLuzAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -106,6 +119,7 @@
 				C563F2CBC5E981184D00E1E6 /* Clients */,
 				FC9E4DC28FEBF626F3076DB2 /* Domain */,
 				C5FBB96D19C4A3102F3B2C86 /* Features */,
+				F2F3101824EFD6C34293D6BB /* UIShared */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -115,6 +129,7 @@
 			children = (
 				275054B9F4F96A724F4116AA /* Sources */,
 				DA6AA6158E4981E3EAB7B4E6 /* Tests */,
+				E6E387E6F326D92A38D89B39 /* UITests */,
 				1C019852C6CE9F0C775EB817 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -178,12 +193,28 @@
 			path = Tests;
 			sourceTree = "<group>";
 		};
+		E6E387E6F326D92A38D89B39 /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				51625C05A57E37064CEBE3EF /* PrecioLuzAppUITests.swift */,
+			);
+			path = UITests;
+			sourceTree = "<group>";
+		};
 		ED1ECC1C6F8A1C31D20423AA /* AppFeature */ = {
 			isa = PBXGroup;
 			children = (
 				288DF63F4693A0161011B4A4 /* AppFeature.swift */,
 			);
 			path = AppFeature;
+			sourceTree = "<group>";
+		};
+		F2F3101824EFD6C34293D6BB /* UIShared */ = {
+			isa = PBXGroup;
+			children = (
+				3602E82D1AA957F3DBC53EB5 /* RootStatusBanner.swift */,
+			);
+			path = UIShared;
 			sourceTree = "<group>";
 		};
 		FC9E4DC28FEBF626F3076DB2 /* Domain */ = {
@@ -198,6 +229,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		32E35F92DD79330EC4DCEE4D /* PrecioLuzAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 35704165F8ECE34D404019E3 /* Build configuration list for PBXNativeTarget "PrecioLuzAppUITests" */;
+			buildPhases = (
+				85049A299160F6F99D4B4D39 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7376B076ED30D0BAAB5B727E /* PBXTargetDependency */,
+			);
+			name = PrecioLuzAppUITests;
+			packageProductDependencies = (
+			);
+			productName = PrecioLuzAppUITests;
+			productReference = 7107E689FEBFDF0CE85B5766 /* PrecioLuzAppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		46AA7BEDF322E624DE3D0B75 /* PrecioLuzApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 96CDDC63FEBE6DA7AE22B029 /* Build configuration list for PBXNativeTarget "PrecioLuzApp" */;
@@ -245,7 +294,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 2640;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					32E35F92DD79330EC4DCEE4D = {
+						TestTargetID = 46AA7BEDF322E624DE3D0B75;
+					};
+				};
 			};
 			buildConfigurationList = 8EB1EA652AF1EAED259FD075 /* Build configuration list for PBXProject "PrecioLuzApp" */;
 			developmentRegion = en;
@@ -267,11 +321,20 @@
 			targets = (
 				46AA7BEDF322E624DE3D0B75 /* PrecioLuzApp */,
 				7875C704CB96C4EF901A5325 /* PrecioLuzAppTests */,
+				32E35F92DD79330EC4DCEE4D /* PrecioLuzAppUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		85049A299160F6F99D4B4D39 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87A27EA53BFD0397DBAE5371 /* PrecioLuzAppUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E4CBDD10F852FD4BB575CBBA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -286,6 +349,7 @@
 				D4F2BDEAF0E519BD8DCB871B /* PrecioLuzAppApp.swift in Sources */,
 				9B13DE84E95AAB6D55816805 /* PricesFeature.swift in Sources */,
 				324A8B65E4B3AE6929DAC3AF /* PricingClient.swift in Sources */,
+				E6E7A2E30ED90CDEB11D9C79 /* RootStatusBanner.swift in Sources */,
 				85ABD8BD485CCA4876B101A7 /* SettingsFeature.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -306,6 +370,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		7376B076ED30D0BAAB5B727E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 46AA7BEDF322E624DE3D0B75 /* PrecioLuzApp */;
+			targetProxy = EC84DC7AFEDEA1153E989889 /* PBXContainerItemProxy */;
+		};
 		920CEEEA5024FA024D236EDF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 46AA7BEDF322E624DE3D0B75 /* PrecioLuzApp */;
@@ -328,6 +397,23 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrecioLuzApp.app/PrecioLuzApp";
+			};
+			name = Debug;
+		};
+		26DA3D4AF9B4D1812281D9D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = PrecioLuzApp;
 			};
 			name = Debug;
 		};
@@ -385,7 +471,6 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -399,11 +484,27 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		8DB066517597FA6709F91BCF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = PrecioLuzApp;
 			};
 			name = Release;
 		};
@@ -461,7 +562,6 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -482,7 +582,6 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -515,6 +614,15 @@
 			buildConfigurations = (
 				12014D0C2702B20EB2BC8DE2 /* Debug */,
 				34A90CE9B48E2161416EF1BE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		35704165F8ECE34D404019E3 /* Build configuration list for PBXNativeTarget "PrecioLuzAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26DA3D4AF9B4D1812281D9D5 /* Debug */,
+				8DB066517597FA6709F91BCF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

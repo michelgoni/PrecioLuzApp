@@ -90,14 +90,30 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - No introducir abstracciones genéricas o reutilización prematura si el flujo base aún no existe.
 
 ## Política de tests (obligatoria)
-- No usar `XCTest` en este proyecto salvo bloqueo técnico explícito y temporal.
+- No usar `XCTest` para unit/integration tests en este proyecto salvo bloqueo técnico explícito y temporal.
+- Excepción permitida: `XCUITest` para pruebas de UI end-to-end en su target dedicado.
 - Los tests deben implementarse con el framework `Testing` (`import Testing`, `@Test`, `#expect`, `#require`).
 - Para reducers y efectos en `TCA`, seguir el enfoque oficial con `TestStore` descrito en la documentación de TCA:
   - https://pointfreeco.github.io/swift-composable-architecture/1.9.0/documentation/composablearchitecture/testing/
+- Para regresión visual de UI, adoptar `SnapshotTesting` (`pointfreeco/swift-snapshot-testing`) como patrón principal de cobertura visual.
+- Mantener `SnapshotTesting` integrado en suites basadas en `Testing`; no abrir suites nuevas de `XCTest` para snapshots.
+- En snapshots inline:
+  - no escribir manualmente el contenido del snapshot en trailing closures;
+  - no editar snapshots inline a mano;
+  - regenerar snapshots en record mode y revisar diffs.
+- Los UI tests se introducen de forma faseada:
+  - baseline smoke de wiring con `XCUITest` en hitos de shell/navegación
+  - baseline visual de estados con `SnapshotTesting` en hitos de shell/feature
+  - expansión de cobertura visual y flujos E2E en hitos de QA
+- Para UI tests de comportamiento visible:
+  - usar `XCUITest` en un target de UI tests dedicado para smoke/wiring;
+  - usar `SnapshotTesting` para matriz de estados y regresión visual.
 - Si una suite existente usa `XCTest`, migrarla de forma incremental en el siguiente cambio que toque esa suite.
 - Evitar tests redundantes:
   - cada test debe cubrir una intención diferente y aportar señal nueva;
   - no duplicar en aceptación los mismos asserts detallados que ya están cubiertos en unit tests;
+  - no duplicar en `XCUITest` la lógica ya validada con `Testing + TestStore`;
+  - no duplicar en `XCUITest` verificaciones visuales ya cubiertas con `SnapshotTesting`;
   - mantener tests de aceptación en flujo integrado y tests unitarios en lógica puntual.
 
 ## Validación mínima obligatoria
@@ -109,6 +125,8 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - ejecutar compilación del target/scheme afectado
   - ejecutar `SwiftLint` en modo estricto
   - ejecutar tests automáticos del área afectada (o suite completa si no hay filtrado útil)
+  - revisar warnings de compilación y tratarlos como bloqueantes de cierre de tarea cuando afecten al stack aprobado
+  - en particular, warnings o deprecations de `TCA` (`swift-composable-architecture`) deben resolverse en el mismo cambio o dejar la tarea abierta hasta su resolución
 - Tras cambios de UI, navegación o comportamiento visible:
   - si existe proyecto Xcode, validar con `build` y simulador mediante `XcodeBuildMCP`
   - arrancar la app y revisar logs de ejecución para detectar errores no visibles
@@ -123,6 +141,10 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - `swiftlint lint --strict`
 - Tests:
   - `xcodebuild -project <Project>.xcodeproj -scheme <Scheme> -destination 'platform=iOS Simulator,name=<Device>' test`
+- UI smoke tests (cuando aplique por milestone/scope):
+  - `xcodebuild -project <Project>.xcodeproj -scheme <Scheme> -destination 'platform=iOS Simulator,name=<Device>' -only-testing:<UITestsTarget> test`
+- UI snapshot tests (cuando aplique por milestone/scope):
+  - `xcodebuild -project <Project>.xcodeproj -scheme <Scheme> -destination 'platform=iOS Simulator,name=<Device>' -only-testing:<SnapshotTestsTarget> test`
 - Logs en ejecución:
   - `xcrun simctl spawn booted log show --style compact --last 5m --predicate 'process == "<AppBinaryName>" AND messageType == error'`
 - Evidencia visual mínima (si hay cambio visible):
@@ -177,6 +199,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - el entregable pedido existe
   - el cambio está alineado con `AGENTS.md`
   - se ha ejecutado la validación mínima posible
+  - no quedan warnings activos de `TCA` en el scope tocado (especialmente deprecations con migración disponible)
   - se ha dejado claro el estado de integración por `Pull Request` y CI cuando aplique
   - se ha indicado explícitamente su dependencia respecto a hitos/PR previos y siguientes cuando forme parte de una cadena
   - no se marca como integrada si depende de hitos/PR todavía no integrados
