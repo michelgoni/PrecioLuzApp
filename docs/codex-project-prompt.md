@@ -1,58 +1,43 @@
 # Codex Project Prompt
 
-Usa este documento como prompt operativo auxiliar del proyecto. Complementa `AGENTS.md`, no lo sustituye y no puede contradecirlo.
+Usa este documento como plantilla operativa auxiliar para una tarea concreta. Complementa `AGENTS.md`, no lo sustituye y no puede contradecirlo.
 
 ## Uso correcto
 - Úsalo para encuadrar una tarea concreta, no para redefinir normas del proyecto.
-- Antes de ejecutar, consulta siempre:
-  - `AGENTS.md`
-  - `docs/engineering-rules.md`
-  - `docs/product-spec.md`
-  - `docs/ios-architecture.md`
-  - `docs/ui-direction.md` cuando la tarea afecte UI
+- Trata `docs/engineering-rules.md` como fuente única para ejecución técnica (preflight, alcance, validación, PR/CI e issues/dependencias).
 - Si este documento entra en conflicto con `AGENTS.md`, manda `AGENTS.md`.
 
-## Plantilla de ejecución
+## Plantilla mínima de ejecución
 
 ```md
 <task_context>
 Proyecto: PrecioLuzApp
 Tarea: [describir aquí el cambio pedido]
 Área afectada: [feature, pantalla o capa técnica]
-Documentos a revisar:
-- AGENTS.md
-- docs/engineering-rules.md
-- docs/product-spec.md
-- docs/ios-architecture.md
-- docs/ui-direction.md (si aplica)
+Tipo de cambio: [documentación | código sin impacto visible | UI/comportamiento visible]
 </task_context>
 
-<preflight_sync>
-- Si estás en `main`, ejecuta `git pull --ff-only origin main`.
-- Si estás en feature branch, ejecuta `git fetch origin` y confirma alineación/base contra `origin/main`.
-- Si falla la sincronización, no implementes sobre estado desactualizado; deja el bloqueo explícito.
-</preflight_sync>
+<required_docs>
+- AGENTS.md
+- docs/engineering-rules.md
+- docs/product-spec.md (si aplica)
+- docs/ios-architecture.md (si aplica)
+- docs/ui-direction.md (si aplica)
+</required_docs>
 
-<execution_focus>
-- Limita el cambio al alcance pedido.
-- No toques archivos no relacionados.
-- Si necesitas ampliar alcance, explica por qué.
-- Mantén alineación con TCA, stack aprobado y naming en inglés para identificadores de código.
-</execution_focus>
-
-<validation>
-- Ejecuta la validación mínima realmente disponible para la tarea.
-- Si no puedes validar, explica la limitación de forma explícita.
-- No presentes validaciones no ejecutadas como realizadas.
-</validation>
+<execution_contract>
+- Aplicar el cambio más pequeño y reversible posible.
+- Limitar el cambio al alcance pedido.
+- Declarar explícitamente cualquier limitación de validación.
+</execution_contract>
 
 <response_expectations>
-- Resume el cambio real.
-- Lista supuestos o límites si existen.
-- Indica qué validación se ejecutó de verdad.
+- Resumen del cambio real aplicado.
+- Validación ejecutada de verdad (según `docs/engineering-rules.md`).
+- Supuestos, bloqueos o límites pendientes.
 </response_expectations>
 ```
 
 ## Notas
 - Mantén este documento ligero.
-- No dupliques aquí reglas de alcance, arquitectura o validación que ya vivan mejor en `AGENTS.md` o `docs/engineering-rules.md`.
+- No dupliques aquí reglas que ya estén definidas en `AGENTS.md` o `docs/engineering-rules.md`.
