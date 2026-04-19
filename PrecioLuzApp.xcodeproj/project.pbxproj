@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0707733D9FC9E87DBB20DE2B /* PersistenceClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8560ED2DC8C618B58A3BF47D /* PersistenceClient.swift */; };
 		0F51D007FF797C2528199A19 /* DailyPricingSnapshotPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1E5EE190D8DB8B3B216D13 /* DailyPricingSnapshotPipelineTests.swift */; };
+		1B31E86A5D49A419A3A08835 /* AppShellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DFB6EC91C18B88CA7DD53C /* AppShellView.swift */; };
 		324A8B65E4B3AE6929DAC3AF /* PricingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD7FDA5CB1305816A882113 /* PricingClient.swift */; };
 		32965E2DB2F87CDF4A850149 /* AppFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20AF13249077EB2D15ECE90 /* AppFeatureTests.swift */; };
 		48ADECD7D1DB8A2363D06077 /* Issue5AcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE589D64FFD105C083825C13 /* Issue5AcceptanceTests.swift */; };
@@ -60,6 +61,7 @@
 		7107E689FEBFDF0CE85B5766 /* PrecioLuzAppUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PrecioLuzAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		741F0D1CD612C8F05168C6B2 /* PrecioLuzApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PrecioLuzApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75905F6274FE9F8BFD18AA70 /* DomainModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainModels.swift; sourceTree = "<group>"; };
+		76DFB6EC91C18B88CA7DD53C /* AppShellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShellView.swift; sourceTree = "<group>"; };
 		8560ED2DC8C618B58A3BF47D /* PersistenceClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceClient.swift; sourceTree = "<group>"; };
 		85CBEA5E1ECD0491F94E0DBA /* SettingsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFeature.swift; sourceTree = "<group>"; };
 		98F488EF3222A15A96E4F3CF /* DateClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateClient.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 			isa = PBXGroup;
 			children = (
 				288DF63F4693A0161011B4A4 /* AppFeature.swift */,
+				76DFB6EC91C18B88CA7DD53C /* AppShellView.swift */,
 			);
 			path = AppFeature;
 			sourceTree = "<group>";
@@ -340,6 +343,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4A687F3008BBA0F8B3C409C /* AppFeature.swift in Sources */,
+				1B31E86A5D49A419A3A08835 /* AppShellView.swift in Sources */,
 				C38E3205CBA69E8FEEC1230F /* ChartFeature.swift in Sources */,
 				5E5746E4E23EC6B3BD28CE34 /* DailyPricingSnapshotPipeline.swift in Sources */,
 				BE6F8B2F22DC95595232845A /* DateClient.swift in Sources */,
