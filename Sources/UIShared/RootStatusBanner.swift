@@ -6,16 +6,20 @@ struct RootStatusBanner: View {
 
   var body: some View {
     HStack(spacing: 8) {
-        Spacer()
-      Image(systemName: iconName)
-        .foregroundStyle(tintColor)
-      Text(label)
+      Image(systemName: style.iconName)
+        .foregroundStyle(style.tintColor)
+      Text(style.label)
         .font(.footnote.weight(.semibold))
-        .foregroundStyle(tintColor)
+        .foregroundStyle(style.tintColor)
         .accessibilityIdentifier("appRootStatusLabel")
       Spacer(minLength: 0)
       if status == .error {
-        Button("Reintentar") {
+        Button(
+          String(
+            localized: "app.rootStatus.retry.button",
+            defaultValue: "Reintentar"
+          )
+        ) {
           onRetry()
         }
         .buttonStyle(.borderedProminent)
@@ -27,67 +31,75 @@ struct RootStatusBanner: View {
     .padding(.vertical, 10)
     .background(
       RoundedRectangle(cornerRadius: 10, style: .continuous)
-        .fill(backgroundColor)
+        .fill(style.backgroundColor)
     )
   }
 
-  private var backgroundColor: Color {
-    switch status {
-    case .cached:
-      Color.orange.opacity(0.15)
-    case .content:
-      Color.green.opacity(0.15)
-    case .empty:
-      Color.yellow.opacity(0.15)
-    case .error:
-      Color.red.opacity(0.15)
-    case .loading:
-      Color.blue.opacity(0.15)
-    }
+  private var style: RootStatusBannerStyle {
+    status.bannerStyle
   }
+}
 
-  private var iconName: String {
-    switch status {
-    case .cached:
-      "clock.arrow.circlepath"
-    case .content:
-      "checkmark.circle"
-    case .empty:
-      "tray"
-    case .error:
-      "exclamationmark.triangle"
-    case .loading:
-      "arrow.clockwise"
-    }
-  }
+private struct RootStatusBannerStyle {
+  let backgroundColor: Color
+  let iconName: String
+  let label: String
+  let tintColor: Color
+}
 
-  private var label: String {
-    switch status {
+private extension RootStatus {
+  var bannerStyle: RootStatusBannerStyle {
+    switch self {
     case .cached:
-      "Usando caché"
+      RootStatusBannerStyle(
+        backgroundColor: Color.orange.opacity(0.15),
+        iconName: "clock.arrow.circlepath",
+        label: String(
+          localized: "app.rootStatus.cached.label",
+          defaultValue: "Usando caché"
+        ),
+        tintColor: .orange
+      )
     case .content:
-      "Datos actualizados"
+      RootStatusBannerStyle(
+        backgroundColor: Color.green.opacity(0.15),
+        iconName: "checkmark.circle",
+        label: String(
+          localized: "app.rootStatus.content.label",
+          defaultValue: "Datos actualizados"
+        ),
+        tintColor: .green
+      )
     case .empty:
-      "Sin datos disponibles"
+      RootStatusBannerStyle(
+        backgroundColor: Color.yellow.opacity(0.15),
+        iconName: "tray",
+        label: String(
+          localized: "app.rootStatus.empty.label",
+          defaultValue: "Sin datos disponibles"
+        ),
+        tintColor: .yellow
+      )
     case .error:
-      "No se han podido cargar datos"
+      RootStatusBannerStyle(
+        backgroundColor: Color.red.opacity(0.15),
+        iconName: "exclamationmark.triangle",
+        label: String(
+          localized: "app.rootStatus.error.label",
+          defaultValue: "No se han podido cargar datos"
+        ),
+        tintColor: .red
+      )
     case .loading:
-      "Cargando precios..."
-    }
-  }
-
-  private var tintColor: Color {
-    switch status {
-    case .cached:
-      .orange
-    case .content:
-      .green
-    case .empty:
-      .yellow
-    case .error:
-      .red
-    case .loading:
-      .blue
+      RootStatusBannerStyle(
+        backgroundColor: Color.blue.opacity(0.15),
+        iconName: "arrow.clockwise",
+        label: String(
+          localized: "app.rootStatus.loading.label",
+          defaultValue: "Cargando precios..."
+        ),
+        tintColor: .blue
+      )
     }
   }
 }

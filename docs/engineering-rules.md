@@ -55,6 +55,10 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - métodos
   - reducers, states y actions
 - Los textos visibles para usuario pueden estar en español; los identificadores de código no.
+- Localización (obligatorio):
+  - no usar strings literales directas para copy visible al usuario en vistas o componentes;
+  - usar siempre claves de localización (`String(localized:)` o equivalente) y registrar la entrada en `Resources/es.lproj/Localizable.strings` y `Resources/en.lproj/Localizable.strings`;
+  - evitar cerrar tareas con copy nueva sin claves localizables añadidas.
 - Orden y consistencia (cuando aplique):
   - Ordenar alfabéticamente `import`s.
   - Ordenar alfabéticamente las propiedades en `struct`s y `class`es si no existe un orden semántico más claro.
