@@ -57,6 +57,7 @@ jobs:
             -project PrecioLuzApp.xcodeproj \
             -scheme PrecioLuzApp \
             -destination "${{ steps.test-destination.outputs.value }}" \
+            clean \
             -skipMacroValidation \
             test
 
@@ -66,6 +67,7 @@ jobs:
             -project PrecioLuzApp.xcodeproj \
             -scheme PrecioLuzApp \
             -destination "${{ steps.test-destination.outputs.value }}" \
+            clean \
             -skipMacroValidation \
             -only-testing:PrecioLuzAppUITests/PrecioLuzAppUITests \
             test
