@@ -1,20 +1,14 @@
 name: iOS CI
 
-'on':
+on:
   pull_request:
-    branches:
-      - main
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   build-and-test:
     runs-on: macos-latest
-    timeout-minutes: 45
-    env:
-      LLVM_PROFILE_FILE: ${{ runner.temp }}/llvm-%p.profraw
 
     steps:
       - name: Checkout
@@ -57,40 +51,22 @@ jobs:
           echo "value=$TEST_DESTINATION" >> "$GITHUB_OUTPUT"
           echo "Using test destination: $TEST_DESTINATION"
 
-      - name: Preboot simulator
-        timeout-minutes: 10
-        shell: bash
-        run: |
-          set -euo pipefail
-          SIMULATOR_ID="${{ steps.test-destination.outputs.value }}"
-          SIMULATOR_ID="${SIMULATOR_ID#platform=iOS Simulator,id=}"
-          xcrun simctl shutdown "$SIMULATOR_ID" || true
-          xcrun simctl boot "$SIMULATOR_ID" || true
-          xcrun simctl bootstatus "$SIMULATOR_ID" -b
-
       - name: Test
-        timeout-minutes: 20
         run: |
           xcodebuild \
             -project PrecioLuzApp.xcodeproj \
             -scheme PrecioLuzApp \
             -destination "${{ steps.test-destination.outputs.value }}" \
-            -destination-timeout 180 \
-            -parallel-testing-enabled NO \
-            -only-testing:PrecioLuzAppTests \
             clean \
             -skipMacroValidation \
             test
 
       - name: UI Smoke Test
-        timeout-minutes: 20
         run: |
           xcodebuild \
             -project PrecioLuzApp.xcodeproj \
             -scheme PrecioLuzApp \
             -destination "${{ steps.test-destination.outputs.value }}" \
-            -destination-timeout 180 \
-            -parallel-testing-enabled NO \
             clean \
             -skipMacroValidation \
             -only-testing:PrecioLuzAppUITests/PrecioLuzAppUITests \
