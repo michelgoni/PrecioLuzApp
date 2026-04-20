@@ -9,6 +9,7 @@ on:
 jobs:
   build-and-test:
     runs-on: macos-latest
+    timeout-minutes: 45
 
     steps:
       - name: Checkout
@@ -51,12 +52,24 @@ jobs:
           echo "value=$TEST_DESTINATION" >> "$GITHUB_OUTPUT"
           echo "Using test destination: $TEST_DESTINATION"
 
+      - name: Preboot simulator
+        shell: bash
+        run: |
+          set -euo pipefail
+          SIMULATOR_ID="${{ steps.test-destination.outputs.value }}"
+          SIMULATOR_ID="${SIMULATOR_ID#platform=iOS Simulator,id=}"
+          xcrun simctl shutdown "$SIMULATOR_ID" || true
+          xcrun simctl boot "$SIMULATOR_ID" || true
+          xcrun simctl bootstatus "$SIMULATOR_ID" -b
+
       - name: Test
         run: |
           xcodebuild \
             -project PrecioLuzApp.xcodeproj \
             -scheme PrecioLuzApp \
             -destination "${{ steps.test-destination.outputs.value }}" \
+            -destination-timeout 180 \
+            -parallel-testing-enabled NO \
             clean \
             -skipMacroValidation \
             test
@@ -67,6 +80,8 @@ jobs:
             -project PrecioLuzApp.xcodeproj \
             -scheme PrecioLuzApp \
             -destination "${{ steps.test-destination.outputs.value }}" \
+            -destination-timeout 180 \
+            -parallel-testing-enabled NO \
             clean \
             -skipMacroValidation \
             -only-testing:PrecioLuzAppUITests/PrecioLuzAppUITests \
