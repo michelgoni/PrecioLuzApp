@@ -63,6 +63,7 @@ jobs:
           xcrun simctl bootstatus "$SIMULATOR_ID" -b
 
       - name: Test
+        timeout-minutes: 20
         run: |
           xcodebuild \
             -project PrecioLuzApp.xcodeproj \
@@ -70,11 +71,13 @@ jobs:
             -destination "${{ steps.test-destination.outputs.value }}" \
             -destination-timeout 180 \
             -parallel-testing-enabled NO \
+            -only-testing:PrecioLuzAppTests \
             clean \
             -skipMacroValidation \
             test
 
       - name: UI Smoke Test
+        timeout-minutes: 20
         run: |
           xcodebuild \
             -project PrecioLuzApp.xcodeproj \
