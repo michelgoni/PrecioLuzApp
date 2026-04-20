@@ -48,3 +48,15 @@ targets:
       - target: PrecioLuzApp
       - package: ComposableArchitecture
         product: ComposableArchitecture
+
+  PrecioLuzAppUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: UITests
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: PrecioLuzApp

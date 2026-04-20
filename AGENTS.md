@@ -8,7 +8,7 @@
 ## Reglas no negociables
 - Target mínimo: `iOS 26+`.
 - UI y arquitectura: `SwiftUI`, `Swift Concurrency`, `Charts`, `UserNotifications`, `URLSession` y `The Composable Architecture`.
-- Política técnica: Apple-first. Las excepciones aprobadas actuales son `pointfreeco/swift-composable-architecture` para gestión de estado y composición, y `pointfreeco/sqlite-data` para persistencia y caché.
+- Política técnica: Apple-first. Las excepciones aprobadas actuales son `pointfreeco/swift-composable-architecture` para gestión de estado y composición, `pointfreeco/sqlite-data` para persistencia y caché, y `pointfreeco/swift-snapshot-testing` para regresión visual en tests.
 - Preferir `async/await` y evitar APIs basadas en callbacks salvo necesidad real de integración.
 - Evitar `UIKit` salvo integración imprescindible con APIs del sistema o limitaciones concretas de `SwiftUI`.
 - Idioma inicial de la app: español, con estructura preparada para localización futura.

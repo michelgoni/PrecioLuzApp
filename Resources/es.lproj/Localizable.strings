@@ -1,3 +1,9 @@
 "tab.prices.title" = "Precios";
 "tab.chart.title" = "Gráfica";
 "tab.settings.title" = "Ajustes";
+"app.rootStatus.cached.label" = "Usando caché";
+"app.rootStatus.content.label" = "Datos actualizados";
+"app.rootStatus.empty.label" = "Sin datos disponibles";
+"app.rootStatus.error.label" = "No se han podido cargar datos";
+"app.rootStatus.loading.label" = "Cargando precios...";
+"app.rootStatus.retry.button" = "Reintentar";
