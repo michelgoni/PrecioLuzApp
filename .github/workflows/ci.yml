@@ -10,6 +10,8 @@ jobs:
   build-and-test:
     runs-on: macos-latest
     timeout-minutes: 45
+    env:
+      LLVM_PROFILE_FILE: ${{ runner.temp }}/llvm-%p.profraw
 
     steps:
       - name: Checkout
@@ -53,6 +55,7 @@ jobs:
           echo "Using test destination: $TEST_DESTINATION"
 
       - name: Preboot simulator
+        timeout-minutes: 10
         shell: bash
         run: |
           set -euo pipefail
