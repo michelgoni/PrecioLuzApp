@@ -8,7 +8,11 @@ struct AppShellView: View {
         ZStack {
             backgroundView
             tabView
+        }
+        .safeAreaInset(edge: .top) {
             statusBannerOverlay
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
         }
         .task {
             store.send(.onAppear)
@@ -25,8 +29,6 @@ struct AppShellView: View {
             onRetry: { store.send(.retryTapped) },
             status: store.rootStatus
         )
-        .padding(.horizontal, 16)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .accessibilityIdentifier("appRootStatusBanner")
     }
 

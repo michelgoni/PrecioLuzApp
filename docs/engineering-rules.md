@@ -58,7 +58,12 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Localización (obligatorio):
   - no usar strings literales directas para copy visible al usuario en vistas o componentes;
   - usar siempre claves de localización (`String(localized:)` o equivalente) y registrar la entrada en `Resources/es.lproj/Localizable.strings` y `Resources/en.lproj/Localizable.strings`;
+  - en código de UI, evitar `defaultValue` con copy visible al usuario salvo contexto excepcional documentado; preferir claves existentes y sincronizadas en ficheros de localización;
   - evitar cerrar tareas con copy nueva sin claves localizables añadidas.
+- Tokens visuales (obligatorio para UI):
+  - evitar magic numbers en layout/estilo (`padding`, `spacing`, `cornerRadius`, tamaños) dentro de vistas;
+  - definir constantes con intención semántica (por ejemplo `Layout.contentPadding`, `Layout.cardCornerRadius`) en el scope más cercano razonable;
+  - cuando el patrón se repita entre pantallas, promover esos tokens a un módulo compartido de design system.
 - Orden y consistencia (cuando aplique):
   - Ordenar alfabéticamente `import`s.
   - Ordenar alfabéticamente las propiedades en `struct`s y `class`es si no existe un orden semántico más claro.
@@ -88,6 +93,10 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - En features TCA:
   - introducir cambios primero en `State`, `Action`, `Reducer` y dependencias
   - después ajustar la vista y el wiring mínimo necesario
+- Previews SwiftUI (obligatorio):
+  - toda vista nueva debe incluir `#Preview` útil para validar layout y estados principales;
+  - si se modifica una vista existente, actualizar/añadir previews de los estados afectados por el cambio;
+  - no cerrar tareas de UI sin revisar al menos una preview o validación equivalente en simulador.
 - Preferir `async/await` para efectos y clientes.
 - Evitar callbacks salvo integración imprescindible.
 - Evitar `UIKit` salvo integración necesaria y aislada.
@@ -132,9 +141,10 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - revisar warnings de compilación y tratarlos como bloqueantes de cierre de tarea cuando afecten al stack aprobado
   - en particular, warnings o deprecations de `TCA` (`swift-composable-architecture`) deben resolverse en el mismo cambio o dejar la tarea abierta hasta su resolución
 - Tras cambios de UI, navegación o comportamiento visible:
+  - contrastar el resultado con el baseline de diseño aprobado en `Issue #13` y `docs/ui-direction.md`;
   - si existe proyecto Xcode, validar con `build` y simulador mediante `XcodeBuildMCP`
   - arrancar la app y revisar logs de ejecución para detectar errores no visibles
-  - realizar chequeo visual básico del flujo tocado y recoger evidencia mínima (screenshot o logs)
+  - realizar chequeo visual básico del flujo tocado y recoger evidencia mínima (screenshot, preview o logs)
   - guardar al menos un screenshot por feature tocada dentro de `docs/` y referenciar su ruta en el resumen final de la tarea/PR
 - Si no existe proyecto Xcode o no es posible validar, dejar constancia explícita y no presentar la validación como realizada.
 
