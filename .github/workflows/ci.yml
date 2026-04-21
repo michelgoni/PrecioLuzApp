@@ -53,21 +53,13 @@ jobs:
 
       - name: Test
         run: |
+          # The generated scheme already exercises the current UI smoke tests on CI.
+          # A second xcodebuild invocation for the same UITest target has been hanging on
+          # GitHub-hosted runners after build completion, so keep a single test pass here.
           xcodebuild \
             -project PrecioLuzApp.xcodeproj \
             -scheme PrecioLuzApp \
             -destination "${{ steps.test-destination.outputs.value }}" \
             clean \
             -skipMacroValidation \
-            test
-
-      - name: UI Smoke Test
-        run: |
-          xcodebuild \
-            -project PrecioLuzApp.xcodeproj \
-            -scheme PrecioLuzApp \
-            -destination "${{ steps.test-destination.outputs.value }}" \
-            clean \
-            -skipMacroValidation \
-            -only-testing:PrecioLuzAppUITests/PrecioLuzAppUITests \
             test

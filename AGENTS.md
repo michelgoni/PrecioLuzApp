@@ -23,6 +23,8 @@
 - No inventes arquitectura ni convenciones si todavía no están definidas en el repo.
 - Usa los documentos de `docs/` como fuente de verdad para el detalle funcional, técnico y visual.
 - La configuración estructural del proyecto vive en `project.yml` (`XcodeGen`); si cambian targets, paquetes, settings o estructura del proyecto, actualizar primero `project.yml` y después regenerar `PrecioLuzApp.xcodeproj`.
+- El workflow CI activo está en `.github/workflows/ci.yml` y usa `xcodebuild -resolvePackageDependencies`, `xcodebuild ... -skipMacroValidation build` y `xcodebuild ... test` con el scheme compartido del proyecto.
+- Cuando la tarea se ejecute en `worktree` o `detached HEAD`, mantener igualmente el preflight de sincronización y comprobar alineación con `origin/main` antes de editar.
 - `AGENTS.md` define marco, límites y prioridades.
 - `docs/engineering-rules.md` es la fuente única de reglas operativas de ejecución: preflight, disciplina de alcance, validación, integración por PR, CI y trazabilidad con issues/dependencias.
 - `docs/codex-project-prompt.md` es un apoyo de ejecución concreta y no puede reemplazar ni contradecir este archivo.
@@ -38,4 +40,6 @@
 - Arquitectura y decisiones técnicas: `docs/ios-architecture.md`
 - Reglas operativas de ingeniería: `docs/engineering-rules.md`
 - Dirección visual y UX: `docs/ui-direction.md`
+- Roadmap y dependencias entre hitos: `docs/implementation-roadmap.md`
+- Evidencia visual versionada de validaciones: `docs/validation-evidence.md`
 - Prompt auxiliar de ejecución para Codex: `docs/codex-project-prompt.md`
