@@ -167,6 +167,10 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - El título y la descripción de la `Pull Request` deben estar en inglés.
 - Gestión de comentarios de review en PR (obligatorio):
   - responder siempre a cada comentario de review con el contexto del cambio aplicado o la justificación técnica;
+  - no aceptar comentarios “porque sí”: antes de cambiar, evaluar si la propuesta mejora realmente el diseño/código/tests y explicar el porqué (incluyendo tradeoffs si aplica);
+  - declarar una decisión explícita por comentario: `aplicar`, `aplicar con ajuste` o `no aplicar` con motivo técnico;
+  - después de editar, listar de forma explícita qué se cambió (archivo y comportamiento afectado);
+  - cerrar cada comentario con el estado de validación ejecutada (`build`, `lint`, `tests`, UI checks cuando aplique);
   - tras aplicar el fix, marcar el hilo como resuelto;
   - no dejar comentarios accionables sin respuesta ni hilos abiertos por omisión.
 - Si la `Pull Request` contiene código, el CI mínimo en `GitHub Actions` debe ejecutar al menos `build` y tests, y ambos deben estar en verde antes del merge.

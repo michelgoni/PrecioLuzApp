@@ -39,6 +39,7 @@ enum RootStatus: Equatable, Sendable {
 struct AppFeature: Reducer {
     @ObservableState
     struct State: Equatable {
+        var prices = PricesFeature.State()
         var rootStatus: RootStatus = .loading
         var selectedTab: AppTab = .prices
     }
@@ -71,6 +72,7 @@ struct AppFeature: Reducer {
 
             case let .snapshotResponse(result):
                 state.rootStatus = mapRootStatus(from: result)
+                updatePricesState(&state.prices, from: result)
                 return .none
             }
         }
@@ -102,5 +104,20 @@ struct AppFeature: Reducer {
 
     private func mapStatus(from payload: DailyPricingSnapshotPayload, whenNotEmpty status: RootStatus) -> RootStatus {
         payload.hourlyPrices.isEmpty ? .empty : status
+    }
+
+    private func updatePricesState(_ state: inout PricesFeature.State, from result: DailyPricingSnapshotPipelineResult) {
+        switch result {
+        case .failed:
+            break
+        case let .cached(payload):
+            state.hourlyPrices = payload.hourlyPrices
+            state.isFromCache = true
+            state.summary = payload.summary
+        case let .fresh(payload):
+            state.hourlyPrices = payload.hourlyPrices
+            state.isFromCache = false
+            state.summary = payload.summary
+        }
     }
 }
