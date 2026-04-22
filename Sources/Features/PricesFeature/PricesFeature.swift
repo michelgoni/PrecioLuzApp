@@ -42,11 +42,19 @@ struct PricesFeature: Reducer {
 
 struct PricesView: View {
     private enum Layout {
+        static let cardBorderOpacity = 0.15
         static let cardCornerRadius: CGFloat = 12
         static let cardPadding: CGFloat = 12
+        static let classificationBadgeHorizontalPadding: CGFloat = 8
+        static let classificationBadgeVerticalPadding: CGFloat = 4
         static let contentPadding: CGFloat = 16
+        static let hourlyListSpacing: CGFloat = 10
+        static let hourlyRowHorizontalPadding: CGFloat = 12
+        static let hourlyRowVerticalPadding: CGFloat = 10
+        static let iconContainerSize: CGFloat = 28
         static let gridSpacing: CGFloat = 12
         static let safeAreaTopPadding: CGFloat = 8
+        static let sectionSpacing: CGFloat = 18
         static let summaryCardSpacing: CGFloat = 6
         static let verticalSpacing: CGFloat = 16
     }
@@ -65,6 +73,9 @@ struct PricesView: View {
                 } else {
                     noSummaryView
                 }
+
+                hourlyListSection
+                    .padding(.top, Layout.sectionSpacing)
             }
             .padding(Layout.contentPadding)
         }
@@ -88,6 +99,82 @@ struct PricesView: View {
             .font(.subheadline)
             .foregroundStyle(.secondary)
             .accessibilityIdentifier("pricesSummaryEmpty")
+    }
+
+    private var hourlyListSection: some View {
+        VStack(alignment: .leading, spacing: Layout.hourlyListSpacing) {
+            Text(String(localized: "prices.hourly.title"))
+                .font(.headline)
+                .foregroundStyle(.primary)
+                .accessibilityIdentifier("pricesHourlyTitle")
+
+            if state.hourlyPrices.isEmpty {
+                Text(String(localized: "prices.hourly.empty"))
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .accessibilityIdentifier("pricesHourlyEmpty")
+            } else {
+                hourlyRows
+            }
+        }
+        .accessibilityIdentifier("pricesHourlySection")
+    }
+
+    private var hourlyRows: some View {
+        VStack(spacing: Layout.hourlyListSpacing) {
+            ForEach(Array(state.hourlyPrices.enumerated()), id: \.element.date) { index, hourlyPrice in
+                hourlyPriceRow(hourlyPrice: hourlyPrice, isCurrent: isCurrent(hourlyPrice))
+                    .accessibilityIdentifier("pricesHourlyRow\(index)")
+            }
+        }
+    }
+
+    private func hourlyPriceRow(hourlyPrice: HourlyPrice, isCurrent: Bool) -> some View {
+        HStack(spacing: Layout.hourlyListSpacing) {
+            VStack(alignment: .leading, spacing: Layout.summaryCardSpacing) {
+                HStack(spacing: Layout.summaryCardSpacing) {
+                    Text(formattedHour(hourlyPrice.date))
+                        .font(.body.monospacedDigit())
+                        .foregroundStyle(.primary)
+
+                    if isCurrent {
+                        Text(String(localized: "prices.hourly.current.badge"))
+                            .font(.caption2.weight(.semibold))
+                            .padding(.horizontal, Layout.classificationBadgeHorizontalPadding)
+                            .padding(.vertical, Layout.classificationBadgeVerticalPadding)
+                            .background(Color.accentColor.opacity(Layout.cardBorderOpacity), in: Capsule())
+                    }
+                }
+
+                Text(classificationTitle(hourlyPrice.classification))
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(classificationColor(hourlyPrice.classification))
+                    .padding(.horizontal, Layout.classificationBadgeHorizontalPadding)
+                    .padding(.vertical, Layout.classificationBadgeVerticalPadding)
+                    .background(classificationColor(hourlyPrice.classification).opacity(Layout.cardBorderOpacity), in: Capsule())
+            }
+
+            Spacer(minLength: 0)
+
+            HStack(spacing: Layout.hourlyListSpacing) {
+                Text(formattedPrice(hourlyPrice.eurPerKWh))
+                    .font(.headline.monospacedDigit())
+                    .foregroundStyle(.primary)
+
+                Image(systemName: "calculator")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.primary)
+                    .frame(width: Layout.iconContainerSize, height: Layout.iconContainerSize)
+                    .background(Color(.tertiarySystemFill), in: Circle())
+                    .accessibilityIdentifier("pricesHourlyRowCalculator")
+            }
+        }
+        .padding(.horizontal, Layout.hourlyRowHorizontalPadding)
+        .padding(.vertical, Layout.hourlyRowVerticalPadding)
+        .background(
+            classificationColor(hourlyPrice.classification).opacity(Layout.cardBorderOpacity),
+            in: RoundedRectangle(cornerRadius: Layout.cardCornerRadius)
+        )
     }
 
     private func summaryGrid(_ summary: PriceSummary) -> some View {
@@ -131,6 +218,36 @@ struct PricesView: View {
         price.formatted(.currency(code: "EUR").precision(.fractionLength(3)))
     }
 
+    private func classificationColor(_ classification: PriceClassification) -> Color {
+        switch classification {
+        case .cheap:
+            .green
+        case .expensive:
+            .red
+        case .mid:
+            .orange
+        }
+    }
+
+    private func classificationTitle(_ classification: PriceClassification) -> String {
+        switch classification {
+        case .cheap:
+            String(localized: "prices.classification.cheap")
+        case .expensive:
+            String(localized: "prices.classification.expensive")
+        case .mid:
+            String(localized: "prices.classification.mid")
+        }
+    }
+
+    private func formattedHour(_ date: Date) -> String {
+        date.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)))
+    }
+
+    private func isCurrent(_ hourlyPrice: HourlyPrice) -> Bool {
+        state.summary?.current?.date == hourlyPrice.date
+    }
+
     private func summaryCard(accessibilityIdentifier: String, title: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: Layout.summaryCardSpacing) {
             Text(title)
@@ -166,6 +283,12 @@ struct PricesView: View {
     PricesView(
         state: .previewCached
     )
+}
+
+#Preview("Prices hourly only") {
+    var state = PricesFeature.State.previewContent
+    state.summary = nil
+    return PricesView(state: state)
 }
 
 private extension PricesFeature.State {

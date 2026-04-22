@@ -4,7 +4,13 @@
 "app.rootStatus.error.label" = "Could not load data";
 "app.rootStatus.loading.label" = "Loading prices...";
 "app.rootStatus.retry.button" = "Retry";
+"prices.classification.cheap" = "Cheap";
+"prices.classification.expensive" = "Expensive";
+"prices.classification.mid" = "Mid";
 "prices.cache.badge" = "Cached data";
+"prices.hourly.current.badge" = "Now";
+"prices.hourly.empty" = "No hourly prices available";
+"prices.hourly.title" = "Hourly prices";
 "prices.summary.average" = "Average";
 "prices.summary.current" = "Current";
 "prices.summary.empty" = "Summary unavailable";

@@ -4,7 +4,13 @@
 "app.rootStatus.error.label" = "No se han podido cargar datos";
 "app.rootStatus.loading.label" = "Cargando precios...";
 "app.rootStatus.retry.button" = "Reintentar";
+"prices.classification.cheap" = "Barato";
+"prices.classification.expensive" = "Caro";
+"prices.classification.mid" = "Medio";
 "prices.cache.badge" = "Datos desde caché";
+"prices.hourly.current.badge" = "Ahora";
+"prices.hourly.empty" = "No hay precios horarios disponibles";
+"prices.hourly.title" = "Precios por hora";
 "prices.summary.average" = "Media";
 "prices.summary.current" = "Actual";
 "prices.summary.empty" = "Resumen no disponible";
