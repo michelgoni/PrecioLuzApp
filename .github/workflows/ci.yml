@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: macos-latest
+    runs-on: macos-26
 
     steps:
       - name: Checkout
@@ -53,13 +53,14 @@ jobs:
 
       - name: Test
         run: |
-          # The generated scheme already exercises the current UI smoke tests on CI.
-          # A second xcodebuild invocation for the same UITest target has been hanging on
-          # GitHub-hosted runners after build completion, so keep a single test pass here.
+          # Limit CI to unit tests on GitHub-hosted runners.
+          # The scheme also includes UITests, and those have been hanging before
+          # any XCTest case starts executing in Actions.
           xcodebuild \
             -project PrecioLuzApp.xcodeproj \
             -scheme PrecioLuzApp \
             -destination "${{ steps.test-destination.outputs.value }}" \
             clean \
+            -only-testing:PrecioLuzAppTests \
             -skipMacroValidation \
             test

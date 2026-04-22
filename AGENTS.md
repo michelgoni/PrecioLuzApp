@@ -23,17 +23,12 @@
 - No inventes arquitectura ni convenciones si todavía no están definidas en el repo.
 - Usa los documentos de `docs/` como fuente de verdad para el detalle funcional, técnico y visual.
 - La configuración estructural del proyecto vive en `project.yml` (`XcodeGen`); si cambian targets, paquetes, settings o estructura del proyecto, actualizar primero `project.yml` y después regenerar `PrecioLuzApp.xcodeproj`.
-- El workflow CI activo está en `.github/workflows/ci.yml` y usa `xcodebuild -resolvePackageDependencies`, `xcodebuild ... -skipMacroValidation build` y `xcodebuild ... test` con el scheme compartido del proyecto.
+- El workflow CI activo está en `.github/workflows/ci.yml` y define la validación automática vigente de `build` y `test` para el scheme compartido del proyecto.
 - Cuando la tarea se ejecute en `worktree` o `detached HEAD`, mantener igualmente el preflight de sincronización y comprobar alineación con `origin/main` antes de editar.
 - `AGENTS.md` define marco, límites y prioridades.
 - `docs/engineering-rules.md` es la fuente única de reglas operativas de ejecución: preflight, disciplina de alcance, validación, integración por PR, CI y trazabilidad con issues/dependencias.
 - `docs/codex-project-prompt.md` es un apoyo de ejecución concreta y no puede reemplazar ni contradecir este archivo.
 - Si dos documentos entran en conflicto, prioriza este archivo y después `docs/product-spec.md`.
-- Comandos base alineados con el workflow actual de CI:
-  - `xcodebuild -resolvePackageDependencies -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp`
-  - `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination "generic/platform=iOS Simulator" -skipMacroValidation build`
-  - `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -showdestinations`
-  - `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,id=<simulator-id>' -skipMacroValidation test`
 
 ## Contexto del proyecto
 - Producto y contrato funcional: `docs/product-spec.md`
