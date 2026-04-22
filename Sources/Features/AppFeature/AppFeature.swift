@@ -46,6 +46,8 @@ struct AppFeature: Reducer {
 
     enum Action: Equatable {
         case onAppear
+        case pricesCalculationPlaceholderDismissed
+        case pricesHourTapped(HourlyPrice)
         case retryTapped
         case selectedTabChanged(AppTab)
         case snapshotResponse(DailyPricingSnapshotPipelineResult)
@@ -65,6 +67,15 @@ struct AppFeature: Reducer {
             case .onAppear, .retryTapped:
                 state.rootStatus = .loading
                 return loadSnapshotEffect()
+
+            case .pricesCalculationPlaceholderDismissed:
+                state.prices.isCalculationPlaceholderPresented = false
+                return .none
+
+            case let .pricesHourTapped(hour):
+                state.prices.selectedHour = hour
+                state.prices.isCalculationPlaceholderPresented = true
+                return .none
 
             case let .selectedTabChanged(tab):
                 state.selectedTab = tab

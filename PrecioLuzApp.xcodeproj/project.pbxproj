@@ -16,8 +16,9 @@
 		4C0BAE6A4CB9433F43182C37 /* DomainModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75905F6274FE9F8BFD18AA70 /* DomainModels.swift */; };
 		5D279D6881FAF12A670D335F /* DomainModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A029A1E50E3C94217EFFCFD3 /* DomainModelsTests.swift */; };
 		5E5746E4E23EC6B3BD28CE34 /* DailyPricingSnapshotPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BBD1FCB478C16D91769556 /* DailyPricingSnapshotPipeline.swift */; };
-		693300BDC4A7882348CC27BB /* SQLiteData in Frameworks */ = {isa = PBXBuildFile; productRef = 4188B8C7C367C21C44A8C549 /* SQLiteData */; };
+		693300BDC4A7882348CC27BB /* PerceptionCore in Frameworks */ = {isa = PBXBuildFile; productRef = 68F3E522A5B73E8D51220272 /* PerceptionCore */; };
 		710230124962E2BB85E1987F /* ClientDependenciesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9580A221A5C7CD6CCF6C022 /* ClientDependenciesTests.swift */; };
+		74C87C125B8103E879B5E025 /* Perception in Frameworks */ = {isa = PBXBuildFile; productRef = A766A56786864703170D8E16 /* Perception */; };
 		800D4B667AA0009EDF34F4A4 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C64AB47F534C3EF47DA37C60 /* ComposableArchitecture */; };
 		85ABD8BD485CCA4876B101A7 /* SettingsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CBEA5E1ECD0491F94E0DBA /* SettingsFeature.swift */; };
 		87A27EA53BFD0397DBAE5371 /* PrecioLuzAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51625C05A57E37064CEBE3EF /* PrecioLuzAppUITests.swift */; };
@@ -29,6 +30,7 @@
 		E4A687F3008BBA0F8B3C409C /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288DF63F4693A0161011B4A4 /* AppFeature.swift */; };
 		E6E7A2E30ED90CDEB11D9C79 /* RootStatusBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3602E82D1AA957F3DBC53EB5 /* RootStatusBanner.swift */; };
 		EAA54D0786CB11AB8762B373 /* Issue5AcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD4ED9252AA55CABFF1E90B /* Issue5AcceptanceTests.swift */; };
+		EED5F452F96BA33B52E73AF8 /* SQLiteData in Frameworks */ = {isa = PBXBuildFile; productRef = 4188B8C7C367C21C44A8C549 /* SQLiteData */; };
 		FE626B826E8DC20501C5B924 /* DailyPricingSnapshotPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2271894EDF7E0F475C376F87 /* DailyPricingSnapshotPipelineTests.swift */; };
 		FFD909BEA040F73D5FEDDC2D /* NotificationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DEBD7F1E386956FE512E3D6 /* NotificationClient.swift */; };
 /* End PBXBuildFile section */
@@ -83,7 +85,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				800D4B667AA0009EDF34F4A4 /* ComposableArchitecture in Frameworks */,
-				693300BDC4A7882348CC27BB /* SQLiteData in Frameworks */,
+				693300BDC4A7882348CC27BB /* PerceptionCore in Frameworks */,
+				74C87C125B8103E879B5E025 /* Perception in Frameworks */,
+				EED5F452F96BA33B52E73AF8 /* SQLiteData in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,6 +311,8 @@
 			name = PrecioLuzApp;
 			packageProductDependencies = (
 				C64AB47F534C3EF47DA37C60 /* ComposableArchitecture */,
+				68F3E522A5B73E8D51220272 /* PerceptionCore */,
+				A766A56786864703170D8E16 /* Perception */,
 				4188B8C7C367C21C44A8C549 /* SQLiteData */,
 			);
 			productName = PrecioLuzApp;
@@ -358,6 +364,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				0FDEA251C6FA6D692292341D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				A08C018D5EF3C577EB9EC0DC /* XCRemoteSwiftPackageReference "swift-perception" */,
 				EC3D920470079938231681F7 /* XCRemoteSwiftPackageReference "sqlite-data" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -704,6 +711,14 @@
 				minimumVersion = 1.9.3;
 			};
 		};
+		A08C018D5EF3C577EB9EC0DC /* XCRemoteSwiftPackageReference "swift-perception" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-perception";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.10;
+			};
+		};
 		EC3D920470079938231681F7 /* XCRemoteSwiftPackageReference "sqlite-data" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/sqlite-data";
@@ -719,6 +734,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EC3D920470079938231681F7 /* XCRemoteSwiftPackageReference "sqlite-data" */;
 			productName = SQLiteData;
+		};
+		68F3E522A5B73E8D51220272 /* PerceptionCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A08C018D5EF3C577EB9EC0DC /* XCRemoteSwiftPackageReference "swift-perception" */;
+			productName = PerceptionCore;
+		};
+		A766A56786864703170D8E16 /* Perception */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A08C018D5EF3C577EB9EC0DC /* XCRemoteSwiftPackageReference "swift-perception" */;
+			productName = Perception;
 		};
 		B05968D2E8CFF8E01B748541 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;

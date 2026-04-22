@@ -143,12 +143,19 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Tras cambios de UI, navegación o comportamiento visible:
   - contrastar el resultado con el baseline de diseño aprobado en `Issue #13` y `docs/ui-direction.md`;
   - si existe proyecto Xcode, validar con `build` y simulador mediante `XcodeBuildMCP`
+  - incluir `UI smoke tests` en el checkpoint cuando la tarea toque shell/navegación/wiring visible o flujos E2E base
   - arrancar la app y revisar logs de ejecución para detectar errores no visibles
-  - realizar chequeo visual básico del flujo tocado y recoger evidencia mínima (screenshot, preview o logs)
-  - guardar al menos un screenshot por feature tocada dentro de `docs/` y referenciar su ruta en el resumen final de la tarea/PR
+  - realizar chequeo visual básico del flujo tocado y recoger evidencia mínima obligatoria
+  - guardar al menos un screenshot por feature tocada dentro de `docs/` y referenciar su ruta en el resumen final de la tarea/PR (si el simulador falla, adjuntar evidencia de preview y dejar la limitación documentada)
 - Si no existe proyecto Xcode o no es posible validar, dejar constancia explícita y no presentar la validación como realizada.
+- Si aparece un bloqueo de linker/build session (por ejemplo símbolos no resueltos intermitentes):
+  - ejecutar `clean build session` del scheme afectado;
+  - repetir `build` y `test` en secuencial (no en paralelo) tras el clean;
+  - documentar en el checkpoint que se aplicó la mitigación.
 
 ### Checklist ejecutable (DoD transversal para tareas con código)
+- Clean build session (cuando haya bloqueo de linker/sesión de build):
+  - `xcodebuild -project <Project>.xcodeproj -scheme <Scheme> -destination 'platform=iOS Simulator,name=<Device>' clean`
 - Compilación:
   - `xcodebuild -project <Project>.xcodeproj -scheme <Scheme> -destination 'platform=iOS Simulator,name=<Device>' build`
 - Lint:
@@ -167,6 +174,10 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 
 ### Reglas de aplicabilidad del checklist
 - Si el cambio es solo documental, no aplicar compilación/lint/tests/UI; aplicar únicamente validación documental.
+- En mini incrementos de UI, el checkpoint no se considera completo sin:
+  - `build` + tests de lógica del scope tocado;
+  - `UI smoke tests` cuando aplique por wiring/flujo visible;
+  - evidencia visual versionada (screenshot o preview documentada con limitación explícita).
 - Si no existe proyecto Xcode todavía, ejecutar lo que sí esté disponible y reportar explícitamente la limitación restante.
 - Si `SwiftLint` no está instalado, tratar la validación como incompleta hasta instalarlo o dejar el bloqueo documentado.
 - En el alcance base actual no existe backend propio; revisión de logs backend no aplica salvo que se añada un servicio en el repo.

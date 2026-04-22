@@ -41,7 +41,11 @@ struct AppShellView: View {
 
     private var tabView: some View {
         TabView(selection: tabSelection) {
-            PricesView(state: store.prices)
+            PricesView(
+                onCalculationPlaceholderDismissed: { store.send(.pricesCalculationPlaceholderDismissed) },
+                onHourTapped: { store.send(.pricesHourTapped($0)) },
+                state: store.prices
+            )
                 .tabItem {
                     Label(AppTab.prices.title, systemImage: AppTab.prices.systemImage)
                         .accessibilityIdentifier("tabPrices")

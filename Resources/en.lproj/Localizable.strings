@@ -8,6 +8,11 @@
 "prices.classification.expensive" = "Expensive";
 "prices.classification.mid" = "Mid";
 "prices.cache.badge" = "Cached data";
+"prices.calculation.placeholder.close" = "Close";
+"prices.calculation.placeholder.message" = "In the next increment we will implement presets and duration to estimate cost.";
+"prices.calculation.placeholder.noSelection" = "No selected slot.";
+"prices.calculation.placeholder.selection" = "Hour %@ · %@";
+"prices.calculation.placeholder.title" = "Cost estimation";
 "prices.hourly.current.badge" = "Now";
 "prices.hourly.empty" = "No hourly prices available";
 "prices.hourly.title" = "Hourly prices";

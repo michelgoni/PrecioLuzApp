@@ -59,6 +59,8 @@ struct PricesView: View {
         static let verticalSpacing: CGFloat = 16
     }
 
+    let onCalculationPlaceholderDismissed: () -> Void
+    let onHourTapped: (HourlyPrice) -> Void
     let state: PricesFeature.State
 
     var body: some View {
@@ -82,11 +84,25 @@ struct PricesView: View {
         .background(Color(.systemBackground))
         .accessibilityIdentifier("pricesScreen")
         .safeAreaPadding(.top, Layout.safeAreaTopPadding)
+        .sheet(
+            isPresented: Binding(
+                get: { state.isCalculationPlaceholderPresented },
+                set: { isPresented in
+                    if !isPresented {
+                        onCalculationPlaceholderDismissed()
+                    }
+                }
+            )
+        ) {
+            calculationPlaceholderView
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
+        }
     }
 
     private var cacheBadge: some View {
         Label(
-            String(localized: "prices.cache.badge"),
+            String(localized: "prices.cache.badge", defaultValue: "Datos desde caché"),
             systemImage: "externaldrive.badge.clock"
         )
         .font(.footnote.weight(.semibold))
@@ -95,7 +111,7 @@ struct PricesView: View {
     }
 
     private var noSummaryView: some View {
-        Text(String(localized: "prices.summary.empty"))
+        Text(String(localized: "prices.summary.empty", defaultValue: "Resumen no disponible"))
             .font(.subheadline)
             .foregroundStyle(.secondary)
             .accessibilityIdentifier("pricesSummaryEmpty")
@@ -103,13 +119,13 @@ struct PricesView: View {
 
     private var hourlyListSection: some View {
         VStack(alignment: .leading, spacing: Layout.hourlyListSpacing) {
-            Text(String(localized: "prices.hourly.title"))
+            Text(String(localized: "prices.hourly.title", defaultValue: "Precios por hora"))
                 .font(.headline)
                 .foregroundStyle(.primary)
                 .accessibilityIdentifier("pricesHourlyTitle")
 
             if state.hourlyPrices.isEmpty {
-                Text(String(localized: "prices.hourly.empty"))
+                Text(String(localized: "prices.hourly.empty", defaultValue: "No hay precios horarios disponibles"))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .accessibilityIdentifier("pricesHourlyEmpty")
@@ -123,8 +139,13 @@ struct PricesView: View {
     private var hourlyRows: some View {
         VStack(spacing: Layout.hourlyListSpacing) {
             ForEach(Array(state.hourlyPrices.enumerated()), id: \.element.date) { index, hourlyPrice in
-                hourlyPriceRow(hourlyPrice: hourlyPrice, isCurrent: isCurrent(hourlyPrice))
-                    .accessibilityIdentifier("pricesHourlyRow\(index)")
+                Button {
+                    onHourTapped(hourlyPrice)
+                } label: {
+                    hourlyPriceRow(hourlyPrice: hourlyPrice, isCurrent: isCurrent(hourlyPrice))
+                        .accessibilityIdentifier("pricesHourlyRow\(index)")
+                }
+                .buttonStyle(.plain)
             }
         }
     }
@@ -138,7 +159,7 @@ struct PricesView: View {
                         .foregroundStyle(.primary)
 
                     if isCurrent {
-                        Text(String(localized: "prices.hourly.current.badge"))
+                        Text(String(localized: "prices.hourly.current.badge", defaultValue: "Ahora"))
                             .font(.caption2.weight(.semibold))
                             .padding(.horizontal, Layout.classificationBadgeHorizontalPadding)
                             .padding(.vertical, Layout.classificationBadgeVerticalPadding)
@@ -161,7 +182,7 @@ struct PricesView: View {
                     .font(.headline.monospacedDigit())
                     .foregroundStyle(.primary)
 
-                Image(systemName: "calculator")
+                Image(systemName: "plus.forwardslash.minus")
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.primary)
                     .frame(width: Layout.iconContainerSize, height: Layout.iconContainerSize)
@@ -181,22 +202,22 @@ struct PricesView: View {
         LazyVGrid(columns: summaryColumns, spacing: Layout.gridSpacing) {
             summaryCard(
                 accessibilityIdentifier: "pricesSummaryAverage",
-                title: String(localized: "prices.summary.average"),
+                title: String(localized: "prices.summary.average", defaultValue: "Media"),
                 value: formattedPrice(summary.average)
             )
             summaryCard(
                 accessibilityIdentifier: "pricesSummaryCurrent",
-                title: String(localized: "prices.summary.current"),
+                title: String(localized: "prices.summary.current", defaultValue: "Actual"),
                 value: summary.current.map { formattedPrice($0.eurPerKWh) } ?? placeholderValue
             )
             summaryCard(
                 accessibilityIdentifier: "pricesSummaryMaximum",
-                title: String(localized: "prices.summary.maximum"),
+                title: String(localized: "prices.summary.maximum", defaultValue: "Máximo"),
                 value: formattedPrice(summary.maximum)
             )
             summaryCard(
                 accessibilityIdentifier: "pricesSummaryMinimum",
-                title: String(localized: "prices.summary.minimum"),
+                title: String(localized: "prices.summary.minimum", defaultValue: "Mínimo"),
                 value: formattedPrice(summary.minimum)
             )
         }
@@ -211,7 +232,7 @@ struct PricesView: View {
     }
 
     private var placeholderValue: String {
-        String(localized: "prices.summary.unavailable")
+        String(localized: "prices.summary.unavailable", defaultValue: "N/D")
     }
 
     private func formattedPrice(_ price: Double) -> String {
@@ -232,11 +253,11 @@ struct PricesView: View {
     private func classificationTitle(_ classification: PriceClassification) -> String {
         switch classification {
         case .cheap:
-            String(localized: "prices.classification.cheap")
+            String(localized: "prices.classification.cheap", defaultValue: "Barato")
         case .expensive:
-            String(localized: "prices.classification.expensive")
+            String(localized: "prices.classification.expensive", defaultValue: "Caro")
         case .mid:
-            String(localized: "prices.classification.mid")
+            String(localized: "prices.classification.mid", defaultValue: "Medio")
         }
     }
 
@@ -246,6 +267,46 @@ struct PricesView: View {
 
     private func isCurrent(_ hourlyPrice: HourlyPrice) -> Bool {
         state.summary?.current?.date == hourlyPrice.date
+    }
+
+    private var calculationPlaceholderView: some View {
+        VStack(alignment: .leading, spacing: Layout.verticalSpacing) {
+            Text(String(localized: "prices.calculation.placeholder.title", defaultValue: "Cálculo de coste"))
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(.primary)
+                .accessibilityIdentifier("pricesCalculationPlaceholderTitle")
+
+            Text(selectedHourDescription)
+                .font(.body)
+                .foregroundStyle(.secondary)
+                .accessibilityIdentifier("pricesCalculationPlaceholderSelectedHour")
+
+            Text(String(localized: "prices.calculation.placeholder.message", defaultValue: "En el siguiente incremento implementaremos presets y duración para calcular el coste."))
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .accessibilityIdentifier("pricesCalculationPlaceholderMessage")
+
+            Button(String(localized: "prices.calculation.placeholder.close", defaultValue: "Cerrar")) {
+                onCalculationPlaceholderDismissed()
+            }
+            .buttonStyle(.borderedProminent)
+            .accessibilityIdentifier("pricesCalculationPlaceholderCloseButton")
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(Layout.contentPadding)
+    }
+
+    private var selectedHourDescription: String {
+        guard let selectedHour = state.selectedHour else {
+            return String(localized: "prices.calculation.placeholder.noSelection", defaultValue: "No hay franja seleccionada.")
+        }
+        let hour = formattedHour(selectedHour.date)
+        let price = formattedPrice(selectedHour.eurPerKWh)
+        return String(
+            format: String(localized: "prices.calculation.placeholder.selection", defaultValue: "Hora %@ · %@"),
+            hour,
+            price
+        )
     }
 
     private func summaryCard(accessibilityIdentifier: String, title: String, value: String) -> some View {
@@ -269,18 +330,24 @@ struct PricesView: View {
 
 #Preview("Prices placeholder") {
     PricesView(
+        onCalculationPlaceholderDismissed: {},
+        onHourTapped: { _ in },
         state: PricesFeature.State()
     )
 }
 
 #Preview("Prices summary content") {
     PricesView(
+        onCalculationPlaceholderDismissed: {},
+        onHourTapped: { _ in },
         state: .previewContent
     )
 }
 
 #Preview("Prices cached content") {
     PricesView(
+        onCalculationPlaceholderDismissed: {},
+        onHourTapped: { _ in },
         state: .previewCached
     )
 }
@@ -288,7 +355,22 @@ struct PricesView: View {
 #Preview("Prices hourly only") {
     var state = PricesFeature.State.previewContent
     state.summary = nil
-    return PricesView(state: state)
+    return PricesView(
+        onCalculationPlaceholderDismissed: {},
+        onHourTapped: { _ in },
+        state: state
+    )
+}
+
+#Preview("Prices calculation placeholder") {
+    var state = PricesFeature.State.previewContent
+    state.isCalculationPlaceholderPresented = true
+    state.selectedHour = state.hourlyPrices.first
+    return PricesView(
+        onCalculationPlaceholderDismissed: {},
+        onHourTapped: { _ in },
+        state: state
+    )
 }
 
 private extension PricesFeature.State {

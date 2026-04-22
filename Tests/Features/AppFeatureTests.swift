@@ -37,6 +37,35 @@ struct AppFeatureTests {
     }
 
     @MainActor
+    @Test("AppFeature opens calculation placeholder when hour is tapped")
+    func pricesHourTappedPresentsPlaceholder() async {
+        let selectedHour = HourlyPrice.mockValue
+        let store = TestStore(initialState: AppFeature.State()) {
+            AppFeature()
+        }
+
+        await store.send(.pricesHourTapped(selectedHour)) {
+            $0.prices.isCalculationPlaceholderPresented = true
+            $0.prices.selectedHour = selectedHour
+        }
+    }
+
+    @MainActor
+    @Test("AppFeature dismisses calculation placeholder")
+    func pricesCalculationPlaceholderDismissed() async {
+        let initial = AppFeature.State(
+            prices: PricesFeature.State(isCalculationPlaceholderPresented: true, selectedHour: HourlyPrice.mockValue)
+        )
+        let store = TestStore(initialState: initial) {
+            AppFeature()
+        }
+
+        await store.send(.pricesCalculationPlaceholderDismissed) {
+            $0.prices.isCalculationPlaceholderPresented = false
+        }
+    }
+
+    @MainActor
     @Test("AppFeature maps fresh snapshot to content")
     func freshMapsToContent() async {
         let payload = DailyPricingSnapshotPayload.mockPayload(withPrices: true)
