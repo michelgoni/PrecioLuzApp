@@ -8,11 +8,11 @@ enum AppTab: Hashable {
     var title: String {
         switch self {
         case .chart:
-            String(localized: "tab.chart.title", defaultValue: "Gráfica")
+            String(localized: "tab.chart.title")
         case .prices:
-            String(localized: "tab.prices.title", defaultValue: "Precios")
+            String(localized: "tab.prices.title")
         case .settings:
-            String(localized: "tab.settings.title", defaultValue: "Ajustes")
+            String(localized: "tab.settings.title")
         }
     }
 
@@ -47,7 +47,9 @@ struct AppFeature: Reducer {
     enum Action: Equatable {
         case onAppear
         case pricesCalculationPlaceholderDismissed
+        case pricesDurationHoursChanged(Double)
         case pricesHourTapped(HourlyPrice)
+        case pricesPresetSelected(AppliancePreset.Kind)
         case retryTapped
         case selectedTabChanged(AppTab)
         case snapshotResponse(DailyPricingSnapshotPipelineResult)
@@ -72,9 +74,22 @@ struct AppFeature: Reducer {
                 state.prices.isCalculationPlaceholderPresented = false
                 return .none
 
+            case let .pricesDurationHoursChanged(durationHours):
+                state.prices.calculationDurationHours = max(
+                    PricesFeature.State.minimumCalculationDurationHours,
+                    durationHours
+                )
+                return .none
+
             case let .pricesHourTapped(hour):
+                state.prices.calculationDurationHours = PricesFeature.State.defaultCalculationDurationHours
+                state.prices.selectedPresetKind = .washingMachine
                 state.prices.selectedHour = hour
                 state.prices.isCalculationPlaceholderPresented = true
+                return .none
+
+            case let .pricesPresetSelected(kind):
+                state.prices.selectedPresetKind = kind
                 return .none
 
             case let .selectedTabChanged(tab):

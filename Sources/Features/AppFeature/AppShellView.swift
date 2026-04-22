@@ -42,7 +42,9 @@ struct AppShellView: View {
     private var tabView: some View {
         TabView(selection: tabSelection) {
             PricesView(
+                onCalculationDurationHoursChanged: { store.send(.pricesDurationHoursChanged($0)) },
                 onCalculationPlaceholderDismissed: { store.send(.pricesCalculationPlaceholderDismissed) },
+                onCalculationPresetSelected: { store.send(.pricesPresetSelected($0)) },
                 onHourTapped: { store.send(.pricesHourTapped($0)) },
                 state: store.prices
             )

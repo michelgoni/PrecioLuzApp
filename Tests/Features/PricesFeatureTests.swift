@@ -29,8 +29,34 @@ struct PricesFeatureTests {
         }
 
         await store.send(.hourTapped(selectedHour)) {
+            $0.calculationDurationHours = 1.0
             $0.isCalculationPlaceholderPresented = true
             $0.selectedHour = selectedHour
+            $0.selectedPresetKind = .washingMachine
+        }
+    }
+
+    @MainActor
+    @Test("PricesFeature updates calculation duration")
+    func calculationDurationHoursChanged() async {
+        let store = TestStore(initialState: PricesFeature.State()) {
+            PricesFeature()
+        }
+
+        await store.send(.calculationDurationHoursChanged(2.0)) {
+            $0.calculationDurationHours = 2.0
+        }
+    }
+
+    @MainActor
+    @Test("PricesFeature updates selected preset")
+    func calculationPresetSelected() async {
+        let store = TestStore(initialState: PricesFeature.State()) {
+            PricesFeature()
+        }
+
+        await store.send(.calculationPresetSelected(.airConditioner)) {
+            $0.selectedPresetKind = .airConditioner
         }
     }
 

@@ -77,6 +77,8 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Legibilidad y formato (obligatorio):
   - Preferir firmas de funciones en una sola línea cuando sea razonable para lectura (evitar saltos justo después del nombre de la función).
   - Mantener indentación consistente; al tocar un archivo en Xcode, re-indentar con `Control+i` (Editor > Structure > Re-Indent) antes de considerar el cambio listo.
+  - Límite de tamaño por extensión/tipo: ninguna `class` (incluyendo sus `extension`) puede superar 400 líneas en un mismo archivo; si se alcanza ese tamaño, es obligatorio separar responsabilidades en archivos/tipos más pequeños antes de cerrar la tarea.
+  - Si `SwiftLint` no está aplicando esta regla, tratarla igualmente como bloqueante de revisión y verificarla manualmente en el checkpoint.
 - Diseño y claridad de intención (obligatorio):
   - No mezclar responsabilidades distintas dentro del mismo tipo (`class`, `struct`, `enum` o `actor`). Separar clasificación, agregación, cálculo, persistencia y orquestación cuando corresponda.
   - Cada tipo debe tener un propósito principal claro y verificable en su API pública.
@@ -97,6 +99,10 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - toda vista nueva debe incluir `#Preview` útil para validar layout y estados principales;
   - si se modifica una vista existente, actualizar/añadir previews de los estados afectados por el cambio;
   - no cerrar tareas de UI sin revisar al menos una preview o validación equivalente en simulador.
+- Arquitectura de vistas SwiftUI (obligatorio):
+  - seguir diseño atómico y granular por componentes siempre que sea posible;
+  - evitar vistas monolíticas; dividir en sub-vistas con responsabilidad única y nombres explícitos;
+  - extraer piezas reutilizables cuando un bloque visual/funcional se repita o complique la lectura.
 - Preferir `async/await` para efectos y clientes.
 - Evitar callbacks salvo integración imprescindible.
 - Evitar `UIKit` salvo integración necesaria y aislada.
