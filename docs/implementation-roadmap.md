@@ -5,6 +5,11 @@ Convert the documentation-first repository into a production-ready native iPhone
 
 ## DoD transversal
 - Para hitos con código (`Hito 1` en adelante), el cierre se evalúa con el checklist ejecutable definido en `docs/engineering-rules.md` (compilación, lint, tests, logs y validación visual cuando aplique).
+- Para mini incrementos de UI dentro de un hito, cada checkpoint debe incluir:
+  - `build` + tests del scope tocado;
+  - `UI smoke tests` cuando el cambio afecte wiring/navegación/flujo visible;
+  - evidencia visual del estado implementado (screenshot versionado; si no es posible, preview documentada con limitación explícita).
+- Si el checkpoint sufre bloqueo de linker/build session, aplicar `clean build session` y revalidar en secuencial antes de cerrar el incremento.
 - `Hito 0` es documental y se valida con su DoD específico.
 - `Hito 1.5` es documental y se valida con su DoD específico.
 
@@ -95,6 +100,22 @@ Convert the documentation-first repository into a production-ready native iPhone
 - lista horaria
 - selección de franja
 - tratamiento visual de la hora actual y caché
+
+#### Incremento 7.0 — Contrato visual-funcional previo
+- tipo: documental (sin código de app)
+- objetivo:
+  - cerrar contrato mínimo de implementación para `Prices` antes de empezar reducers/vistas
+  - validar alineación con `docs/product-spec.md` y `docs/ui-direction.md`
+- alcance funcional cerrado para el arranque:
+  - bloque superior con tarjetas `Actual`, `Media`, `Mínimo`, `Máximo`
+  - lista horaria completa con semántica `cheap/mid/expensive`
+  - diferenciación explícita de hora actual
+  - tratamiento visual de dato `cached` cuando aplique
+  - selección de franja con apertura de modal placeholder (sin cálculo final en este incremento)
+- condiciones de salida:
+  - preflight de sincronización ejecutado en la rama de trabajo
+  - dependencia de diseño (`Issue #13`) verificada como cerrada
+  - sin contradicciones detectadas entre roadmap, product spec y UI direction
 
 ### Hito 5 — Feature `CostCalculation`
 - presets cerrados

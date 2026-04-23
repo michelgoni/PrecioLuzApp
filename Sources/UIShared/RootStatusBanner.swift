@@ -15,10 +15,7 @@ struct RootStatusBanner: View {
       Spacer(minLength: 0)
       if status == .error {
         Button(
-          String(
-            localized: "app.rootStatus.retry.button",
-            defaultValue: "Reintentar"
-          )
+          String(localized: "app.rootStatus.retry.button")
         ) {
           onRetry()
         }
@@ -54,50 +51,35 @@ private extension RootStatus {
       RootStatusBannerStyle(
         backgroundColor: Color.orange.opacity(0.15),
         iconName: "clock.arrow.circlepath",
-        label: String(
-          localized: "app.rootStatus.cached.label",
-          defaultValue: "Usando caché"
-        ),
+        label: String(localized: "app.rootStatus.cached.label"),
         tintColor: .orange
       )
     case .content:
       RootStatusBannerStyle(
         backgroundColor: Color.green.opacity(0.15),
         iconName: "checkmark.circle",
-        label: String(
-          localized: "app.rootStatus.content.label",
-          defaultValue: "Datos actualizados"
-        ),
+        label: String(localized: "app.rootStatus.content.label"),
         tintColor: .green
       )
     case .empty:
       RootStatusBannerStyle(
         backgroundColor: Color.yellow.opacity(0.15),
         iconName: "tray",
-        label: String(
-          localized: "app.rootStatus.empty.label",
-          defaultValue: "Sin datos disponibles"
-        ),
+        label: String(localized: "app.rootStatus.empty.label"),
         tintColor: .yellow
       )
     case .error:
       RootStatusBannerStyle(
         backgroundColor: Color.red.opacity(0.15),
         iconName: "exclamationmark.triangle",
-        label: String(
-          localized: "app.rootStatus.error.label",
-          defaultValue: "No se han podido cargar datos"
-        ),
+        label: String(localized: "app.rootStatus.error.label"),
         tintColor: .red
       )
     case .loading:
       RootStatusBannerStyle(
         backgroundColor: Color.blue.opacity(0.15),
         iconName: "arrow.clockwise",
-        label: String(
-          localized: "app.rootStatus.loading.label",
-          defaultValue: "Cargando precios..."
-        ),
+        label: String(localized: "app.rootStatus.loading.label"),
         tintColor: .blue
       )
     }

@@ -8,11 +8,11 @@ enum AppTab: Hashable {
     var title: String {
         switch self {
         case .chart:
-            String(localized: "tab.chart.title", defaultValue: "Gráfica")
+            String(localized: "tab.chart.title")
         case .prices:
-            String(localized: "tab.prices.title", defaultValue: "Precios")
+            String(localized: "tab.prices.title")
         case .settings:
-            String(localized: "tab.settings.title", defaultValue: "Ajustes")
+            String(localized: "tab.settings.title")
         }
     }
 
@@ -39,12 +39,17 @@ enum RootStatus: Equatable, Sendable {
 struct AppFeature: Reducer {
     @ObservableState
     struct State: Equatable {
+        var prices = PricesFeature.State()
         var rootStatus: RootStatus = .loading
         var selectedTab: AppTab = .prices
     }
 
     enum Action: Equatable {
         case onAppear
+        case pricesCalculationPlaceholderDismissed
+        case pricesDurationHoursChanged(Double)
+        case pricesHourTapped(HourlyPrice)
+        case pricesPresetSelected(AppliancePreset.Kind)
         case retryTapped
         case selectedTabChanged(AppTab)
         case snapshotResponse(DailyPricingSnapshotPipelineResult)
@@ -65,12 +70,35 @@ struct AppFeature: Reducer {
                 state.rootStatus = .loading
                 return loadSnapshotEffect()
 
+            case .pricesCalculationPlaceholderDismissed:
+                state.prices.isCalculationPlaceholderPresented = false
+                return .none
+
+            case let .pricesDurationHoursChanged(durationHours):
+                state.prices.calculationDurationHours = max(
+                    PricesFeature.State.minimumCalculationDurationHours,
+                    durationHours
+                )
+                return .none
+
+            case let .pricesHourTapped(hour):
+                state.prices.calculationDurationHours = PricesFeature.State.defaultCalculationDurationHours
+                state.prices.selectedPresetKind = .washingMachine
+                state.prices.selectedHour = hour
+                state.prices.isCalculationPlaceholderPresented = true
+                return .none
+
+            case let .pricesPresetSelected(kind):
+                state.prices.selectedPresetKind = kind
+                return .none
+
             case let .selectedTabChanged(tab):
                 state.selectedTab = tab
                 return .none
 
             case let .snapshotResponse(result):
                 state.rootStatus = mapRootStatus(from: result)
+                updatePricesState(&state.prices, from: result)
                 return .none
             }
         }
@@ -102,5 +130,22 @@ struct AppFeature: Reducer {
 
     private func mapStatus(from payload: DailyPricingSnapshotPayload, whenNotEmpty status: RootStatus) -> RootStatus {
         payload.hourlyPrices.isEmpty ? .empty : status
+    }
+
+    private func updatePricesState(_ state: inout PricesFeature.State, from result: DailyPricingSnapshotPipelineResult) {
+        switch result {
+        case .failed:
+            break
+        case let .cached(payload):
+            state.hourlyPrices = payload.hourlyPrices
+            state.isFromCache = true
+            state.selectedHour = payload.hourlyPrices.first { $0.date == state.selectedHour?.date }
+            state.summary = payload.summary
+        case let .fresh(payload):
+            state.hourlyPrices = payload.hourlyPrices
+            state.isFromCache = false
+            state.selectedHour = payload.hourlyPrices.first { $0.date == state.selectedHour?.date }
+            state.summary = payload.summary
+        }
     }
 }

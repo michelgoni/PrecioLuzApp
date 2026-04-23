@@ -58,7 +58,12 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Localización (obligatorio):
   - no usar strings literales directas para copy visible al usuario en vistas o componentes;
   - usar siempre claves de localización (`String(localized:)` o equivalente) y registrar la entrada en `Resources/es.lproj/Localizable.strings` y `Resources/en.lproj/Localizable.strings`;
+  - en código de UI, evitar `defaultValue` con copy visible al usuario salvo contexto excepcional documentado; preferir claves existentes y sincronizadas en ficheros de localización;
   - evitar cerrar tareas con copy nueva sin claves localizables añadidas.
+- Tokens visuales (obligatorio para UI):
+  - evitar magic numbers en layout/estilo (`padding`, `spacing`, `cornerRadius`, tamaños) dentro de vistas;
+  - definir constantes con intención semántica (por ejemplo `Layout.contentPadding`, `Layout.cardCornerRadius`) en el scope más cercano razonable;
+  - cuando el patrón se repita entre pantallas, promover esos tokens a un módulo compartido de design system.
 - Orden y consistencia (cuando aplique):
   - Ordenar alfabéticamente `import`s.
   - Ordenar alfabéticamente las propiedades en `struct`s y `class`es si no existe un orden semántico más claro.
@@ -72,6 +77,8 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Legibilidad y formato (obligatorio):
   - Preferir firmas de funciones en una sola línea cuando sea razonable para lectura (evitar saltos justo después del nombre de la función).
   - Mantener indentación consistente; al tocar un archivo en Xcode, re-indentar con `Control+i` (Editor > Structure > Re-Indent) antes de considerar el cambio listo.
+  - Límite de tamaño por extensión/tipo: ninguna `class` (incluyendo sus `extension`) puede superar 400 líneas en un mismo archivo; si se alcanza ese tamaño, es obligatorio separar responsabilidades en archivos/tipos más pequeños antes de cerrar la tarea.
+  - Si `SwiftLint` no está aplicando esta regla, tratarla igualmente como bloqueante de revisión y verificarla manualmente en el checkpoint.
 - Diseño y claridad de intención (obligatorio):
   - No mezclar responsabilidades distintas dentro del mismo tipo (`class`, `struct`, `enum` o `actor`). Separar clasificación, agregación, cálculo, persistencia y orquestación cuando corresponda.
   - Cada tipo debe tener un propósito principal claro y verificable en su API pública.
@@ -88,6 +95,14 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - En features TCA:
   - introducir cambios primero en `State`, `Action`, `Reducer` y dependencias
   - después ajustar la vista y el wiring mínimo necesario
+- Previews SwiftUI (obligatorio):
+  - toda vista nueva debe incluir `#Preview` útil para validar layout y estados principales;
+  - si se modifica una vista existente, actualizar/añadir previews de los estados afectados por el cambio;
+  - no cerrar tareas de UI sin revisar al menos una preview o validación equivalente en simulador.
+- Arquitectura de vistas SwiftUI (obligatorio):
+  - seguir diseño atómico y granular por componentes siempre que sea posible;
+  - evitar vistas monolíticas; dividir en sub-vistas con responsabilidad única y nombres explícitos;
+  - extraer piezas reutilizables cuando un bloque visual/funcional se repita o complique la lectura.
 - Preferir `async/await` para efectos y clientes.
 - Evitar callbacks salvo integración imprescindible.
 - Evitar `UIKit` salvo integración necesaria y aislada.
@@ -96,6 +111,8 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 ## Política de tests (obligatoria)
 - No usar `XCTest` para unit/integration tests en este proyecto salvo bloqueo técnico explícito y temporal.
 - Excepción permitida: `XCUITest` para pruebas de UI end-to-end en su target dedicado.
+- No introducir lógica, flags o ramas de ejecución de testing dentro del código de producción (`Sources/App`, `Sources/Features`, etc.).
+- Si un test solo pasa alterando el flujo de producción, rediseñar el test para que sea determinista sin hooks productivos o eliminarlo.
 - Los tests deben implementarse con el framework `Testing` (`import Testing`, `@Test`, `#expect`, `#require`).
 - Para reducers y efectos en `TCA`, seguir el enfoque oficial con `TestStore` descrito en la documentación de TCA:
   - https://pointfreeco.github.io/swift-composable-architecture/1.9.0/documentation/composablearchitecture/testing/
@@ -130,15 +147,28 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - ejecutar `SwiftLint` en modo estricto
   - ejecutar tests automáticos del área afectada (o suite completa si no hay filtrado útil)
   - revisar warnings de compilación y tratarlos como bloqueantes de cierre de tarea cuando afecten al stack aprobado
+  - revisar deprecations activas en el scope tocado y migrarlas en el mismo cambio
   - en particular, warnings o deprecations de `TCA` (`swift-composable-architecture`) deben resolverse en el mismo cambio o dejar la tarea abierta hasta su resolución
 - Tras cambios de UI, navegación o comportamiento visible:
+  - contrastar el resultado con el baseline de diseño aprobado en `Issue #13` y `docs/ui-direction.md`;
   - si existe proyecto Xcode, validar con `build` y simulador mediante `XcodeBuildMCP`
+  - incluir `UI smoke tests` en el checkpoint cuando la tarea toque shell/navegación/wiring visible o flujos E2E base
   - arrancar la app y revisar logs de ejecución para detectar errores no visibles
-  - realizar chequeo visual básico del flujo tocado y recoger evidencia mínima (screenshot o logs)
-  - guardar al menos un screenshot por feature tocada dentro de `docs/` y referenciar su ruta en el resumen final de la tarea/PR
+  - realizar chequeo visual básico del flujo tocado y recoger evidencia mínima obligatoria
+  - guardar al menos un screenshot por feature tocada dentro de `docs/` y referenciar su ruta en el resumen final de la tarea/PR (si el simulador falla, adjuntar evidencia de preview y dejar la limitación documentada)
 - Si no existe proyecto Xcode o no es posible validar, dejar constancia explícita y no presentar la validación como realizada.
+- Si aparece un bloqueo de linker/build session (por ejemplo símbolos no resueltos intermitentes):
+  - ejecutar `clean build session` del scheme afectado;
+  - repetir `build` y `test` en secuencial (no en paralelo) tras el clean;
+  - documentar en el checkpoint que se aplicó la mitigación.
+- Para evitar bloqueos de `build.db` y `DerivedData`:
+  - no ejecutar `UI smoke tests` en paralelo con `build` o con otras ejecuciones de `xcodebuild` sobre el mismo proyecto;
+  - ejecutar `build` y, después, `UI smoke tests` en secuencial;
+  - si se requieren varias validaciones concurrentes, usar `DerivedDataPath` aislado por ejecución y documentarlo en el checkpoint.
 
 ### Checklist ejecutable (DoD transversal para tareas con código)
+- Clean build session (cuando haya bloqueo de linker/sesión de build):
+  - `xcodebuild -project <Project>.xcodeproj -scheme <Scheme> -destination 'platform=iOS Simulator,name=<Device>' clean`
 - Compilación:
   - `xcodebuild -project <Project>.xcodeproj -scheme <Scheme> -destination 'platform=iOS Simulator,name=<Device>' build`
 - Lint:
@@ -157,6 +187,10 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 
 ### Reglas de aplicabilidad del checklist
 - Si el cambio es solo documental, no aplicar compilación/lint/tests/UI; aplicar únicamente validación documental.
+- En mini incrementos de UI, el checkpoint no se considera completo sin:
+  - `build` + tests de lógica del scope tocado;
+  - `UI smoke tests` cuando aplique por wiring/flujo visible;
+  - evidencia visual versionada (screenshot o preview documentada con limitación explícita).
 - Si no existe proyecto Xcode todavía, ejecutar lo que sí esté disponible y reportar explícitamente la limitación restante.
 - Si `SwiftLint` no está instalado, tratar la validación como incompleta hasta instalarlo o dejar el bloqueo documentado.
 - En el alcance base actual no existe backend propio; revisión de logs backend no aplica salvo que se añada un servicio en el repo.
@@ -167,6 +201,10 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - El título y la descripción de la `Pull Request` deben estar en inglés.
 - Gestión de comentarios de review en PR (obligatorio):
   - responder siempre a cada comentario de review con el contexto del cambio aplicado o la justificación técnica;
+  - no aceptar comentarios “porque sí”: antes de cambiar, evaluar si la propuesta mejora realmente el diseño/código/tests y explicar el porqué (incluyendo tradeoffs si aplica);
+  - declarar una decisión explícita por comentario: `aplicar`, `aplicar con ajuste` o `no aplicar` con motivo técnico;
+  - después de editar, listar de forma explícita qué se cambió (archivo y comportamiento afectado);
+  - cerrar cada comentario con el estado de validación ejecutada (`build`, `lint`, `tests`, UI checks cuando aplique);
   - tras aplicar el fix, marcar el hilo como resuelto;
   - no dejar comentarios accionables sin respuesta ni hilos abiertos por omisión.
 - Si la `Pull Request` contiene código, el CI mínimo en `GitHub Actions` debe ejecutar al menos `build` y tests, y ambos deben estar en verde antes del merge.
@@ -203,6 +241,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - el entregable pedido existe
   - el cambio está alineado con `AGENTS.md`
   - se ha ejecutado la validación mínima posible
+  - no quedan warnings ni deprecations activas en el scope tocado
   - no quedan warnings activos de `TCA` en el scope tocado (especialmente deprecations con migración disponible)
   - se ha dejado claro el estado de integración por `Pull Request` y CI cuando aplique
   - se ha indicado explícitamente su dependencia respecto a hitos/PR previos y siguientes cuando forme parte de una cadena
