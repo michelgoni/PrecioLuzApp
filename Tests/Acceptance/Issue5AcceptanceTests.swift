@@ -1,3 +1,4 @@
+import ComposableArchitecture
 import Foundation
 import Testing
 
@@ -157,6 +158,99 @@ struct Issue5AcceptanceTests {
     )
 
     #expect(await failedPipeline.load() == .failed)
+  }
+}
+
+struct Issue7AcceptanceTests {
+  @MainActor
+  @Test("Acceptance #7: fresh pricing flow supports time-slot selection and modal lifecycle")
+  func freshPricingSelectionFlow() async {
+    let payload = DailyPricingSnapshotPayload.issue7Payload
+    let selectedHour = payload.hourlyPrices[1]
+    let store = TestStore(initialState: AppFeature.State()) {
+      AppFeature()
+    }
+
+    await store.send(.snapshotResponse(.fresh(payload))) {
+      $0.prices.hourlyPrices = payload.hourlyPrices
+      $0.prices.isFromCache = false
+      $0.prices.summary = payload.summary
+      $0.rootStatus = .content
+    }
+
+    await store.send(.pricesHourTapped(selectedHour)) {
+      $0.prices.calculationDurationHours = PricesFeature.State.defaultCalculationDurationHours
+      $0.prices.isCalculationPlaceholderPresented = true
+      $0.prices.selectedHour = selectedHour
+      $0.prices.selectedPresetKind = .washingMachine
+    }
+
+    await store.send(.pricesDurationHoursChanged(2.0)) {
+      $0.prices.calculationDurationHours = 2.0
+    }
+
+    await store.send(.pricesPresetSelected(.dishwasher)) {
+      $0.prices.selectedPresetKind = .dishwasher
+    }
+
+    await store.send(.pricesCalculationPlaceholderDismissed) {
+      $0.prices.isCalculationPlaceholderPresented = false
+    }
+  }
+
+  @MainActor
+  @Test("Acceptance #7: cached pricing flow marks cache state for shell and prices")
+  func cachedPricingFlowMarksCacheState() async {
+    let payload = DailyPricingSnapshotPayload.issue7Payload
+    let store = TestStore(initialState: AppFeature.State()) {
+      AppFeature()
+    }
+
+    await store.send(.snapshotResponse(.cached(payload))) {
+      $0.prices.hourlyPrices = payload.hourlyPrices
+      $0.prices.isFromCache = true
+      $0.prices.summary = payload.summary
+      $0.rootStatus = .cached
+    }
+  }
+}
+
+private extension DailyPricingSnapshotPayload {
+  static var issue7Payload: Self {
+    let prices = [
+      HourlyPrice(
+        classification: .cheap,
+        date: Date(timeIntervalSince1970: 1_700_000_000),
+        daypart: .morning,
+        eurPerKWh: 0.10
+      ),
+      HourlyPrice(
+        classification: .mid,
+        date: Date(timeIntervalSince1970: 1_700_003_600),
+        daypart: .morning,
+        eurPerKWh: 0.158
+      ),
+      HourlyPrice(
+        classification: .expensive,
+        date: Date(timeIntervalSince1970: 1_700_007_200),
+        daypart: .afternoon,
+        eurPerKWh: 0.215
+      ),
+    ]
+
+    return Self(
+      dayStart: Date(timeIntervalSince1970: 1_699_996_400),
+      fetchedAt: Date(timeIntervalSince1970: 1_700_010_800),
+      hourlyPrices: prices,
+      summary: PriceSummary(
+        average: 0.158,
+        current: prices[1],
+        maximum: 0.215,
+        maximumHour: prices[2].date,
+        minimum: 0.10,
+        minimumHour: prices[0].date
+      )
+    )
   }
 }
 
