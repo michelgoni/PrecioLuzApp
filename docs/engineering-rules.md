@@ -111,6 +111,8 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 ## Política de tests (obligatoria)
 - No usar `XCTest` para unit/integration tests en este proyecto salvo bloqueo técnico explícito y temporal.
 - Excepción permitida: `XCUITest` para pruebas de UI end-to-end en su target dedicado.
+- No introducir lógica, flags o ramas de ejecución de testing dentro del código de producción (`Sources/App`, `Sources/Features`, etc.).
+- Si un test solo pasa alterando el flujo de producción, rediseñar el test para que sea determinista sin hooks productivos o eliminarlo.
 - Los tests deben implementarse con el framework `Testing` (`import Testing`, `@Test`, `#expect`, `#require`).
 - Para reducers y efectos en `TCA`, seguir el enfoque oficial con `TestStore` descrito en la documentación de TCA:
   - https://pointfreeco.github.io/swift-composable-architecture/1.9.0/documentation/composablearchitecture/testing/
@@ -145,6 +147,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - ejecutar `SwiftLint` en modo estricto
   - ejecutar tests automáticos del área afectada (o suite completa si no hay filtrado útil)
   - revisar warnings de compilación y tratarlos como bloqueantes de cierre de tarea cuando afecten al stack aprobado
+  - revisar deprecations activas en el scope tocado y migrarlas en el mismo cambio
   - en particular, warnings o deprecations de `TCA` (`swift-composable-architecture`) deben resolverse en el mismo cambio o dejar la tarea abierta hasta su resolución
 - Tras cambios de UI, navegación o comportamiento visible:
   - contrastar el resultado con el baseline de diseño aprobado en `Issue #13` y `docs/ui-direction.md`;
@@ -158,6 +161,10 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - ejecutar `clean build session` del scheme afectado;
   - repetir `build` y `test` en secuencial (no en paralelo) tras el clean;
   - documentar en el checkpoint que se aplicó la mitigación.
+- Para evitar bloqueos de `build.db` y `DerivedData`:
+  - no ejecutar `UI smoke tests` en paralelo con `build` o con otras ejecuciones de `xcodebuild` sobre el mismo proyecto;
+  - ejecutar `build` y, después, `UI smoke tests` en secuencial;
+  - si se requieren varias validaciones concurrentes, usar `DerivedDataPath` aislado por ejecución y documentarlo en el checkpoint.
 
 ### Checklist ejecutable (DoD transversal para tareas con código)
 - Clean build session (cuando haya bloqueo de linker/sesión de build):
@@ -234,6 +241,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - el entregable pedido existe
   - el cambio está alineado con `AGENTS.md`
   - se ha ejecutado la validación mínima posible
+  - no quedan warnings ni deprecations activas en el scope tocado
   - no quedan warnings activos de `TCA` en el scope tocado (especialmente deprecations con migración disponible)
   - se ha dejado claro el estado de integración por `Pull Request` y CI cuando aplique
   - se ha indicado explícitamente su dependencia respecto a hitos/PR previos y siguientes cuando forme parte de una cadena

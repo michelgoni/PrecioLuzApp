@@ -15,7 +15,6 @@ struct PricesHourlyListSectionView: View {
                 hourlyRows
             }
         }
-        .accessibilityIdentifier("pricesHourlySection")
     }
 
     private var emptyState: some View {
