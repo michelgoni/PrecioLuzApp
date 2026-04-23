@@ -47,6 +47,30 @@ final class PrecioLuzAppUITests: XCTestCase {
     XCTAssertTrue(pricesButton.isSelected)
   }
 
+  func testPriceRowSelectionPresentsAndDismissesCalculationModal() throws {
+    let app = makeApp()
+    app.launch()
+
+    let row = app.descendants(matching: .any)["pricesHourlyRow0"]
+    try XCTSkipUnless(
+      row.waitForExistence(timeout: 5),
+      "No hourly row available in this launch; skipping modal selection smoke."
+    )
+    row.tap()
+
+    let modalTitle = staticText(in: app, names: ["Cálculo de coste", "prices.calculation.placeholder.title"])
+    XCTAssertTrue(modalTitle.waitForExistence(timeout: 5))
+
+    let presetPicker = app.scrollViews["pricesCalculationPresetPicker"]
+    XCTAssertTrue(presetPicker.waitForExistence(timeout: 5))
+
+    let closeButton = app.buttons["pricesCalculationPlaceholderCloseButton"]
+    XCTAssertTrue(closeButton.waitForExistence(timeout: 5))
+    closeButton.tap()
+
+    XCTAssertFalse(closeButton.exists)
+  }
+
   private func makeApp() -> XCUIApplication {
     let app = XCUIApplication()
     app.launchArguments += ["-AppleLanguages", "(es)", "-AppleLocale", "es_ES"]

@@ -7,21 +7,22 @@ struct PricesHourlyListSectionView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: PricesViewLayout.hourlyListSpacing) {
-            Text(String(localized: "prices.hourly.title"))
-                .font(.headline)
-                .foregroundStyle(.primary)
-                .accessibilityIdentifier("pricesHourlyTitle")
+            sectionTitle
 
             if hourlyPrices.isEmpty {
-                Text(String(localized: "prices.hourly.empty"))
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .accessibilityIdentifier("pricesHourlyEmpty")
+                emptyState
             } else {
                 hourlyRows
             }
         }
         .accessibilityIdentifier("pricesHourlySection")
+    }
+
+    private var emptyState: some View {
+        Text(String(localized: "prices.hourly.empty"))
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
+            .accessibilityIdentifier("pricesHourlyEmpty")
     }
 
     private var hourlyRows: some View {
@@ -34,11 +35,18 @@ struct PricesHourlyListSectionView: View {
                         hourlyPrice: hourlyPrice,
                         isCurrent: currentDate == hourlyPrice.date
                     )
-                    .accessibilityIdentifier("pricesHourlyRow\(index)")
                 }
                 .buttonStyle(.plain)
+                .accessibilityIdentifier("pricesHourlyRow\(index)")
             }
         }
+    }
+
+    private var sectionTitle: some View {
+        Text(String(localized: "prices.hourly.title"))
+            .font(.headline)
+            .foregroundStyle(.primary)
+            .accessibilityIdentifier("pricesHourlyTitle")
     }
 }
 
@@ -50,33 +58,20 @@ private struct PricesHourlyRowView: View {
         HStack(spacing: PricesViewLayout.hourlyListSpacing) {
             VStack(alignment: .leading, spacing: PricesViewLayout.summaryCardSpacing) {
                 HStack(spacing: PricesViewLayout.summaryCardSpacing) {
-                    Text(PricesViewFormatting.hour(hourlyPrice.date))
-                        .font(.body.monospacedDigit())
-                        .foregroundStyle(.primary)
+                    hourLabel
 
                     if isCurrent {
-                        Text(String(localized: "prices.hourly.current.badge"))
-                            .font(.caption2.weight(.semibold))
-                            .padding(.horizontal, PricesViewLayout.classificationBadgeHorizontalPadding)
-                            .padding(.vertical, PricesViewLayout.classificationBadgeVerticalPadding)
-                            .background(Color.accentColor.opacity(PricesViewLayout.cardBorderOpacity), in: Capsule())
+                        currentBadge
                     }
                 }
 
-                Text(classificationTitle)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(classificationColor)
-                    .padding(.horizontal, PricesViewLayout.classificationBadgeHorizontalPadding)
-                    .padding(.vertical, PricesViewLayout.classificationBadgeVerticalPadding)
-                    .background(classificationColor.opacity(PricesViewLayout.cardBorderOpacity), in: Capsule())
+                classificationBadge
             }
 
             Spacer(minLength: 0)
 
             HStack(spacing: PricesViewLayout.hourlyListSpacing) {
-                Text(PricesViewFormatting.price(hourlyPrice.eurPerKWh))
-                    .font(.headline.monospacedDigit())
-                    .foregroundStyle(.primary)
+                priceLabel
 
                 Image(systemName: "plus.forwardslash.minus")
                     .font(.subheadline.weight(.semibold))
@@ -92,6 +87,15 @@ private struct PricesHourlyRowView: View {
             classificationColor.opacity(PricesViewLayout.cardBorderOpacity),
             in: RoundedRectangle(cornerRadius: PricesViewLayout.cardCornerRadius)
         )
+    }
+
+    private var classificationBadge: some View {
+        Text(classificationTitle)
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(classificationColor)
+            .padding(.horizontal, PricesViewLayout.classificationBadgeHorizontalPadding)
+            .padding(.vertical, PricesViewLayout.classificationBadgeVerticalPadding)
+            .background(classificationColor.opacity(PricesViewLayout.cardBorderOpacity), in: Capsule())
     }
 
     private var classificationColor: Color {
@@ -114,5 +118,25 @@ private struct PricesHourlyRowView: View {
         case .mid:
             String(localized: "prices.classification.mid")
         }
+    }
+
+    private var currentBadge: some View {
+        Text(String(localized: "prices.hourly.current.badge"))
+            .font(.caption2.weight(.semibold))
+            .padding(.horizontal, PricesViewLayout.classificationBadgeHorizontalPadding)
+            .padding(.vertical, PricesViewLayout.classificationBadgeVerticalPadding)
+            .background(Color.accentColor.opacity(PricesViewLayout.cardBorderOpacity), in: Capsule())
+    }
+
+    private var hourLabel: some View {
+        Text(PricesViewFormatting.hour(hourlyPrice.date))
+            .font(.body.monospacedDigit())
+            .foregroundStyle(.primary)
+    }
+
+    private var priceLabel: some View {
+        Text(PricesViewFormatting.price(hourlyPrice.eurPerKWh))
+            .font(.headline.monospacedDigit())
+            .foregroundStyle(.primary)
     }
 }
