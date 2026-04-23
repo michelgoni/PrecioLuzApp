@@ -139,10 +139,12 @@ struct AppFeature: Reducer {
         case let .cached(payload):
             state.hourlyPrices = payload.hourlyPrices
             state.isFromCache = true
+            state.selectedHour = payload.hourlyPrices.first { $0.date == state.selectedHour?.date }
             state.summary = payload.summary
         case let .fresh(payload):
             state.hourlyPrices = payload.hourlyPrices
             state.isFromCache = false
+            state.selectedHour = payload.hourlyPrices.first { $0.date == state.selectedHour?.date }
             state.summary = payload.summary
         }
     }

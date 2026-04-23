@@ -69,6 +69,31 @@ struct AppFeatureTests {
     }
 
     @MainActor
+    @Test("AppFeature clears selected hour when snapshot no longer contains it")
+    func snapshotResponseClearsStaleSelectedHour() async {
+        let selectedHour = HourlyPrice.mockValue
+        var initialState = AppFeature.State()
+        initialState.prices.selectedHour = selectedHour
+        let payload = DailyPricingSnapshotPayload(
+            dayStart: .mockNow,
+            fetchedAt: .mockNow,
+            hourlyPrices: [HourlyPrice.mockFutureValue],
+            summary: nil
+        )
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        }
+
+        await store.send(.snapshotResponse(.fresh(payload))) {
+            $0.rootStatus = .content
+            $0.prices.hourlyPrices = payload.hourlyPrices
+            $0.prices.isFromCache = false
+            $0.prices.selectedHour = nil
+            $0.prices.summary = nil
+        }
+    }
+
+    @MainActor
     @Test("AppFeature maps failed result to error")
     func failedMapsToError() async {
         let store = TestStore(initialState: AppFeature.State()) {
@@ -155,5 +180,12 @@ private extension HourlyPrice {
         date: .mockNow,
         daypart: .morning,
         eurPerKWh: 0.15
+    )
+
+    static let mockFutureValue = HourlyPrice(
+        classification: .mid,
+        date: Date.mockNow.addingTimeInterval(3_600),
+        daypart: .morning,
+        eurPerKWh: 0.18
     )
 }
