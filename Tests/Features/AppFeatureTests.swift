@@ -95,6 +95,36 @@ struct AppFeatureTests {
         }
     }
 
+    @MainActor
+    @Test("AppFeature opens calculation modal when an hourly price is selected")
+    func pricesHourTappedPresentsCalculationModal() async {
+        let selectedHour = HourlyPrice.mockValue
+        let store = TestStore(initialState: AppFeature.State()) {
+            AppFeature()
+        }
+
+        await store.send(.pricesHourTapped(selectedHour)) {
+            $0.prices.calculationDurationHours = PricesFeature.State.defaultCalculationDurationHours
+            $0.prices.isCalculationPlaceholderPresented = true
+            $0.prices.selectedHour = selectedHour
+            $0.prices.selectedPresetKind = .washingMachine
+        }
+    }
+
+    @MainActor
+    @Test("AppFeature closes calculation modal when dismiss is triggered")
+    func pricesCalculationPlaceholderDismissedClosesModal() async {
+        var initialState = AppFeature.State()
+        initialState.prices.isCalculationPlaceholderPresented = true
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        }
+
+        await store.send(.pricesCalculationPlaceholderDismissed) {
+            $0.prices.isCalculationPlaceholderPresented = false
+        }
+    }
+
     @Test("App tabs expose expected SF Symbols")
     func tabSymbolsAreConfigured() {
         #expect(AppTab.chart.systemImage == "chart.xyaxis.line")
