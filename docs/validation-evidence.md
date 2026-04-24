@@ -20,4 +20,4 @@
   - `testHourlyRowTapPresentsAndDismissesCalculationModal`
   - `testChartTabDoesNotPresentCalculationModal`
 - Visual evidence:
-  - pending capture in simulator during review checkpoint of this mini increment
+  - [docs/evidence-issue8-prices-shell.png](/Users/michelgoni/Documents/repos/PrecioLuzApp/docs/evidence-issue8-prices-shell.png)
