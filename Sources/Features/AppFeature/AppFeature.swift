@@ -145,12 +145,18 @@ struct AppFeature: Reducer {
             state.costCalculation.selectedHour = payload.hourlyPrices.first {
                 $0.date == state.costCalculation.selectedHour?.date
             }
+            if state.costCalculation.selectedHour == nil {
+                state.costCalculation.isPresented = false
+            }
             state.summary = payload.summary
         case let .fresh(payload):
             state.hourlyPrices = payload.hourlyPrices
             state.isFromCache = false
             state.costCalculation.selectedHour = payload.hourlyPrices.first {
                 $0.date == state.costCalculation.selectedHour?.date
+            }
+            if state.costCalculation.selectedHour == nil {
+                state.costCalculation.isPresented = false
             }
             state.summary = payload.summary
         }

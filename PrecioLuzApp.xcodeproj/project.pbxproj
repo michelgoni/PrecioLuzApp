@@ -21,6 +21,7 @@
 		593628AFC7B815D234E34500 /* PricesCalculationSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CF32CE8FA1797C28B789D1 /* PricesCalculationSheetView.swift */; };
 		5D279D6881FAF12A670D335F /* DomainModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A029A1E50E3C94217EFFCFD3 /* DomainModelsTests.swift */; };
 		5E5746E4E23EC6B3BD28CE34 /* DailyPricingSnapshotPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BBD1FCB478C16D91769556 /* DailyPricingSnapshotPipeline.swift */; };
+		68B309C5FF0C727AAC50E095 /* Issue8AcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79D3713AFCF1EB48194466D /* Issue8AcceptanceTests.swift */; };
 		693300BDC4A7882348CC27BB /* PerceptionCore in Frameworks */ = {isa = PBXBuildFile; productRef = 68F3E522A5B73E8D51220272 /* PerceptionCore */; };
 		710230124962E2BB85E1987F /* ClientDependenciesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9580A221A5C7CD6CCF6C022 /* ClientDependenciesTests.swift */; };
 		74C87C125B8103E879B5E025 /* Perception in Frameworks */ = {isa = PBXBuildFile; productRef = A766A56786864703170D8E16 /* Perception */; };
@@ -93,6 +94,7 @@
 		9F4F1D582D8DBA50B34C8BD4 /* PricesFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesFeatureTests.swift; sourceTree = "<group>"; };
 		A029A1E50E3C94217EFFCFD3 /* DomainModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainModelsTests.swift; sourceTree = "<group>"; };
 		A349262256B13A6827F96952 /* PricesFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesFeature.swift; sourceTree = "<group>"; };
+		A79D3713AFCF1EB48194466D /* Issue8AcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue8AcceptanceTests.swift; sourceTree = "<group>"; };
 		ACADDCB130E4F2949415F1B1 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C4DFEC270AECA2B51E278782 /* PricesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesView.swift; sourceTree = "<group>"; };
 		D6D0097CAC5D657E7AA186A3 /* CostCalculationFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostCalculationFeature.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				EAD4ED9252AA55CABFF1E90B /* Issue5AcceptanceTests.swift */,
+				A79D3713AFCF1EB48194466D /* Issue8AcceptanceTests.swift */,
 			);
 			path = Acceptance;
 			sourceTree = "<group>";
@@ -490,6 +493,7 @@
 				FE626B826E8DC20501C5B924 /* DailyPricingSnapshotPipelineTests.swift in Sources */,
 				5D279D6881FAF12A670D335F /* DomainModelsTests.swift in Sources */,
 				EAA54D0786CB11AB8762B373 /* Issue5AcceptanceTests.swift in Sources */,
+				68B309C5FF0C727AAC50E095 /* Issue8AcceptanceTests.swift in Sources */,
 				2C7A88ECC9F97A3203DEB45D /* PricesFeatureTests.swift in Sources */,
 				00FB8BC052CFF7B1164C485D /* TCASmokeTests.swift in Sources */,
 			);
