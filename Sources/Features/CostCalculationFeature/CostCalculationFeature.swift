@@ -12,6 +12,17 @@ struct CostCalculationFeature: Reducer {
         var isPresented = false
         var selectedHour: HourlyPrice?
         var selectedPresetKind: AppliancePreset.Kind = .washingMachine
+
+        var calculation: CostCalculation? {
+            guard let selectedHour else {
+                return nil
+            }
+            return ApplianceCostEstimator.estimate(
+                durationHours: durationHours,
+                preset: PricesPresetCatalog.preset(for: selectedPresetKind),
+                selectedHour: selectedHour
+            )
+        }
     }
 
     enum Action: Equatable {

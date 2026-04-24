@@ -61,6 +61,44 @@ struct CostCalculationFeatureTests {
             $0.durationHours = 2.0
         }
     }
+
+    @MainActor
+    @Test("CostCalculationFeature clamps duration to allowed range")
+    func durationHoursChangedClampsRange() async {
+        let store = TestStore(initialState: CostCalculationFeature.State()) {
+            CostCalculationFeature()
+        }
+
+        await store.send(.durationHoursChanged(99.0)) {
+            $0.durationHours = CostCalculationFeature.State.maximumDurationHours
+        }
+
+        await store.send(.durationHoursChanged(0.0)) {
+            $0.durationHours = CostCalculationFeature.State.minimumDurationHours
+        }
+    }
+
+    @Test("CostCalculationFeature derives cost result from selected input")
+    func calculationDerivedFromState() {
+        var state = CostCalculationFeature.State()
+        CostCalculationFeature.State.apply(.hourSelected(hourPriceTestValue), to: &state)
+        CostCalculationFeature.State.apply(.presetSelected(.dishwasher), to: &state)
+        CostCalculationFeature.State.apply(.durationHoursChanged(2.0), to: &state)
+
+        let expected = ApplianceCostEstimator.estimate(
+            durationHours: 2.0,
+            preset: PricesPresetCatalog.preset(for: .dishwasher),
+            selectedHour: hourPriceTestValue
+        )
+        #expect(state.calculation == expected)
+    }
+
+    @MainActor
+    @Test("CostCalculationFeature has no result when selected hour is missing")
+    func calculationIsNilWithoutSelectedHour() async {
+        let state = CostCalculationFeature.State()
+        #expect(state.calculation == nil)
+    }
 }
 
 private let hourPriceTestValue = HourlyPrice(

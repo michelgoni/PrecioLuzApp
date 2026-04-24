@@ -14,6 +14,19 @@ struct AppShellView: View {
                 .padding(.horizontal, 16)
                 .padding(.top, 8)
         }
+        .sheet(isPresented: calculationSheetPresentedBinding) {
+            PricesCalculationSheetView(
+                durationHours: store.prices.costCalculation.durationHours,
+                durationHoursBinding: calculationDurationBinding,
+                estimatedCostDescription: estimatedCostDescription,
+                onCloseTapped: { store.send(.pricesCalculationPlaceholderDismissed) },
+                presetBinding: selectedPresetBinding,
+                selectedHour: store.prices.costCalculation.selectedHour,
+                presets: PricesPresetCatalog.all
+            )
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
+        }
         .task {
             store.send(.onAppear)
         }
@@ -39,12 +52,43 @@ struct AppShellView: View {
         )
     }
 
+    private var calculationDurationBinding: Binding<Double> {
+        Binding(
+            get: { store.prices.costCalculation.durationHours },
+            set: { store.send(.pricesDurationHoursChanged($0)) }
+        )
+    }
+
+    private var calculationSheetPresentedBinding: Binding<Bool> {
+        Binding(
+            get: {
+                store.selectedTab == .prices && store.prices.costCalculation.isPresented
+            },
+            set: { isPresented in
+                if !isPresented {
+                    store.send(.pricesCalculationPlaceholderDismissed)
+                }
+            }
+        )
+    }
+
+    private var estimatedCostDescription: String {
+        guard let estimatedCostEUR = store.prices.costCalculation.calculation?.estimatedCostEUR else {
+            return String(localized: "prices.calculation.result.empty")
+        }
+        return PricesViewFormatting.price(estimatedCostEUR)
+    }
+
+    private var selectedPresetBinding: Binding<AppliancePreset.Kind> {
+        Binding(
+            get: { store.prices.costCalculation.selectedPresetKind },
+            set: { store.send(.pricesPresetSelected($0)) }
+        )
+    }
+
     private var tabView: some View {
         TabView(selection: tabSelection) {
             PricesView(
-                onCalculationDurationHoursChanged: { store.send(.pricesDurationHoursChanged($0)) },
-                onCalculationPlaceholderDismissed: { store.send(.pricesCalculationPlaceholderDismissed) },
-                onCalculationPresetSelected: { store.send(.pricesPresetSelected($0)) },
                 onHourTapped: { store.send(.pricesHourTapped($0)) },
                 state: store.prices
             )

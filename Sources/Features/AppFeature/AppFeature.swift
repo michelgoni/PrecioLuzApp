@@ -94,6 +94,9 @@ struct AppFeature: Reducer {
 
             case let .selectedTabChanged(tab):
                 state.selectedTab = tab
+                if tab != .prices {
+                    state.prices.costCalculation.isPresented = false
+                }
                 return .none
 
             case let .snapshotResponse(result):

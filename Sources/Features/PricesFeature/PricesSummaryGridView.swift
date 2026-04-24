@@ -52,47 +52,53 @@ struct PricesSummaryGridView: View {
 }
 
 #Preview("Preset selector horizontal list") {
-    @Previewable @State var selectedPreset: AppliancePreset.Kind = .washingMachine
+    struct PreviewHarness: View {
+        @State var selectedPreset: AppliancePreset.Kind = .washingMachine
 
-    PricesSummaryGridView(
-        presetBinding: $selectedPreset,
-        presets: [
-            AppliancePreset(
-                displayName: String(localized: "prices.calculation.preset.airConditioner.name"),
-                kind: .airConditioner,
-                powerKW: 1.2,
-                shortDescription: String(localized: "prices.calculation.preset.airConditioner.description"),
-                symbolName: "fan"
-            ),
-            AppliancePreset(
-                displayName: String(localized: "prices.calculation.preset.clothesDryer.name"),
-                kind: .clothesDryer,
-                powerKW: 2.5,
-                shortDescription: String(localized: "prices.calculation.preset.clothesDryer.description"),
-                symbolName: "wind"
-            ),
-            AppliancePreset(
-                displayName: String(localized: "prices.calculation.preset.dishwasher.name"),
-                kind: .dishwasher,
-                powerKW: 1.5,
-                shortDescription: String(localized: "prices.calculation.preset.dishwasher.description"),
-                symbolName: "drop"
-            ),
-            AppliancePreset(
-                displayName: String(localized: "prices.calculation.preset.oven.name"),
-                kind: .oven,
-                powerKW: 2.2,
-                shortDescription: String(localized: "prices.calculation.preset.oven.description"),
-                symbolName: "flame"
-            ),
-            AppliancePreset(
-                displayName: String(localized: "prices.calculation.preset.washingMachine.name"),
-                kind: .washingMachine,
-                powerKW: 2.0,
-                shortDescription: String(localized: "prices.calculation.preset.washingMachine.description"),
-                symbolName: "washer"
-            ),
-        ]
-    )
-    .padding()
+        var body: some View {
+            PricesSummaryGridView(
+                presetBinding: $selectedPreset,
+                presets: [
+                    AppliancePreset(
+                        displayName: String(localized: "prices.calculation.preset.airConditioner.name"),
+                        kind: .airConditioner,
+                        powerKW: 1.2,
+                        shortDescription: String(localized: "prices.calculation.preset.airConditioner.description"),
+                        symbolName: "fan"
+                    ),
+                    AppliancePreset(
+                        displayName: String(localized: "prices.calculation.preset.clothesDryer.name"),
+                        kind: .clothesDryer,
+                        powerKW: 2.5,
+                        shortDescription: String(localized: "prices.calculation.preset.clothesDryer.description"),
+                        symbolName: "wind"
+                    ),
+                    AppliancePreset(
+                        displayName: String(localized: "prices.calculation.preset.dishwasher.name"),
+                        kind: .dishwasher,
+                        powerKW: 1.5,
+                        shortDescription: String(localized: "prices.calculation.preset.dishwasher.description"),
+                        symbolName: "drop"
+                    ),
+                    AppliancePreset(
+                        displayName: String(localized: "prices.calculation.preset.oven.name"),
+                        kind: .oven,
+                        powerKW: 2.2,
+                        shortDescription: String(localized: "prices.calculation.preset.oven.description"),
+                        symbolName: "flame"
+                    ),
+                    AppliancePreset(
+                        displayName: String(localized: "prices.calculation.preset.washingMachine.name"),
+                        kind: .washingMachine,
+                        powerKW: 2.0,
+                        shortDescription: String(localized: "prices.calculation.preset.washingMachine.description"),
+                        symbolName: "washer"
+                    ),
+                ]
+            )
+            .padding()
+        }
+    }
+
+    return PreviewHarness()
 }

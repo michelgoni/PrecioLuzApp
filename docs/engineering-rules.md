@@ -111,7 +111,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 ## Política de tests (obligatoria)
 - No usar `XCTest` para unit/integration tests en este proyecto salvo bloqueo técnico explícito y temporal.
 - Excepción permitida: `XCUITest` para pruebas de UI end-to-end en su target dedicado.
-- No introducir lógica, flags o ramas de ejecución de testing dentro del código de producción (`Sources/App`, `Sources/Features`, etc.).
+- No introducir lógica, flags o ramas de ejecución de testing o preview dentro del runtime de producción (`Sources/App`, `Sources/Features`, etc.).
 - Si un test solo pasa alterando el flujo de producción, rediseñar el test para que sea determinista sin hooks productivos o eliminarlo.
 - Los tests deben implementarse con el framework `Testing` (`import Testing`, `@Test`, `#expect`, `#require`).
 - Para reducers y efectos en `TCA`, seguir el enfoque oficial con `TestStore` descrito en la documentación de TCA:

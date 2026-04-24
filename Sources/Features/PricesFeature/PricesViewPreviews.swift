@@ -3,9 +3,6 @@ import SwiftUI
 
 #Preview("Prices placeholder") {
     PricesView(
-        onCalculationDurationHoursChanged: { _ in },
-        onCalculationPlaceholderDismissed: {},
-        onCalculationPresetSelected: { _ in },
         onHourTapped: { _ in },
         state: PricesFeature.State()
     )
@@ -13,9 +10,6 @@ import SwiftUI
 
 #Preview("Prices summary content") {
     PricesView(
-        onCalculationDurationHoursChanged: { _ in },
-        onCalculationPlaceholderDismissed: {},
-        onCalculationPresetSelected: { _ in },
         onHourTapped: { _ in },
         state: .previewContent
     )
@@ -23,9 +17,6 @@ import SwiftUI
 
 #Preview("Prices cached content") {
     PricesView(
-        onCalculationDurationHoursChanged: { _ in },
-        onCalculationPlaceholderDismissed: {},
-        onCalculationPresetSelected: { _ in },
         onHourTapped: { _ in },
         state: .previewCached
     )
@@ -33,9 +24,6 @@ import SwiftUI
 
 #Preview("Prices hourly only") {
     PricesView(
-        onCalculationDurationHoursChanged: { _ in },
-        onCalculationPlaceholderDismissed: {},
-        onCalculationPresetSelected: { _ in },
         onHourTapped: { _ in },
         state: .previewHourlyOnly
     )
@@ -43,9 +31,6 @@ import SwiftUI
 
 #Preview("Prices calculation placeholder") {
     PricesView(
-        onCalculationDurationHoursChanged: { _ in },
-        onCalculationPlaceholderDismissed: {},
-        onCalculationPresetSelected: { _ in },
         onHourTapped: { _ in },
         state: .previewCalculationSheet
     )

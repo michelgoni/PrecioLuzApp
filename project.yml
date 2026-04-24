@@ -25,8 +25,10 @@ targets:
     deploymentTarget: "26.0"
     sources:
       - path: Sources
-    resources:
       - path: Resources
+        buildPhase: resources
+        excludes:
+          - Info.plist
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.michelgoni.PrecioLuzApp

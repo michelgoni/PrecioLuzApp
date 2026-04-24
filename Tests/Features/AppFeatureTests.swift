@@ -11,11 +11,14 @@ struct AppFeatureTests {
     @MainActor
     @Test("AppFeature sets selected tab")
     func selectedTabChanged() async {
-        let store = TestStore(initialState: AppFeature.State()) {
+        var initialState = AppFeature.State()
+        initialState.prices.costCalculation.isPresented = true
+        let store = TestStore(initialState: initialState) {
             AppFeature()
         }
 
         await store.send(.selectedTabChanged(.settings)) {
+            $0.prices.costCalculation.isPresented = false
             $0.selectedTab = .settings
         }
     }
