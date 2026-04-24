@@ -29,13 +29,24 @@ Tipo de cambio: [documentación | código sin impacto visible | UI/comportamient
 - Aplicar el cambio más pequeño y reversible posible.
 - Limitar el cambio al alcance pedido.
 - Declarar explícitamente cualquier limitación de validación.
+- En cada miniincremento: parar tras checkpoint y esperar validación explícita del usuario.
 </execution_contract>
 
 <response_expectations>
 - Resumen del cambio real aplicado.
 - Validación ejecutada de verdad (según `docs/engineering-rules.md`).
+- Resultado explícito del control de TCA: `TCA warnings/deprecations: 0|N`.
 - Supuestos, bloqueos o límites pendientes.
 </response_expectations>
+
+<checkpoint_example>
+- Build:
+  - `xcodebuild ... build 2>&1 | tee /tmp/precioluzapp-build.log`
+- TCA warning scan (bloqueante):
+  - `scripts/check_tca_warnings.sh --log /tmp/precioluzapp-build.log`
+- Si el script devuelve error:
+  - bloquear cierre del incremento y no avanzar al siguiente.
+</checkpoint_example>
 ```
 
 ## Notas

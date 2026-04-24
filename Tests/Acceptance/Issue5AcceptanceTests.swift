@@ -179,22 +179,22 @@ struct Issue7AcceptanceTests {
     }
 
     await store.send(.pricesHourTapped(selectedHour)) {
-      $0.prices.calculationDurationHours = PricesFeature.State.defaultCalculationDurationHours
-      $0.prices.isCalculationPlaceholderPresented = true
-      $0.prices.selectedHour = selectedHour
-      $0.prices.selectedPresetKind = .washingMachine
+      $0.prices.costCalculation.durationHours = CostCalculationFeature.State.defaultDurationHours
+      $0.prices.costCalculation.isPresented = true
+      $0.prices.costCalculation.selectedHour = selectedHour
+      $0.prices.costCalculation.selectedPresetKind = .washingMachine
     }
 
     await store.send(.pricesDurationHoursChanged(2.0)) {
-      $0.prices.calculationDurationHours = 2.0
+      $0.prices.costCalculation.durationHours = 2.0
     }
 
     await store.send(.pricesPresetSelected(.dishwasher)) {
-      $0.prices.selectedPresetKind = .dishwasher
+      $0.prices.costCalculation.selectedPresetKind = .dishwasher
     }
 
     await store.send(.pricesCalculationPlaceholderDismissed) {
-      $0.prices.isCalculationPlaceholderPresented = false
+      $0.prices.costCalculation.isPresented = false
     }
   }
 

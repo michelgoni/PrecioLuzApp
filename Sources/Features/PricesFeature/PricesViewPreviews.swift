@@ -80,10 +80,9 @@ private extension PricesFeature.State {
             ),
         ]
         return PricesFeature.State(
+            costCalculation: CostCalculationFeature.State(),
             hourlyPrices: prices,
-            isCalculationPlaceholderPresented: false,
             isFromCache: false,
-            selectedHour: nil,
             summary: PriceSummary(
                 average: 0.158,
                 current: prices[1],
@@ -103,8 +102,8 @@ private extension PricesFeature.State {
 
     static var previewCalculationSheet: Self {
         var state = previewContent
-        state.isCalculationPlaceholderPresented = true
-        state.selectedHour = state.hourlyPrices.first
+        state.costCalculation.isPresented = true
+        state.costCalculation.selectedHour = state.hourlyPrices.first
         return state
     }
 }

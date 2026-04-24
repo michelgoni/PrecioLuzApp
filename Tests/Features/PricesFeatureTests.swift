@@ -29,10 +29,10 @@ struct PricesFeatureTests {
         }
 
         await store.send(.hourTapped(selectedHour)) {
-            $0.calculationDurationHours = 1.0
-            $0.isCalculationPlaceholderPresented = true
-            $0.selectedHour = selectedHour
-            $0.selectedPresetKind = .washingMachine
+            $0.costCalculation.durationHours = 1.0
+            $0.costCalculation.isPresented = true
+            $0.costCalculation.selectedHour = selectedHour
+            $0.costCalculation.selectedPresetKind = .washingMachine
         }
     }
 
@@ -43,8 +43,8 @@ struct PricesFeatureTests {
             PricesFeature()
         }
 
-        await store.send(.calculationDurationHoursChanged(2.0)) {
-            $0.calculationDurationHours = 2.0
+        await store.send(.costCalculation(.durationHoursChanged(2.0))) {
+            $0.costCalculation.durationHours = 2.0
         }
     }
 
@@ -55,15 +55,16 @@ struct PricesFeatureTests {
             PricesFeature()
         }
 
-        await store.send(.calculationPresetSelected(.airConditioner)) {
-            $0.selectedPresetKind = .airConditioner
+        await store.send(.costCalculation(.presetSelected(.airConditioner))) {
+            $0.costCalculation.selectedPresetKind = .airConditioner
         }
     }
 
     @MainActor
     @Test("PricesFeature clears invalid selected hour after snapshot refresh")
     func snapshotLoadedClearsSelectionWhenHourDisappears() async {
-        let initial = PricesFeature.State(selectedHour: HourlyPrice.testValue)
+        var initial = PricesFeature.State()
+        initial.costCalculation.selectedHour = HourlyPrice.testValue
         let payload = DailyPricingSnapshotPayload.emptyValue
         let store = TestStore(initialState: initial) {
             PricesFeature()
@@ -71,7 +72,7 @@ struct PricesFeatureTests {
 
         await store.send(.snapshotLoaded(payload, isCached: false)) {
             $0.hourlyPrices = []
-            $0.selectedHour = nil
+            $0.costCalculation.selectedHour = nil
             $0.summary = nil
         }
     }

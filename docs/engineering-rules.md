@@ -144,6 +144,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - confirmar que no se contradice `AGENTS.md`
 - Tras cambios de código sin impacto visual:
   - ejecutar compilación del target/scheme afectado
+  - guardar log de compilación (`tee`) y escanear warnings/deprecations de `TCA` con `scripts/check_tca_warnings.sh`
   - ejecutar `SwiftLint` en modo estricto
   - ejecutar tests automáticos del área afectada (o suite completa si no hay filtrado útil)
   - revisar warnings de compilación y tratarlos como bloqueantes de cierre de tarea cuando afecten al stack aprobado
@@ -166,11 +167,38 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - ejecutar `build` y, después, `UI smoke tests` en secuencial;
   - si se requieren varias validaciones concurrentes, usar `DerivedDataPath` aislado por ejecución y documentarlo en el checkpoint.
 
+### Control de warnings/deprecations TCA (bloqueante)
+- No cerrar miniincrementos, tareas ni PR si `scripts/check_tca_warnings.sh` detecta warnings/deprecations de `TCA` en el build del scope tocado.
+- Flujo mínimo obligatorio por checkpoint:
+  - `xcodebuild ... build 2>&1 | tee /tmp/precioluzapp-build.log`
+  - `scripts/check_tca_warnings.sh --log /tmp/precioluzapp-build.log`
+- Resultado obligatorio en el resumen del checkpoint:
+  - `TCA warnings/deprecations: 0` o `TCA warnings/deprecations: N (bloqueante)`.
+- Si hay coincidencias:
+  - el estado del incremento debe quedar en `waiting_user_review` y `blocked_by_tca_warning`;
+  - no continuar al siguiente incremento hasta resolverlas o acordar excepción explícita del usuario.
+
+## Regla de parada por miniincremento (obligatoria)
+- En tareas planificadas por miniincrementos, está prohibido comenzar el siguiente incremento sin validación explícita del usuario sobre el incremento actual.
+- Al cerrar un miniincremento, el agente debe:
+  - reportar checkpoint y archivos tocados;
+  - declarar estado `waiting_user_review`;
+  - detener edición/implementación hasta confirmación explícita del usuario (`ok`, `continuamos`, `adelante` o equivalente).
+- Si el usuario no valida, solo se permite:
+  - responder dudas;
+  - ejecutar comandos de diagnóstico no mutantes;
+  - preparar contexto del siguiente incremento sin tocar código.
+- Hook de control recomendado (bloqueante de commit):
+  - usar `scripts/hito_guard.sh` + `.githooks/pre-commit` para bloquear commits cuando el estado sea `waiting_user_review`.
+  - antes de iniciar cada incremento, ejecutar `scripts/hito_guard.sh can-continue`.
+
 ### Checklist ejecutable (DoD transversal para tareas con código)
 - Clean build session (cuando haya bloqueo de linker/sesión de build):
   - `xcodebuild -project <Project>.xcodeproj -scheme <Scheme> -destination 'platform=iOS Simulator,name=<Device>' clean`
 - Compilación:
   - `xcodebuild -project <Project>.xcodeproj -scheme <Scheme> -destination 'platform=iOS Simulator,name=<Device>' build`
+  - `xcodebuild -project <Project>.xcodeproj -scheme <Scheme> -destination 'platform=iOS Simulator,name=<Device>' build 2>&1 | tee /tmp/precioluzapp-build.log`
+  - `scripts/check_tca_warnings.sh --log /tmp/precioluzapp-build.log`
 - Lint:
   - `swiftlint lint --strict`
 - Tests:

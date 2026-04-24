@@ -34,12 +34,12 @@ struct PricesView: View {
         .safeAreaPadding(.top, PricesViewLayout.safeAreaTopPadding)
         .sheet(isPresented: isCalculationSheetPresentedBinding) {
             PricesCalculationSheetView(
-                durationHours: state.calculationDurationHours,
+                durationHours: state.costCalculation.durationHours,
                 durationHoursBinding: calculationDurationBinding,
                 onCloseTapped: onCalculationPlaceholderDismissed,
                 presetBinding: selectedPresetBinding,
-                selectedHour: state.selectedHour,
-                selectedPreset: PricesPresetCatalog.preset(for: state.selectedPresetKind),
+                selectedHour: state.costCalculation.selectedHour,
+                selectedPreset: PricesPresetCatalog.preset(for: state.costCalculation.selectedPresetKind),
                 presets: PricesPresetCatalog.all
             )
             .presentationDetents([.medium])
@@ -59,14 +59,14 @@ struct PricesView: View {
 
     private var calculationDurationBinding: Binding<Double> {
         Binding(
-            get: { state.calculationDurationHours },
+            get: { state.costCalculation.durationHours },
             set: { onCalculationDurationHoursChanged($0) }
         )
     }
 
     private var isCalculationSheetPresentedBinding: Binding<Bool> {
         Binding(
-            get: { state.isCalculationPlaceholderPresented },
+            get: { state.costCalculation.isPresented },
             set: { isPresented in
                 if !isPresented {
                     onCalculationPlaceholderDismissed()
@@ -84,7 +84,7 @@ struct PricesView: View {
 
     private var selectedPresetBinding: Binding<AppliancePreset.Kind> {
         Binding(
-            get: { state.selectedPresetKind },
+            get: { state.costCalculation.selectedPresetKind },
             set: { onCalculationPresetSelected($0) }
         )
     }

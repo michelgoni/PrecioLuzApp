@@ -39,8 +39,8 @@ struct PricesCalculationSheetView: View {
 
                 Stepper(
                     value: durationHoursBinding,
-                    in: PricesFeature.State.minimumCalculationDurationHours...PricesFeature.State.maximumCalculationDurationHours,
-                    step: PricesFeature.State.stepCalculationDurationHours
+                    in: CostCalculationFeature.State.minimumDurationHours...CostCalculationFeature.State.maximumDurationHours,
+                    step: CostCalculationFeature.State.stepDurationHours
                 ) {
                     Text(durationDescription)
                         .font(.body.monospacedDigit())
