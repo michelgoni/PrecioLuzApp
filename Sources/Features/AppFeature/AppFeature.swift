@@ -71,29 +71,32 @@ struct AppFeature: Reducer {
                 return loadSnapshotEffect()
 
             case .pricesCalculationPlaceholderDismissed:
-                state.prices.isCalculationPlaceholderPresented = false
+                state.prices.costCalculation.isPresented = false
                 return .none
 
             case let .pricesDurationHoursChanged(durationHours):
-                state.prices.calculationDurationHours = max(
-                    PricesFeature.State.minimumCalculationDurationHours,
-                    durationHours
+                state.prices.costCalculation.durationHours = min(
+                    max(durationHours, CostCalculationFeature.State.minimumDurationHours),
+                    CostCalculationFeature.State.maximumDurationHours
                 )
                 return .none
 
             case let .pricesHourTapped(hour):
-                state.prices.calculationDurationHours = PricesFeature.State.defaultCalculationDurationHours
-                state.prices.selectedPresetKind = .washingMachine
-                state.prices.selectedHour = hour
-                state.prices.isCalculationPlaceholderPresented = true
+                state.prices.costCalculation.durationHours = CostCalculationFeature.State.defaultDurationHours
+                state.prices.costCalculation.selectedPresetKind = .washingMachine
+                state.prices.costCalculation.selectedHour = hour
+                state.prices.costCalculation.isPresented = true
                 return .none
 
             case let .pricesPresetSelected(kind):
-                state.prices.selectedPresetKind = kind
+                state.prices.costCalculation.selectedPresetKind = kind
                 return .none
 
             case let .selectedTabChanged(tab):
                 state.selectedTab = tab
+                if tab != .prices {
+                    state.prices.costCalculation.isPresented = false
+                }
                 return .none
 
             case let .snapshotResponse(result):
@@ -139,12 +142,22 @@ struct AppFeature: Reducer {
         case let .cached(payload):
             state.hourlyPrices = payload.hourlyPrices
             state.isFromCache = true
-            state.selectedHour = payload.hourlyPrices.first { $0.date == state.selectedHour?.date }
+            state.costCalculation.selectedHour = payload.hourlyPrices.first {
+                $0.date == state.costCalculation.selectedHour?.date
+            }
+            if state.costCalculation.selectedHour == nil {
+                state.costCalculation.isPresented = false
+            }
             state.summary = payload.summary
         case let .fresh(payload):
             state.hourlyPrices = payload.hourlyPrices
             state.isFromCache = false
-            state.selectedHour = payload.hourlyPrices.first { $0.date == state.selectedHour?.date }
+            state.costCalculation.selectedHour = payload.hourlyPrices.first {
+                $0.date == state.costCalculation.selectedHour?.date
+            }
+            if state.costCalculation.selectedHour == nil {
+                state.costCalculation.isPresented = false
+            }
             state.summary = payload.summary
         }
     }

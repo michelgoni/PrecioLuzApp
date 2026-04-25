@@ -3,9 +3,6 @@ import SwiftUI
 
 #Preview("Prices placeholder") {
     PricesView(
-        onCalculationDurationHoursChanged: { _ in },
-        onCalculationPlaceholderDismissed: {},
-        onCalculationPresetSelected: { _ in },
         onHourTapped: { _ in },
         state: PricesFeature.State()
     )
@@ -13,9 +10,6 @@ import SwiftUI
 
 #Preview("Prices summary content") {
     PricesView(
-        onCalculationDurationHoursChanged: { _ in },
-        onCalculationPlaceholderDismissed: {},
-        onCalculationPresetSelected: { _ in },
         onHourTapped: { _ in },
         state: .previewContent
     )
@@ -23,9 +17,6 @@ import SwiftUI
 
 #Preview("Prices cached content") {
     PricesView(
-        onCalculationDurationHoursChanged: { _ in },
-        onCalculationPlaceholderDismissed: {},
-        onCalculationPresetSelected: { _ in },
         onHourTapped: { _ in },
         state: .previewCached
     )
@@ -33,9 +24,6 @@ import SwiftUI
 
 #Preview("Prices hourly only") {
     PricesView(
-        onCalculationDurationHoursChanged: { _ in },
-        onCalculationPlaceholderDismissed: {},
-        onCalculationPresetSelected: { _ in },
         onHourTapped: { _ in },
         state: .previewHourlyOnly
     )
@@ -43,9 +31,6 @@ import SwiftUI
 
 #Preview("Prices calculation placeholder") {
     PricesView(
-        onCalculationDurationHoursChanged: { _ in },
-        onCalculationPlaceholderDismissed: {},
-        onCalculationPresetSelected: { _ in },
         onHourTapped: { _ in },
         state: .previewCalculationSheet
     )
@@ -80,10 +65,9 @@ private extension PricesFeature.State {
             ),
         ]
         return PricesFeature.State(
+            costCalculation: CostCalculationFeature.State(),
             hourlyPrices: prices,
-            isCalculationPlaceholderPresented: false,
             isFromCache: false,
-            selectedHour: nil,
             summary: PriceSummary(
                 average: 0.158,
                 current: prices[1],
@@ -103,8 +87,8 @@ private extension PricesFeature.State {
 
     static var previewCalculationSheet: Self {
         var state = previewContent
-        state.isCalculationPlaceholderPresented = true
-        state.selectedHour = state.hourlyPrices.first
+        state.costCalculation.isPresented = true
+        state.costCalculation.selectedHour = state.hourlyPrices.first
         return state
     }
 }

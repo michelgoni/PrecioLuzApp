@@ -9,3 +9,15 @@
 ## Issue #7 — Prices Feature Visual Baseline
 - Prices tab screenshot in simulator (`iPhone 17 Pro`, iOS 26.4):
   - [docs/evidence-issue7-shell-prices.png](/Users/michelgoni/Documents/repos/PrecioLuzApp/docs/evidence-issue7-shell-prices.png)
+
+## Issue #8 — Cost Calculation Acceptance Baseline
+- Acceptance flow covered in `Testing`:
+  - `Tests/Acceptance/Issue8AcceptanceTests.swift`
+  - validates modal calculation result (`price * powerKW * duration`)
+  - validates stale hour cleanup + modal dismissal after refresh
+- UI smoke wiring for modal visibility:
+  - `UITests/PrecioLuzAppUITests.swift`
+  - `testHourlyRowTapPresentsAndDismissesCalculationModal`
+  - `testChartTabDoesNotPresentCalculationModal`
+- Visual evidence:
+  - [docs/evidence-issue8-prices-shell.png](/Users/michelgoni/Documents/repos/PrecioLuzApp/docs/evidence-issue8-prices-shell.png)

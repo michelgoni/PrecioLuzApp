@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -x "scripts/hito_guard.sh" ]]; then
+  scripts/hito_guard.sh can-continue
+fi

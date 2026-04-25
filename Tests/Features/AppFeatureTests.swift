@@ -11,11 +11,14 @@ struct AppFeatureTests {
     @MainActor
     @Test("AppFeature sets selected tab")
     func selectedTabChanged() async {
-        let store = TestStore(initialState: AppFeature.State()) {
+        var initialState = AppFeature.State()
+        initialState.prices.costCalculation.isPresented = true
+        let store = TestStore(initialState: initialState) {
             AppFeature()
         }
 
         await store.send(.selectedTabChanged(.settings)) {
+            $0.prices.costCalculation.isPresented = false
             $0.selectedTab = .settings
         }
     }
@@ -73,7 +76,7 @@ struct AppFeatureTests {
     func snapshotResponseClearsStaleSelectedHour() async {
         let selectedHour = HourlyPrice.mockValue
         var initialState = AppFeature.State()
-        initialState.prices.selectedHour = selectedHour
+        initialState.prices.costCalculation.selectedHour = selectedHour
         let payload = DailyPricingSnapshotPayload(
             dayStart: .mockNow,
             fetchedAt: .mockNow,
@@ -88,7 +91,7 @@ struct AppFeatureTests {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
-            $0.prices.selectedHour = nil
+            $0.prices.costCalculation.selectedHour = nil
             $0.prices.summary = nil
         }
     }
@@ -129,10 +132,10 @@ struct AppFeatureTests {
         }
 
         await store.send(.pricesHourTapped(selectedHour)) {
-            $0.prices.calculationDurationHours = PricesFeature.State.defaultCalculationDurationHours
-            $0.prices.isCalculationPlaceholderPresented = true
-            $0.prices.selectedHour = selectedHour
-            $0.prices.selectedPresetKind = .washingMachine
+            $0.prices.costCalculation.durationHours = CostCalculationFeature.State.defaultDurationHours
+            $0.prices.costCalculation.isPresented = true
+            $0.prices.costCalculation.selectedHour = selectedHour
+            $0.prices.costCalculation.selectedPresetKind = .washingMachine
         }
     }
 
@@ -140,13 +143,13 @@ struct AppFeatureTests {
     @Test("AppFeature closes calculation modal when dismiss is triggered")
     func pricesCalculationPlaceholderDismissedClosesModal() async {
         var initialState = AppFeature.State()
-        initialState.prices.isCalculationPlaceholderPresented = true
+        initialState.prices.costCalculation.isPresented = true
         let store = TestStore(initialState: initialState) {
             AppFeature()
         }
 
         await store.send(.pricesCalculationPlaceholderDismissed) {
-            $0.prices.isCalculationPlaceholderPresented = false
+            $0.prices.costCalculation.isPresented = false
         }
     }
 

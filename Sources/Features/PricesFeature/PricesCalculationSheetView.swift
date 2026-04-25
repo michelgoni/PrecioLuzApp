@@ -3,10 +3,10 @@ import SwiftUI
 struct PricesCalculationSheetView: View {
     let durationHours: Double
     let durationHoursBinding: Binding<Double>
+    let estimatedCostDescription: String
     let onCloseTapped: () -> Void
     let presetBinding: Binding<AppliancePreset.Kind>
     let selectedHour: HourlyPrice?
-    let selectedPreset: AppliancePreset
     let presets: [AppliancePreset]
 
     var body: some View {
@@ -39,8 +39,8 @@ struct PricesCalculationSheetView: View {
 
                 Stepper(
                     value: durationHoursBinding,
-                    in: PricesFeature.State.minimumCalculationDurationHours...PricesFeature.State.maximumCalculationDurationHours,
-                    step: PricesFeature.State.stepCalculationDurationHours
+                    in: CostCalculationFeature.State.minimumDurationHours...CostCalculationFeature.State.maximumDurationHours,
+                    step: CostCalculationFeature.State.stepDurationHours
                 ) {
                     Text(durationDescription)
                         .font(.body.monospacedDigit())
@@ -82,18 +82,6 @@ struct PricesCalculationSheetView: View {
         )
     }
 
-    private var estimatedCostDescription: String {
-        guard let selectedHour else {
-            return String(localized: "prices.calculation.result.empty")
-        }
-        let calculation = ApplianceCostEstimator.estimate(
-            durationHours: durationHours,
-            preset: selectedPreset,
-            selectedHour: selectedHour
-        )
-        return PricesViewFormatting.price(calculation.estimatedCostEUR)
-    }
-
     private var selectedHourDescription: String {
         guard let selectedHour else {
             return String(localized: "prices.calculation.placeholder.noSelection")
@@ -110,6 +98,7 @@ struct PricesCalculationSheetView: View {
     PricesCalculationSheetView(
         durationHours: 2.0,
         durationHoursBinding: .constant(2.0),
+        estimatedCostDescription: PricesViewFormatting.price(0.58),
         onCloseTapped: {},
         presetBinding: .constant(.washingMachine),
         selectedHour: HourlyPrice(
@@ -117,13 +106,6 @@ struct PricesCalculationSheetView: View {
             date: Date(timeIntervalSince1970: 1_700_000_000),
             daypart: .morning,
             eurPerKWh: 0.145
-        ),
-        selectedPreset: AppliancePreset(
-            displayName: String(localized: "prices.calculation.preset.washingMachine.name"),
-            kind: .washingMachine,
-            powerKW: 2.0,
-            shortDescription: String(localized: "prices.calculation.preset.washingMachine.description"),
-            symbolName: "washer"
         ),
         presets: [
             AppliancePreset(

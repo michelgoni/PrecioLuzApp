@@ -47,6 +47,39 @@ final class PrecioLuzAppUITests: XCTestCase {
     XCTAssertTrue(pricesButton.isSelected)
   }
 
+  func testHourlyRowTapPresentsAndDismissesCalculationModal() throws {
+    let app = makeApp()
+    app.launch()
+
+    let hourlyRow = app.buttons["pricesHourlyRow0"]
+    XCTAssertTrue(hourlyRow.waitForExistence(timeout: 5))
+    hourlyRow.tap()
+
+    let modalTitle = app.staticTexts["pricesCalculationPlaceholderTitle"]
+    XCTAssertTrue(modalTitle.waitForExistence(timeout: 3))
+
+    let closeButton = app.buttons["pricesCalculationPlaceholderCloseButton"]
+    XCTAssertTrue(closeButton.waitForExistence(timeout: 3))
+    closeButton.tap()
+
+    XCTAssertFalse(modalTitle.waitForExistence(timeout: 2))
+  }
+
+  func testChartTabDoesNotPresentCalculationModal() throws {
+    let app = makeApp()
+    app.launch()
+
+    let tabBar = app.tabBars.firstMatch
+    XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+
+    let chartButton = tabButton(in: tabBar, names: ["Gráfica", "tab.chart.title"])
+    chartButton.tap()
+    XCTAssertTrue(chartButton.isSelected)
+
+    let modalTitle = app.staticTexts["pricesCalculationPlaceholderTitle"]
+    XCTAssertFalse(modalTitle.waitForExistence(timeout: 2))
+  }
+
   private func makeApp() -> XCUIApplication {
     let app = XCUIApplication()
     app.launchArguments += ["-AppleLanguages", "(es)", "-AppleLocale", "es_ES"]
