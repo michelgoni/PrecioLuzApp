@@ -4,6 +4,15 @@
 "app.rootStatus.error.label" = "Could not load data";
 "app.rootStatus.loading.label" = "Loading prices...";
 "app.rootStatus.retry.button" = "Retry";
+"chart.axis.hour" = "Hour";
+"chart.axis.price" = "Price";
+"chart.daily.title" = "Daily trend";
+"chart.daypart.afternoon" = "Afternoon";
+"chart.daypart.morning" = "Morning";
+"chart.daypart.night" = "Night";
+"chart.daypart.overnight" = "Overnight";
+"chart.daypart.picker" = "Time segment";
+"chart.empty.daypart" = "No prices available for this segment";
 "prices.classification.cheap" = "Cheap";
 "prices.classification.expensive" = "Expensive";
 "prices.classification.mid" = "Mid";
