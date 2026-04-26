@@ -99,9 +99,8 @@ struct AppShellView: View {
                 .tag(AppTab.prices)
 
             ChartView(
-                store: Store(initialState: ChartFeature.State()) {
-                    ChartFeature()
-                }
+                send: { store.send(.chart($0)) },
+                state: store.chart
             )
                 .tabItem {
                     Label(AppTab.chart.title, systemImage: AppTab.chart.systemImage)

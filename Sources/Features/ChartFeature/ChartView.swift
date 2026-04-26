@@ -1,8 +1,8 @@
-import ComposableArchitecture
 import SwiftUI
 
 struct ChartView: View {
-    let store: StoreOf<ChartFeature>
+    let send: (ChartFeature.Action) -> Void
+    let state: ChartFeature.State
 
     var body: some View {
         Color(.systemBackground)
@@ -12,9 +12,5 @@ struct ChartView: View {
 }
 
 #Preview("Chart placeholder") {
-    ChartView(
-        store: Store(initialState: ChartFeature.State()) {
-            ChartFeature()
-        }
-    )
+    ChartView(send: { _ in }, state: ChartFeature.State())
 }

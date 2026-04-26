@@ -49,3 +49,26 @@ struct ChartFeature: Reducer {
         }
     }
 }
+
+extension ChartFeature.State {
+    static func apply(_ action: ChartFeature.Action, to state: inout Self) {
+        switch action {
+        case let .inspectedHourChanged(hour):
+            state.inspectedHour = hour
+
+        case let .selectedDaypartChanged(daypart):
+            state.selectedDaypart = daypart
+            if let inspectedHour = state.inspectedHour,
+               !state.filteredPrices.contains(where: { $0.date == inspectedHour.date }) {
+                state.inspectedHour = nil
+            }
+
+        case let .syncHourlyPrices(hourlyPrices):
+            state.hourlyPrices = hourlyPrices
+            if let inspectedHour = state.inspectedHour,
+               !state.filteredPrices.contains(where: { $0.date == inspectedHour.date }) {
+                state.inspectedHour = nil
+            }
+        }
+    }
+}

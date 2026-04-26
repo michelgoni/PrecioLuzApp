@@ -39,12 +39,14 @@ enum RootStatus: Equatable, Sendable {
 struct AppFeature: Reducer {
     @ObservableState
     struct State: Equatable {
+        var chart = ChartFeature.State()
         var prices = PricesFeature.State()
         var rootStatus: RootStatus = .loading
         var selectedTab: AppTab = .prices
     }
 
     enum Action: Equatable {
+        case chart(ChartFeature.Action)
         case onAppear
         case pricesCalculationPlaceholderDismissed
         case pricesDurationHoursChanged(Double)
@@ -66,6 +68,10 @@ struct AppFeature: Reducer {
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
+            case let .chart(chartAction):
+                ChartFeature.State.apply(chartAction, to: &state.chart)
+                return .none
+
             case .onAppear, .retryTapped:
                 state.rootStatus = .loading
                 return loadSnapshotEffect()
@@ -101,8 +107,8 @@ struct AppFeature: Reducer {
 
             case let .snapshotResponse(result):
                 state.rootStatus = mapRootStatus(from: result)
-                updatePricesState(&state.prices, from: result)
-                return .none
+                updateFeatureStates(&state, from: result)
+                return chartSyncEffect(from: result)
             }
         }
     }
@@ -133,6 +139,33 @@ struct AppFeature: Reducer {
 
     private func mapStatus(from payload: DailyPricingSnapshotPayload, whenNotEmpty status: RootStatus) -> RootStatus {
         payload.hourlyPrices.isEmpty ? .empty : status
+    }
+
+    private func chartSyncEffect(from result: DailyPricingSnapshotPipelineResult) -> Effect<Action> {
+        switch result {
+        case .failed:
+            return .none
+        case let .cached(payload), let .fresh(payload):
+            return .send(.chart(.syncHourlyPrices(payload.hourlyPrices)))
+        }
+    }
+
+    private func updateFeatureStates(_ state: inout State, from result: DailyPricingSnapshotPipelineResult) {
+        updatePricesState(&state.prices, from: result)
+        updateChartState(&state.chart, from: result)
+    }
+
+    private func updateChartState(_ state: inout ChartFeature.State, from result: DailyPricingSnapshotPipelineResult) {
+        switch result {
+        case .failed:
+            break
+        case let .cached(payload), let .fresh(payload):
+            state.hourlyPrices = payload.hourlyPrices
+            if let inspectedHour = state.inspectedHour,
+               !payload.hourlyPrices.contains(where: { $0.date == inspectedHour.date }) {
+                state.inspectedHour = nil
+            }
+        }
     }
 
     private func updatePricesState(_ state: inout PricesFeature.State, from result: DailyPricingSnapshotPipelineResult) {

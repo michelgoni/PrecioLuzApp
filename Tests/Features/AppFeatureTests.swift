@@ -48,11 +48,13 @@ struct AppFeatureTests {
         }
 
         await store.send(.snapshotResponse(.fresh(payload))) {
+            $0.chart.hourlyPrices = payload.hourlyPrices
             $0.rootStatus = .content
             $0.prices.hourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
             $0.prices.summary = payload.summary
         }
+        await store.receive(.chart(.syncHourlyPrices(payload.hourlyPrices)))
     }
 
     @MainActor
@@ -64,11 +66,13 @@ struct AppFeatureTests {
         }
 
         await store.send(.snapshotResponse(.cached(payload))) {
+            $0.chart.hourlyPrices = payload.hourlyPrices
             $0.rootStatus = .cached
             $0.prices.hourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = true
             $0.prices.summary = payload.summary
         }
+        await store.receive(.chart(.syncHourlyPrices(payload.hourlyPrices)))
     }
 
     @MainActor
@@ -88,12 +92,61 @@ struct AppFeatureTests {
         }
 
         await store.send(.snapshotResponse(.fresh(payload))) {
+            $0.chart.hourlyPrices = payload.hourlyPrices
             $0.rootStatus = .content
             $0.prices.hourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
             $0.prices.costCalculation.selectedHour = nil
             $0.prices.summary = nil
         }
+        await store.receive(.chart(.syncHourlyPrices(payload.hourlyPrices)))
+    }
+
+    @MainActor
+    @Test("AppFeature syncs snapshot hourly prices into ChartFeature")
+    func snapshotResponseSyncsChartHourlyPrices() async {
+        let payload = DailyPricingSnapshotPayload.mockPayload(withPrices: true)
+        let store = TestStore(initialState: AppFeature.State()) {
+            AppFeature()
+        }
+
+        await store.send(.snapshotResponse(.fresh(payload))) {
+            $0.chart.hourlyPrices = payload.hourlyPrices
+            $0.rootStatus = .content
+            $0.prices.hourlyPrices = payload.hourlyPrices
+            $0.prices.isFromCache = false
+            $0.prices.summary = payload.summary
+        }
+        await store.receive(.chart(.syncHourlyPrices(payload.hourlyPrices)))
+    }
+
+    @MainActor
+    @Test("AppFeature clears stale chart inspection when refreshed prices no longer include it")
+    func snapshotResponseClearsStaleChartInspection() async {
+        let inspected = HourlyPrice.mockValue
+        let replacement = HourlyPrice.mockFutureValue
+        var initialState = AppFeature.State()
+        initialState.chart.inspectedHour = inspected
+        initialState.chart.hourlyPrices = [inspected]
+        let refreshedPayload = DailyPricingSnapshotPayload(
+            dayStart: .mockNow,
+            fetchedAt: .mockNow,
+            hourlyPrices: [replacement],
+            summary: nil
+        )
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        }
+
+        await store.send(.snapshotResponse(.fresh(refreshedPayload))) {
+            $0.chart.hourlyPrices = refreshedPayload.hourlyPrices
+            $0.chart.inspectedHour = nil
+            $0.rootStatus = .content
+            $0.prices.hourlyPrices = refreshedPayload.hourlyPrices
+            $0.prices.isFromCache = false
+            $0.prices.summary = nil
+        }
+        await store.receive(.chart(.syncHourlyPrices(refreshedPayload.hourlyPrices)))
     }
 
     @MainActor
@@ -111,16 +164,19 @@ struct AppFeatureTests {
     @MainActor
     @Test("AppFeature maps empty fresh snapshot to empty")
     func emptyFreshMapsToEmpty() async {
+        let payload = DailyPricingSnapshotPayload.mockPayload(withPrices: false)
         let store = TestStore(initialState: AppFeature.State()) {
             AppFeature()
         }
 
-        await store.send(.snapshotResponse(.fresh(.mockPayload(withPrices: false)))) {
+        await store.send(.snapshotResponse(.fresh(payload))) {
+            $0.chart.hourlyPrices = []
             $0.rootStatus = .empty
             $0.prices.hourlyPrices = []
             $0.prices.isFromCache = false
             $0.prices.summary = nil
         }
+        await store.receive(.chart(.syncHourlyPrices(payload.hourlyPrices)))
     }
 
     @MainActor
