@@ -182,6 +182,50 @@ struct AppFeatureTests {
     }
 
     @MainActor
+    @Test("AppFeature refreshes inspected hour value when same date remains after sync")
+    func snapshotResponseRefreshesInspectedHourForSameDate() async {
+        let inspectedDate = Date(timeIntervalSince1970: 1_700_123_200)
+        let inspected = HourlyPrice(
+            classification: .mid,
+            date: inspectedDate,
+            daypart: .morning,
+            eurPerKWh: 0.19
+        )
+        let refreshed = HourlyPrice(
+            classification: .expensive,
+            date: inspectedDate,
+            daypart: .morning,
+            eurPerKWh: 0.27
+        )
+
+        var initialState = AppFeature.State()
+        initialState.chart.selectedDaypart = .morning
+        initialState.chart.hourlyPrices = [inspected]
+        initialState.chart.inspectedHour = inspected
+
+        let refreshedPayload = DailyPricingSnapshotPayload(
+            dayStart: .mockNow,
+            fetchedAt: .mockNow,
+            hourlyPrices: [refreshed],
+            summary: nil
+        )
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        }
+
+        await store.send(.snapshotResponse(.fresh(refreshedPayload))) {
+            $0.rootStatus = .content
+            $0.prices.hourlyPrices = refreshedPayload.hourlyPrices
+            $0.prices.isFromCache = false
+            $0.prices.summary = nil
+        }
+        await store.receive(.chart(.syncHourlyPrices(refreshedPayload.hourlyPrices))) {
+            $0.chart.hourlyPrices = refreshedPayload.hourlyPrices
+            $0.chart.inspectedHour = refreshed
+        }
+    }
+
+    @MainActor
     @Test("AppFeature maps failed result to error")
     func failedMapsToError() async {
         let store = TestStore(initialState: AppFeature.State()) {

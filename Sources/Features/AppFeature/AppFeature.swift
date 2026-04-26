@@ -168,9 +168,8 @@ struct AppFeature: Reducer {
 
         case let .syncHourlyPrices(hourlyPrices):
             state.hourlyPrices = hourlyPrices
-            if let inspectedHour = state.inspectedHour,
-               !state.filteredPrices.contains(where: { $0.date == inspectedHour.date }) {
-                state.inspectedHour = nil
+            if let inspectedDate = state.inspectedHour?.date {
+                state.inspectedHour = state.filteredPrices.first { $0.date == inspectedDate }
             }
         }
     }
