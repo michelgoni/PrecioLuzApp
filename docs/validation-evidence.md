@@ -31,3 +31,13 @@
     - `build` y tests ejecutados
     - `UI smoke` cuando aplique por flujo visible
     - evidencia visual versionada de la gráfica o de su interacción
+- Acceptance (`Testing + TestStore`):
+  - `Tests/Acceptance/Issue9AcceptanceTests.swift`
+  - `Acceptance #9: chart daypart filtering and inspection follow user flow`
+  - `Acceptance #9: chart clears stale inspection after refresh`
+- UI smoke (`XCUITest`):
+  - `UITests/PrecioLuzAppUITests.swift`
+  - `testChartDaypartSelectionAndInteractionIsStable`
+  - valida navegación a tab `Gráfica`, cambio de tramo y gesto de interacción sin crash
+- Evidencia visual:
+  - [docs/evidence-issue9-chart-shell.png](/Users/michelgoni/Documents/repos/PrecioLuzApp/docs/evidence-issue9-chart-shell.png)

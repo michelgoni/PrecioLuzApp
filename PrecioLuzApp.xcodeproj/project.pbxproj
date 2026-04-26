@@ -37,6 +37,7 @@
 		B4A2DFD70536A676347158B4 /* ChartInspectionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642F4C674FBA509E43E81971 /* ChartInspectionCardView.swift */; };
 		BE6F8B2F22DC95595232845A /* DateClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98F488EF3222A15A96E4F3CF /* DateClient.swift */; };
 		C38E3205CBA69E8FEEC1230F /* ChartFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC5C7E5F151FC11C56A3D19 /* ChartFeature.swift */; };
+		C41724ED25C88587D77820D1 /* Issue9AcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7744D261DCF1BFC35D37B5D /* Issue9AcceptanceTests.swift */; };
 		CE2C0DE70A00C8DB9F34406B /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = B05968D2E8CFF8E01B748541 /* ComposableArchitecture */; };
 		D10A52D551C8B3E7C2FB7CDB /* ChartDaypartPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613AC733428459896683DAAC /* ChartDaypartPickerView.swift */; };
 		D4F2BDEAF0E519BD8DCB871B /* PrecioLuzAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA85C7AECFB312B3FB9D051 /* PrecioLuzAppApp.swift */; };
@@ -114,6 +115,7 @@
 		EAD4ED9252AA55CABFF1E90B /* Issue5AcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue5AcceptanceTests.swift; sourceTree = "<group>"; };
 		F2BBD1FCB478C16D91769556 /* DailyPricingSnapshotPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyPricingSnapshotPipeline.swift; sourceTree = "<group>"; };
 		F67521AA664F5FE9F1AC6AB8 /* TCASmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCASmokeTests.swift; sourceTree = "<group>"; };
+		F7744D261DCF1BFC35D37B5D /* Issue9AcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue9AcceptanceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,6 +203,7 @@
 			children = (
 				EAD4ED9252AA55CABFF1E90B /* Issue5AcceptanceTests.swift */,
 				A79D3713AFCF1EB48194466D /* Issue8AcceptanceTests.swift */,
+				F7744D261DCF1BFC35D37B5D /* Issue9AcceptanceTests.swift */,
 			);
 			path = Acceptance;
 			sourceTree = "<group>";
@@ -518,6 +521,7 @@
 				5D279D6881FAF12A670D335F /* DomainModelsTests.swift in Sources */,
 				EAA54D0786CB11AB8762B373 /* Issue5AcceptanceTests.swift in Sources */,
 				68B309C5FF0C727AAC50E095 /* Issue8AcceptanceTests.swift in Sources */,
+				C41724ED25C88587D77820D1 /* Issue9AcceptanceTests.swift in Sources */,
 				2C7A88ECC9F97A3203DEB45D /* PricesFeatureTests.swift in Sources */,
 				00FB8BC052CFF7B1164C485D /* TCASmokeTests.swift in Sources */,
 			);

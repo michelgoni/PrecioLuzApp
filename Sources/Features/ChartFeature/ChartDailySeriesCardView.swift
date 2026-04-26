@@ -89,13 +89,11 @@ struct ChartDailySeriesCardView: View {
                                 let plotArea = geometry[plotFrame]
                                 let xPosition = value.location.x - plotArea.origin.x
                                 guard xPosition >= 0, xPosition <= plotArea.width else { return }
-                                guard let date: Date = proxy.value(atX: xPosition) else { return }
-                                if let nearest = nearestPrice(to: date), nearest != inspectedHour {
-                                    onInspectedHourChanged(nearest)
-                                }
+                                guard let nearest = nearestPrice(atX: xPosition, plotWidth: plotArea.width),
+                                      nearest != inspectedHour else { return }
+                                onInspectedHourChanged(nearest)
                             }
                     )
-                    .accessibilityIdentifier("chartInteractionOverlay")
             }
         }
         .frame(height: UIConstants.chartHeight)
@@ -118,5 +116,15 @@ struct ChartDailySeriesCardView: View {
         prices.min { lhs, rhs in
             abs(lhs.date.timeIntervalSince(date)) < abs(rhs.date.timeIntervalSince(date))
         }
+    }
+
+    private func nearestPrice(atX xPosition: CGFloat, plotWidth: CGFloat) -> HourlyPrice? {
+        guard !prices.isEmpty, plotWidth > 0 else { return nil }
+
+        let ratio = max(0, min(1, xPosition / plotWidth))
+        let rawIndex = ratio * CGFloat(prices.count - 1)
+        let index = Int(rawIndex.rounded())
+        guard prices.indices.contains(index) else { return nil }
+        return prices[index]
     }
 }

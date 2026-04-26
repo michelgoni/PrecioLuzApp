@@ -2,7 +2,7 @@ import ComposableArchitecture
 import SwiftUI
 
 struct ChartView: View {
-    let store: StoreOf<AppFeature>
+    let store: StoreOf<ChartFeature>
 
     private enum UIConstants {
         static let horizontalPadding: CGFloat = 16
@@ -23,13 +23,13 @@ struct ChartView: View {
                     ChartEmptyStateCardView()
                 } else {
                     ChartDailySeriesCardView(
-                        inspectedHour: store.chart.inspectedHour,
+                        inspectedHour: store.inspectedHour,
                         onInspectedHourChanged: {
-                            store.send(.chart(.inspectedHourChanged($0)))
+                            store.send(.inspectedHourChanged($0))
                         },
                         prices: sortedFilteredPrices
                     )
-                    if let inspectedHour = store.chart.inspectedHour {
+                    if let inspectedHour = store.inspectedHour {
                         ChartInspectionCardView(entry: inspectedHour)
                     }
                 }
@@ -44,12 +44,12 @@ struct ChartView: View {
 
     private var selectedDaypartBinding: Binding<Daypart> {
         Binding(
-            get: { store.chart.selectedDaypart },
-            set: { store.send(.chart(.selectedDaypartChanged($0))) }
+            get: { store.selectedDaypart },
+            set: { store.send(.selectedDaypartChanged($0)) }
         )
     }
 
     private var sortedFilteredPrices: [HourlyPrice] {
-        store.chart.filteredPrices.sorted { $0.date < $1.date }
+        store.filteredPrices.sorted { $0.date < $1.date }
     }
 }

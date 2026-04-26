@@ -99,7 +99,10 @@ struct AppShellView: View {
                 .tag(AppTab.prices)
 
             ChartView(
-                store: store
+                store: store.scope(
+                    state: \.chart,
+                    action: { .chart($0) }
+                )
             )
                 .tabItem {
                     Label(AppTab.chart.title, systemImage: AppTab.chart.systemImage)
