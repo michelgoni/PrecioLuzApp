@@ -98,7 +98,12 @@ struct AppShellView: View {
                 }
                 .tag(AppTab.prices)
 
-            ChartView()
+            ChartView(
+                store: store.scope(
+                    state: \.chart,
+                    action: { .chart($0) }
+                )
+            )
                 .tabItem {
                     Label(AppTab.chart.title, systemImage: AppTab.chart.systemImage)
                         .accessibilityIdentifier("tabChart")

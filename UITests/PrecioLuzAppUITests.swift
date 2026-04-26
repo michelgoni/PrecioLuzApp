@@ -80,6 +80,35 @@ final class PrecioLuzAppUITests: XCTestCase {
     XCTAssertFalse(modalTitle.waitForExistence(timeout: 2))
   }
 
+  func testChartDaypartSelectionAndInteractionIsStable() throws {
+    let app = makeApp()
+    app.launch()
+
+    let tabBar = app.tabBars.firstMatch
+    XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+
+    let chartButton = tabButton(in: tabBar, names: ["Gráfica", "tab.chart.title"])
+    chartButton.tap()
+    XCTAssertTrue(chartButton.isSelected)
+
+    let daypartButton = button(
+      in: app,
+      names: ["Tarde", "chart.daypart.afternoon"]
+    )
+    XCTAssertTrue(daypartButton.waitForExistence(timeout: 5))
+    daypartButton.tap()
+    XCTAssertTrue(daypartButton.isSelected)
+
+    let chartSeries = app.otherElements.matching(identifier: "chartDailySeries").firstMatch
+    XCTAssertTrue(chartSeries.waitForExistence(timeout: 5))
+
+    let start = chartSeries.coordinate(withNormalizedOffset: CGVector(dx: 0.20, dy: 0.50))
+    let end = chartSeries.coordinate(withNormalizedOffset: CGVector(dx: 0.65, dy: 0.50))
+    start.press(forDuration: 0.1, thenDragTo: end)
+
+    XCTAssertTrue(chartSeries.exists)
+  }
+
   private func makeApp() -> XCUIApplication {
     let app = XCUIApplication()
     app.launchArguments += ["-AppleLanguages", "(es)", "-AppleLocale", "es_ES"]
@@ -104,5 +133,15 @@ final class PrecioLuzAppUITests: XCTestCase {
       }
     }
     return tabBar.buttons[names[0]]
+  }
+
+  private func button(in app: XCUIApplication, names: [String]) -> XCUIElement {
+    for name in names {
+      let element = app.buttons[name]
+      if element.exists {
+        return element
+      }
+    }
+    return app.buttons[names[0]]
   }
 }
