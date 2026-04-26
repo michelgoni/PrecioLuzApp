@@ -21,3 +21,13 @@
   - `testChartTabDoesNotPresentCalculationModal`
 - Visual evidence:
   - [docs/evidence-issue8-prices-shell.png](/Users/michelgoni/Documents/repos/PrecioLuzApp/docs/evidence-issue8-prices-shell.png)
+
+## Issue #9 — Chart Feature Validation Trace
+- Incremento `9.0` (documental):
+  - alcance de gráfico diario, segmentación `Daypart` e inspección puntual documentado
+  - regla de parada por miniincremento documentada (review manual obligatoria)
+- Incrementos técnicos `9A-9E`:
+  - cada checkpoint debe registrar:
+    - `build` y tests ejecutados
+    - `UI smoke` cuando aplique por flujo visible
+    - evidencia visual versionada de la gráfica o de su interacción

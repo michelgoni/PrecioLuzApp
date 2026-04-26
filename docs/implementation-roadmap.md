@@ -127,6 +127,23 @@ Convert the documentation-first repository into a production-ready native iPhone
 - segmentación por `Daypart`
 - inspección visual por tramo
 
+#### Incremento 9.0 — Contrato técnico-visual previo
+- tipo: documental (sin código de app)
+- objetivo:
+  - fijar alcance ejecutable de `Issue #9` para `ChartFeature`
+  - cerrar criterios medibles para gráficos, segmentación e inspección
+- alcance funcional cerrado para arranque:
+  - render de serie diaria en tab `Gráfica` con `Charts`
+  - selector de tramo por `Daypart` (`overnight`, `morning`, `afternoon`, `night`)
+  - inspección puntual de hora/precio sobre la serie visible
+- checkpoints obligatorios para incrementos técnicos de `Issue #9`:
+  - `build` + tests del scope tocado
+  - `UI smoke tests` cuando el incremento toque wiring/flujo visible
+  - evidencia visual versionada (screenshot o preview justificada)
+- regla de ejecución:
+  - cada miniincremento se cierra con pausa obligatoria para revisión manual
+  - no se inicia el siguiente miniincremento sin visto bueno explícito
+
 ### Hito 7 — Feature `Settings` y notificaciones
 - toggles y umbral personalizado
 - permisos locales

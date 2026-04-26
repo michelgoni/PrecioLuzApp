@@ -71,6 +71,12 @@ La app se construye como una base `iPhone-first` en `iOS 26+`, con `SwiftUI` y A
 
 ### `Features/ChartFeature`
 - Estado y UI del tab `Gráfica`: tramo activo, datos filtrados y estado de inspección del gráfico.
+- Contrato mínimo de `Issue #9`:
+  - `selectedDaypart` como fuente de verdad del tramo visible.
+  - `hourlyPrices` sincronizados desde `AppFeature` tras snapshot `fresh/cached`.
+  - `filteredPrices` derivados por `Daypart` para render de `Charts`.
+  - `inspectedHour` opcional para inspección puntual de hora/precio.
+  - reconciliación de inspección al refrescar datos para evitar estado inválido.
 
 ### `Features/SettingsFeature`
 - Estado y UI del tab `Ajustes`: permisos, toggles, umbral y sincronización con preferencias/notificaciones.
@@ -152,6 +158,8 @@ Responsabilidades:
 
 ### `ChartFeature`
 - gestiona el tramo activo del día y los datos necesarios para la gráfica
+- filtra datos por `Daypart` y expone inspección puntual de un punto horario
+- evita lógica de negocio pesada en la vista; la vista renderiza estado derivado
 
 ### `SettingsFeature`
 - gestiona permisos, toggles de notificación y umbral personalizado
