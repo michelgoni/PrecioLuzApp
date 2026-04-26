@@ -1,13 +1,10 @@
-import Charts
+import ComposableArchitecture
 import SwiftUI
 
 struct ChartView: View {
-    let send: (ChartFeature.Action) -> Void
-    let state: ChartFeature.State
+    let store: StoreOf<AppFeature>
 
     private enum UIConstants {
-        static let chartHeight: CGFloat = 240
-        static let cornerRadius: CGFloat = 16
         static let horizontalPadding: CGFloat = 16
         static let verticalSpacing: CGFloat = 16
     }
@@ -20,22 +17,21 @@ struct ChartView: View {
                     .foregroundStyle(.primary)
                     .accessibilityIdentifier("chartTitle")
 
-                Picker(
-                    String(localized: "chart.daypart.picker"),
-                    selection: selectedDaypartBinding
-                ) {
-                    ForEach(Daypart.allCases, id: \.self) { daypart in
-                        Text(daypart.localizedName)
-                            .tag(daypart)
-                    }
-                }
-                .accessibilityIdentifier("chartDaypartPicker")
-                .pickerStyle(.segmented)
+                ChartDaypartPickerView(selectedDaypart: selectedDaypartBinding)
 
                 if sortedFilteredPrices.isEmpty {
-                    emptyStateCard
+                    ChartEmptyStateCardView()
                 } else {
-                    chartCard
+                    ChartDailySeriesCardView(
+                        inspectedHour: store.chart.inspectedHour,
+                        onInspectedHourChanged: {
+                            store.send(.chart(.inspectedHourChanged($0)))
+                        },
+                        prices: sortedFilteredPrices
+                    )
+                    if let inspectedHour = store.chart.inspectedHour {
+                        ChartInspectionCardView(entry: inspectedHour)
+                    }
                 }
             }
             .padding(.horizontal, UIConstants.horizontalPadding)
@@ -48,79 +44,12 @@ struct ChartView: View {
 
     private var selectedDaypartBinding: Binding<Daypart> {
         Binding(
-            get: { state.selectedDaypart },
-            set: { send(.selectedDaypartChanged($0)) }
+            get: { store.chart.selectedDaypart },
+            set: { store.send(.chart(.selectedDaypartChanged($0))) }
         )
     }
 
     private var sortedFilteredPrices: [HourlyPrice] {
-        state.filteredPrices.sorted { $0.date < $1.date }
-    }
-
-    private var chartCard: some View {
-        Chart(sortedFilteredPrices, id: \.date) { entry in
-            LineMark(
-                x: .value(String(localized: "chart.axis.hour"), entry.date),
-                y: .value(String(localized: "chart.axis.price"), entry.eurPerKWh)
-            )
-            .interpolationMethod(.catmullRom)
-            .lineStyle(.init(lineWidth: 2))
-            .foregroundStyle(Color.accentColor)
-
-            PointMark(
-                x: .value(String(localized: "chart.axis.hour"), entry.date),
-                y: .value(String(localized: "chart.axis.price"), entry.eurPerKWh)
-            )
-            .symbolSize(20)
-            .foregroundStyle(Color.accentColor.opacity(0.8))
-        }
-        .accessibilityIdentifier("chartDailySeries")
-        .chartYAxis {
-            AxisMarks(position: .leading)
-        }
-        .chartXAxis {
-            AxisMarks(values: .automatic(desiredCount: 4)) { value in
-                AxisGridLine()
-                AxisTick()
-                AxisValueLabel {
-                    if let date = value.as(Date.self) {
-                        Text(date.formatted(.dateTime.hour().minute()))
-                    }
-                }
-            }
-        }
-        .frame(height: UIConstants.chartHeight)
-        .padding(12)
-        .background(
-            RoundedRectangle(cornerRadius: UIConstants.cornerRadius)
-                .fill(Color(.secondarySystemBackground))
-        )
-    }
-
-    private var emptyStateCard: some View {
-        Text(String(localized: "chart.empty.daypart"))
-            .font(.body)
-            .foregroundStyle(.secondary)
-            .frame(maxWidth: .infinity, minHeight: UIConstants.chartHeight)
-            .background(
-                RoundedRectangle(cornerRadius: UIConstants.cornerRadius)
-                    .fill(Color(.secondarySystemBackground))
-            )
-            .accessibilityIdentifier("chartEmptyState")
-    }
-}
-
-private extension Daypart {
-    var localizedName: String {
-        switch self {
-        case .overnight:
-            String(localized: "chart.daypart.overnight")
-        case .morning:
-            String(localized: "chart.daypart.morning")
-        case .afternoon:
-            String(localized: "chart.daypart.afternoon")
-        case .night:
-            String(localized: "chart.daypart.night")
-        }
+        store.chart.filteredPrices.sorted { $0.date < $1.date }
     }
 }

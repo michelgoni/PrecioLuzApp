@@ -26,6 +26,9 @@ struct Issue8AcceptanceTests {
       $0.prices.summary = payload.summary
       $0.rootStatus = .content
     }
+    await store.receive(.chart(.syncHourlyPrices(payload.hourlyPrices))) {
+      $0.chart.hourlyPrices = payload.hourlyPrices
+    }
 
     await store.send(.pricesHourTapped(selectedHour)) {
       $0.prices.costCalculation.durationHours = CostCalculationFeature.State.defaultDurationHours
@@ -76,6 +79,9 @@ struct Issue8AcceptanceTests {
       $0.prices.summary = firstPayload.summary
       $0.rootStatus = .content
     }
+    await store.receive(.chart(.syncHourlyPrices(firstPayload.hourlyPrices))) {
+      $0.chart.hourlyPrices = firstPayload.hourlyPrices
+    }
 
     await store.send(.pricesHourTapped(selectedHour)) {
       $0.prices.costCalculation.durationHours = CostCalculationFeature.State.defaultDurationHours
@@ -91,6 +97,9 @@ struct Issue8AcceptanceTests {
       $0.prices.costCalculation.selectedHour = nil
       $0.prices.summary = refreshedPayload.summary
       $0.rootStatus = .content
+    }
+    await store.receive(.chart(.syncHourlyPrices(refreshedPayload.hourlyPrices))) {
+      $0.chart.hourlyPrices = refreshedPayload.hourlyPrices
     }
   }
 }

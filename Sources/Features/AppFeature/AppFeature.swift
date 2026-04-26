@@ -69,7 +69,7 @@ struct AppFeature: Reducer {
         Reduce { state, action in
             switch action {
             case let .chart(chartAction):
-                ChartFeature.State.apply(chartAction, to: &state.chart)
+                applyChartAction(chartAction, to: &state.chart)
                 return .none
 
             case .onAppear, .retryTapped:
@@ -152,17 +152,24 @@ struct AppFeature: Reducer {
 
     private func updateFeatureStates(_ state: inout State, from result: DailyPricingSnapshotPipelineResult) {
         updatePricesState(&state.prices, from: result)
-        updateChartState(&state.chart, from: result)
     }
 
-    private func updateChartState(_ state: inout ChartFeature.State, from result: DailyPricingSnapshotPipelineResult) {
-        switch result {
-        case .failed:
-            break
-        case let .cached(payload), let .fresh(payload):
-            state.hourlyPrices = payload.hourlyPrices
+    private func applyChartAction(_ action: ChartFeature.Action, to state: inout ChartFeature.State) {
+        switch action {
+        case let .inspectedHourChanged(hour):
+            state.inspectedHour = hour
+
+        case let .selectedDaypartChanged(daypart):
+            state.selectedDaypart = daypart
             if let inspectedHour = state.inspectedHour,
-               !payload.hourlyPrices.contains(where: { $0.date == inspectedHour.date }) {
+               !state.filteredPrices.contains(where: { $0.date == inspectedHour.date }) {
+                state.inspectedHour = nil
+            }
+
+        case let .syncHourlyPrices(hourlyPrices):
+            state.hourlyPrices = hourlyPrices
+            if let inspectedHour = state.inspectedHour,
+               !state.filteredPrices.contains(where: { $0.date == inspectedHour.date }) {
                 state.inspectedHour = nil
             }
         }
