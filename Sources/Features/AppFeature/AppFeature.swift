@@ -49,6 +49,7 @@ struct AppFeature: Reducer {
     @CasePathable
     enum Action: Equatable {
         case chart(ChartFeature.Action)
+        case notificationSettingsLoaded(NotificationSettings)
         case onAppear
         case pricesCalculationPlaceholderDismissed
         case pricesDurationHoursChanged(Double)
@@ -66,6 +67,8 @@ struct AppFeature: Reducer {
 
     private enum CancelID {
         case loadSnapshot
+        case loadSettings
+        case saveSettings
     }
 
     var body: some ReducerOf<Self> {
@@ -77,7 +80,10 @@ struct AppFeature: Reducer {
 
             case .onAppear, .retryTapped:
                 state.rootStatus = .loading
-                return loadSnapshotEffect()
+                return .merge(
+                    loadNotificationSettingsEffect(),
+                    loadSnapshotEffect()
+                )
 
             case .pricesCalculationPlaceholderDismissed:
                 state.prices.costCalculation.isPresented = false
@@ -110,6 +116,10 @@ struct AppFeature: Reducer {
 
             case let .settings(settingsAction):
                 applySettingsAction(settingsAction, to: &state.settings)
+                return saveNotificationSettingsEffect(state.settings.notificationSettings)
+
+            case let .notificationSettingsLoaded(notificationSettings):
+                state.settings.notificationSettings = notificationSettings
                 return .none
 
             case let .snapshotResponse(result):
@@ -133,6 +143,14 @@ struct AppFeature: Reducer {
         .cancellable(id: CancelID.loadSnapshot, cancelInFlight: true)
     }
 
+    private func loadNotificationSettingsEffect() -> Effect<Action> {
+        .run { [persistenceClient] send in
+            let loadedSettings = try? await persistenceClient.loadNotificationSettings()
+            await send(.notificationSettingsLoaded(loadedSettings ?? NotificationSettings.productDefaults))
+        }
+        .cancellable(id: CancelID.loadSettings, cancelInFlight: true)
+    }
+
     private func mapRootStatus(from result: DailyPricingSnapshotPipelineResult) -> RootStatus {
         switch result {
         case .failed:
@@ -142,6 +160,13 @@ struct AppFeature: Reducer {
         case let .fresh(payload):
             mapStatus(from: payload, whenNotEmpty: .content)
         }
+    }
+
+    private func saveNotificationSettingsEffect(_ settings: NotificationSettings) -> Effect<Action> {
+        .run { [persistenceClient] _ in
+            try? await persistenceClient.saveNotificationSettings(settings)
+        }
+        .cancellable(id: CancelID.saveSettings, cancelInFlight: true)
     }
 
     private func mapStatus(from payload: DailyPricingSnapshotPayload, whenNotEmpty status: RootStatus) -> RootStatus {

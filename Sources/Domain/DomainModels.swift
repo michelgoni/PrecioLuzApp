@@ -114,7 +114,17 @@ struct NotificationSettings: Equatable, Sendable {
     var notificationsEnabled: Bool
     var notifyDailyMaximum: Bool
     var notifyDailyMinimum: Bool
+
+    static let productDefaults = NotificationSettings(
+        customThresholdEnabled: false,
+        customThresholdEURPerKWh: 0.150,
+        notificationsEnabled: false,
+        notifyDailyMaximum: false,
+        notifyDailyMinimum: true
+    )
 }
+
+extension NotificationSettings: Codable {}
 
 enum HourlyPriceClassifier {
     private struct IndexedPrice {

@@ -284,11 +284,60 @@ struct AppFeatureTests {
         }
     }
 
+    @MainActor
+    @Test("AppFeature applies loaded notification settings")
+    func notificationSettingsLoadedUpdatesState() async {
+        let loadedSettings = NotificationSettings(
+            customThresholdEnabled: true,
+            customThresholdEURPerKWh: 0.225,
+            notificationsEnabled: true,
+            notifyDailyMaximum: true,
+            notifyDailyMinimum: false
+        )
+        let store = TestStore(initialState: AppFeature.State()) {
+            AppFeature()
+        }
+
+        await store.send(.notificationSettingsLoaded(loadedSettings)) {
+            $0.settings.notificationSettings = loadedSettings
+        }
+    }
+
+    @MainActor
+    @Test("AppFeature persists notification settings after settings changes")
+    func settingsActionSavesNotificationSettings() async {
+        let recorder = NotificationSettingsRecorder()
+        let store = TestStore(initialState: AppFeature.State()) {
+            AppFeature()
+        } withDependencies: {
+            $0.persistenceClient.loadNotificationSettings = { nil }
+            $0.persistenceClient.saveNotificationSettings = { settings in
+                await recorder.record(settings)
+            }
+        }
+
+        await store.send(.settings(.notificationsEnabledChanged(true))) {
+            $0.settings.notificationSettings.notificationsEnabled = true
+        }
+        await store.finish()
+
+        let savedSettings = await recorder.last
+        #expect(savedSettings == store.state.settings.notificationSettings)
+    }
+
     @Test("App tabs expose expected SF Symbols")
     func tabSymbolsAreConfigured() {
         #expect(AppTab.chart.systemImage == "chart.xyaxis.line")
         #expect(AppTab.prices.systemImage == "eurosign.circle")
         #expect(AppTab.settings.systemImage == "gearshape")
+    }
+}
+
+private actor NotificationSettingsRecorder {
+    private(set) var last: NotificationSettings?
+
+    func record(_ settings: NotificationSettings) {
+        last = settings
     }
 }
 

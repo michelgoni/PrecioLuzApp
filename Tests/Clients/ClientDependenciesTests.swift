@@ -33,8 +33,10 @@ struct ClientDependenciesTests {
   @Test("PersistenceClient testValue returns no snapshot by default")
   func persistenceClientTestValueReturnsNoSnapshot() async throws {
     let day = Date(timeIntervalSince1970: 1_700_000_000)
+    let notificationSettings = try await PersistenceClient.testValue.loadNotificationSettings()
     let snapshot = try await PersistenceClient.testValue.loadSnapshot(day, .current)
 
+    #expect(notificationSettings == nil)
     #expect(snapshot == nil)
   }
 }

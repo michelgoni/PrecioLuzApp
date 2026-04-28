@@ -8,13 +8,7 @@ struct SettingsFeature: Reducer {
         static let minimumThresholdEURPerKWh = 0.05
         static let thresholdStepEURPerKWh = 0.005
 
-        var notificationSettings = NotificationSettings(
-            customThresholdEnabled: false,
-            customThresholdEURPerKWh: Self.defaultThresholdEURPerKWh,
-            notificationsEnabled: false,
-            notifyDailyMaximum: false,
-            notifyDailyMinimum: true
-        )
+        var notificationSettings = NotificationSettings.productDefaults
     }
 
     enum Action: Equatable {
