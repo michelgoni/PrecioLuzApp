@@ -539,6 +539,36 @@ struct AppFeatureTests {
         }
     }
 
+    @MainActor
+    @Test("AppFeature reloads authorization when app becomes active")
+    func appDidBecomeActiveReloadsAuthorization() async {
+        let store = TestStore(initialState: AppFeature.State()) {
+            AppFeature()
+        } withDependencies: {
+            $0.notificationClient.authorizationStatus = { .authorized }
+        }
+
+        await store.send(.appDidBecomeActive)
+        await store.receive(.notificationAuthorizationStatusLoaded(.authorized)) {
+            $0.settings.authorizationStatus = .authorized
+        }
+    }
+
+    @MainActor
+    @Test("AppFeature reloads authorization when open settings is tapped")
+    func openSystemSettingsTappedReloadsAuthorization() async {
+        let store = TestStore(initialState: AppFeature.State()) {
+            AppFeature()
+        } withDependencies: {
+            $0.notificationClient.authorizationStatus = { .authorized }
+        }
+
+        await store.send(.settings(.openSystemSettingsTapped))
+        await store.receive(.notificationAuthorizationStatusLoaded(.authorized)) {
+            $0.settings.authorizationStatus = .authorized
+        }
+    }
+
     @Test("App tabs expose expected SF Symbols")
     func tabSymbolsAreConfigured() {
         #expect(AppTab.chart.systemImage == "chart.xyaxis.line")

@@ -2,6 +2,7 @@ import ComposableArchitecture
 import SwiftUI
 
 struct AppShellView: View {
+    @Environment(\.scenePhase) private var scenePhase
     let store: StoreOf<AppFeature>
 
     var body: some View {
@@ -29,6 +30,12 @@ struct AppShellView: View {
         }
         .task {
             store.send(.onAppear)
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            guard newPhase == .active else {
+                return
+            }
+            store.send(.appDidBecomeActive)
         }
     }
 

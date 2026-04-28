@@ -49,6 +49,7 @@ struct AppFeature: Reducer {
 
     @CasePathable
     enum Action: Equatable {
+        case appDidBecomeActive
         case chart(ChartFeature.Action)
         case notificationAuthorizationStatusLoaded(NotificationClient.AuthorizationStatus)
         case notificationPermissionRequestFinished(Bool)
@@ -81,6 +82,9 @@ struct AppFeature: Reducer {
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
+            case .appDidBecomeActive:
+                return loadNotificationAuthorizationStatusEffect()
+
             case let .chart(chartAction):
                 applyChartAction(chartAction, to: &state.chart)
                 return .none
@@ -388,7 +392,7 @@ struct AppFeature: Reducer {
             }
 
         case .openSystemSettingsTapped:
-            return .none
+            return loadNotificationAuthorizationStatusEffect()
 
         default:
             applySettingsAction(action, to: &state.settings)

@@ -42,11 +42,13 @@ extension NotificationClient: DependencyKey {
       try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
     },
     schedule: { requests in
+      try Task.checkCancellation()
       let center = UNUserNotificationCenter.current()
       center.removeAllDeliveredNotifications()
       center.removeAllPendingNotificationRequests()
 
       for request in requests {
+        try Task.checkCancellation()
         let content = UNMutableNotificationContent()
         content.body = request.body
         content.sound = .default

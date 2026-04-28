@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsDeniedPermissionsSectionView: View {
     @Environment(\.openURL) private var openURL
+    let onOpenSystemSettingsTapped: () -> Void
 
     var body: some View {
         Section {
@@ -9,6 +10,7 @@ struct SettingsDeniedPermissionsSectionView: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
             Button(String(localized: "settings.notifications.permissions.openSettings.button")) {
+                onOpenSystemSettingsTapped()
                 openSystemSettings()
             }
             .accessibilityIdentifier("settingsOpenSystemSettingsButton")

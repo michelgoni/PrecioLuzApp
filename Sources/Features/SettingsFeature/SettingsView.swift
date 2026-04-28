@@ -11,7 +11,11 @@ struct SettingsView: View {
             )
 
             if store.authorizationStatus == .denied {
-                SettingsDeniedPermissionsSectionView()
+                SettingsDeniedPermissionsSectionView(
+                    onOpenSystemSettingsTapped: {
+                        store.send(.openSystemSettingsTapped)
+                    }
+                )
             }
 
             SettingsAlertsSectionView(
