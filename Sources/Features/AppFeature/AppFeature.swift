@@ -126,8 +126,24 @@ struct AppFeature: Reducer {
                 return handleSettingsAction(settingsAction, state: &state)
 
             case let .notificationSettingsLoaded(notificationSettings):
-                state.settings.notificationSettings = notificationSettings
-                return .none
+                let sanitizedSettings = sanitizeLoadedSettings(
+                    notificationSettings,
+                    authorizationStatus: state.settings.authorizationStatus
+                )
+                state.settings.notificationSettings = sanitizedSettings
+
+                var effects: [Effect<Action>] = [
+                    rescheduleNotificationsEffect(
+                        hourlyPrices: state.prices.hourlyPrices,
+                        settings: sanitizedSettings
+                    )
+                ]
+
+                if sanitizedSettings != notificationSettings {
+                    effects.append(saveNotificationSettingsEffect(sanitizedSettings))
+                }
+
+                return .merge(effects)
 
             case let .notificationAuthorizationStatusLoaded(status):
                 state.settings.authorizationStatus = status
@@ -213,6 +229,15 @@ struct AppFeature: Reducer {
             try? await persistenceClient.saveNotificationSettings(settings)
         }
         .cancellable(id: CancelID.saveSettings, cancelInFlight: true)
+    }
+
+    private func sanitizeLoadedSettings(_ settings: NotificationSettings, authorizationStatus: NotificationClient.AuthorizationStatus) -> NotificationSettings {
+        guard authorizationStatus == .denied else {
+            return settings
+        }
+        var sanitizedSettings = settings
+        sanitizedSettings.notificationsEnabled = false
+        return sanitizedSettings
     }
 
     private func scheduleNotificationsFromSnapshotEffect(result: DailyPricingSnapshotPipelineResult, settings: NotificationSettings) -> Effect<Action> {

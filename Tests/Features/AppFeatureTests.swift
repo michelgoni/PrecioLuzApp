@@ -304,6 +304,95 @@ struct AppFeatureTests {
     }
 
     @MainActor
+    @Test("AppFeature sanitizes loaded settings when authorization is denied")
+    func notificationSettingsLoadedStaysDisabledWhenAuthorizationIsDenied() async {
+        let requestsRecorder = NotificationRequestsRecorder()
+        var initialState = AppFeature.State()
+        initialState.settings.authorizationStatus = .denied
+
+        let loadedSettings = NotificationSettings(
+            customThresholdEnabled: true,
+            customThresholdEURPerKWh: 0.20,
+            notificationsEnabled: true,
+            notifyDailyMaximum: true,
+            notifyDailyMinimum: true
+        )
+
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        } withDependencies: {
+            $0.dateClient.now = { testNow }
+            $0.dateClient.timeZone = { testTimeZone }
+            $0.notificationClient.schedule = { requests in
+                await requestsRecorder.record(requests)
+            }
+        }
+
+        await store.send(.notificationSettingsLoaded(loadedSettings)) {
+            $0.settings.notificationSettings = NotificationSettings(
+                customThresholdEnabled: true,
+                customThresholdEURPerKWh: 0.20,
+                notificationsEnabled: false,
+                notifyDailyMaximum: true,
+                notifyDailyMinimum: true
+            )
+        }
+        await store.finish()
+
+        let scheduledRequests = await requestsRecorder.last
+        #expect(scheduledRequests.isEmpty)
+    }
+
+    @MainActor
+    @Test("AppFeature reschedules notifications when persisted settings load after snapshot")
+    func notificationSettingsLoadedReschedulesAfterSnapshot() async {
+        let requestsRecorder = NotificationRequestsRecorder()
+        let payload = DailyPricingSnapshotPayload(
+            dayStart: testNow,
+            fetchedAt: testNow,
+            hourlyPrices: [HourlyPrice.mockFutureValue],
+            summary: nil
+        )
+
+        let loadedSettings = NotificationSettings(
+            customThresholdEnabled: false,
+            customThresholdEURPerKWh: nil,
+            notificationsEnabled: true,
+            notifyDailyMaximum: false,
+            notifyDailyMinimum: true
+        )
+
+        let store = TestStore(initialState: AppFeature.State()) {
+            AppFeature()
+        } withDependencies: {
+            $0.dateClient.now = { testNow }
+            $0.dateClient.timeZone = { testTimeZone }
+            $0.notificationClient.schedule = { requests in
+                await requestsRecorder.record(requests)
+            }
+        }
+
+        await store.send(.snapshotResponse(.fresh(payload))) {
+            $0.rootStatus = .content
+            $0.prices.hourlyPrices = payload.hourlyPrices
+            $0.prices.isFromCache = false
+            $0.prices.summary = nil
+        }
+        await store.receive(.chart(.syncHourlyPrices(payload.hourlyPrices))) {
+            $0.chart.hourlyPrices = payload.hourlyPrices
+        }
+
+        await store.send(.notificationSettingsLoaded(loadedSettings)) {
+            $0.settings.notificationSettings = loadedSettings
+        }
+        await store.finish()
+
+        let scheduledRequests = await requestsRecorder.last
+        #expect(scheduledRequests.count == 1)
+        #expect(scheduledRequests.first?.id.contains("dailyMinimum") == true)
+    }
+
+    @MainActor
     @Test("AppFeature persists notification settings after settings changes")
     func settingsActionSavesNotificationSettings() async {
         let recorder = NotificationSettingsRecorder()
