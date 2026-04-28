@@ -41,7 +41,30 @@ extension NotificationClient: DependencyKey {
     requestAuthorization: {
       try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
     },
-    schedule: { _ in }
+    schedule: { requests in
+      let center = UNUserNotificationCenter.current()
+      center.removeAllDeliveredNotifications()
+      center.removeAllPendingNotificationRequests()
+
+      for request in requests {
+        let content = UNMutableNotificationContent()
+        content.body = request.body
+        content.sound = .default
+        content.title = request.title
+
+        let components = Calendar.current.dateComponents(
+          [.year, .month, .day, .hour, .minute, .second],
+          from: request.triggerDate
+        )
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        let notificationRequest = UNNotificationRequest(
+          identifier: request.id,
+          content: content,
+          trigger: trigger
+        )
+        try await center.add(notificationRequest)
+      }
+    }
   )
 
   static let testValue = NotificationClient(
@@ -49,6 +72,20 @@ extension NotificationClient: DependencyKey {
     requestAuthorization: { true },
     schedule: { _ in }
   )
+}
+
+private extension UNUserNotificationCenter {
+  func add(_ request: UNNotificationRequest) async throws {
+    try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+      add(request) { error in
+        if let error {
+          continuation.resume(throwing: error)
+        } else {
+          continuation.resume(returning: ())
+        }
+      }
+    }
+  }
 }
 
 extension DependencyValues {

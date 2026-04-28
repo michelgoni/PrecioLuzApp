@@ -16,6 +16,12 @@
 "chart.empty.daypart" = "No hay precios para este tramo";
 "chart.inspection.hour" = "Hora";
 "chart.inspection.price" = "Precio";
+"notifications.dailyMaximum.body" = "Se acerca una franja con precio alto.";
+"notifications.dailyMaximum.title" = "Máximo diario próximo";
+"notifications.dailyMinimum.body" = "Se acerca una franja con precio bajo.";
+"notifications.dailyMinimum.title" = "Mínimo diario próximo";
+"notifications.threshold.body" = "Hay una franja futura por debajo de tu umbral.";
+"notifications.threshold.title" = "Franja bajo tu umbral";
 "prices.classification.cheap" = "Barato";
 "prices.classification.expensive" = "Caro";
 "prices.classification.mid" = "Medio";

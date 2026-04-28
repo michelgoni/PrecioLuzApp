@@ -25,6 +25,7 @@
 		5A1A24247057150A4F915D15 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1DBD42E1BBDDF4FD2891FE /* SettingsView.swift */; };
 		5D279D6881FAF12A670D335F /* DomainModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A029A1E50E3C94217EFFCFD3 /* DomainModelsTests.swift */; };
 		5E5746E4E23EC6B3BD28CE34 /* DailyPricingSnapshotPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BBD1FCB478C16D91769556 /* DailyPricingSnapshotPipeline.swift */; };
+		64480331687A48156A250C3C /* NotificationSchedulingPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153BCC42D73BBD8DD5292357 /* NotificationSchedulingPlanner.swift */; };
 		68B309C5FF0C727AAC50E095 /* Issue8AcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79D3713AFCF1EB48194466D /* Issue8AcceptanceTests.swift */; };
 		693300BDC4A7882348CC27BB /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C64AB47F534C3EF47DA37C60 /* ComposableArchitecture */; };
 		710230124962E2BB85E1987F /* ClientDependenciesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9580A221A5C7CD6CCF6C022 /* ClientDependenciesTests.swift */; };
@@ -46,6 +47,7 @@
 		CE2C0DE70A00C8DB9F34406B /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = B05968D2E8CFF8E01B748541 /* ComposableArchitecture */; };
 		D10A52D551C8B3E7C2FB7CDB /* ChartDaypartPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613AC733428459896683DAAC /* ChartDaypartPickerView.swift */; };
 		D439C31ED58457B59CB2F5D6 /* SettingsFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1D1D0EBF01088EFBD9E3B7 /* SettingsFeatureTests.swift */; };
+		D4CB180C3283A7E29F3AC3DD /* NotificationSchedulingPlannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276B03E4DEC212D3F4AC0C01 /* NotificationSchedulingPlannerTests.swift */; };
 		D4F2BDEAF0E519BD8DCB871B /* PrecioLuzAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA85C7AECFB312B3FB9D051 /* PrecioLuzAppApp.swift */; };
 		D90EA5BE4B99C91A0F417B30 /* PricesSummaryGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2770E992020BA0D8D63EE8EE /* PricesSummaryGridView.swift */; };
 		DB0C5DE8895671AA9ABA9506 /* PricesPresetCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A951194E5023185C583A951 /* PricesPresetCatalog.swift */; };
@@ -84,10 +86,12 @@
 		0A1DBD42E1BBDDF4FD2891FE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		0BD95CAC54FDB663633913B0 /* PricesViewPreviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesViewPreviews.swift; sourceTree = "<group>"; };
 		0EC0E732B44B69678D9DFA62 /* SettingsNotificationsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotificationsSectionView.swift; sourceTree = "<group>"; };
+		153BCC42D73BBD8DD5292357 /* NotificationSchedulingPlanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSchedulingPlanner.swift; sourceTree = "<group>"; };
 		1942F66E100388ADAE896898 /* CostCalculationFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostCalculationFeatureTests.swift; sourceTree = "<group>"; };
 		1A951194E5023185C583A951 /* PricesPresetCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesPresetCatalog.swift; sourceTree = "<group>"; };
 		1FC5C7E5F151FC11C56A3D19 /* ChartFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartFeature.swift; sourceTree = "<group>"; };
 		2271894EDF7E0F475C376F87 /* DailyPricingSnapshotPipelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyPricingSnapshotPipelineTests.swift; sourceTree = "<group>"; };
+		276B03E4DEC212D3F4AC0C01 /* NotificationSchedulingPlannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSchedulingPlannerTests.swift; sourceTree = "<group>"; };
 		2770E992020BA0D8D63EE8EE /* PricesSummaryGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesSummaryGridView.swift; sourceTree = "<group>"; };
 		288DF63F4693A0161011B4A4 /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
 		293BA0BC87789BB4B9D3F603 /* AppShellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShellView.swift; sourceTree = "<group>"; };
@@ -197,6 +201,7 @@
 			children = (
 				2271894EDF7E0F475C376F87 /* DailyPricingSnapshotPipelineTests.swift */,
 				A029A1E50E3C94217EFFCFD3 /* DomainModelsTests.swift */,
+				276B03E4DEC212D3F4AC0C01 /* NotificationSchedulingPlannerTests.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -366,6 +371,7 @@
 			children = (
 				F2BBD1FCB478C16D91769556 /* DailyPricingSnapshotPipeline.swift */,
 				75905F6274FE9F8BFD18AA70 /* DomainModels.swift */,
+				153BCC42D73BBD8DD5292357 /* NotificationSchedulingPlanner.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -515,6 +521,7 @@
 				BE6F8B2F22DC95595232845A /* DateClient.swift in Sources */,
 				4C0BAE6A4CB9433F43182C37 /* DomainModels.swift in Sources */,
 				FFD909BEA040F73D5FEDDC2D /* NotificationClient.swift in Sources */,
+				64480331687A48156A250C3C /* NotificationSchedulingPlanner.swift in Sources */,
 				0707733D9FC9E87DBB20DE2B /* PersistenceClient.swift in Sources */,
 				D4F2BDEAF0E519BD8DCB871B /* PrecioLuzAppApp.swift in Sources */,
 				593628AFC7B815D234E34500 /* PricesCalculationSheetView.swift in Sources */,
@@ -549,6 +556,7 @@
 				EAA54D0786CB11AB8762B373 /* Issue5AcceptanceTests.swift in Sources */,
 				68B309C5FF0C727AAC50E095 /* Issue8AcceptanceTests.swift in Sources */,
 				C41724ED25C88587D77820D1 /* Issue9AcceptanceTests.swift in Sources */,
+				D4CB180C3283A7E29F3AC3DD /* NotificationSchedulingPlannerTests.swift in Sources */,
 				2C7A88ECC9F97A3203DEB45D /* PricesFeatureTests.swift in Sources */,
 				D439C31ED58457B59CB2F5D6 /* SettingsFeatureTests.swift in Sources */,
 				00FB8BC052CFF7B1164C485D /* TCASmokeTests.swift in Sources */,

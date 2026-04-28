@@ -16,6 +16,12 @@
 "chart.empty.daypart" = "No prices available for this segment";
 "chart.inspection.hour" = "Hour";
 "chart.inspection.price" = "Price";
+"notifications.dailyMaximum.body" = "A high-price slot is coming soon.";
+"notifications.dailyMaximum.title" = "Daily maximum ahead";
+"notifications.dailyMinimum.body" = "A low-price slot is coming soon.";
+"notifications.dailyMinimum.title" = "Daily minimum ahead";
+"notifications.threshold.body" = "A future slot is below your configured threshold.";
+"notifications.threshold.title" = "Slot below your threshold";
 "prices.classification.cheap" = "Cheap";
 "prices.classification.expensive" = "Expensive";
 "prices.classification.mid" = "Mid";

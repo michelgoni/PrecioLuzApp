@@ -307,11 +307,17 @@ struct AppFeatureTests {
     @Test("AppFeature persists notification settings after settings changes")
     func settingsActionSavesNotificationSettings() async {
         let recorder = NotificationSettingsRecorder()
+        let requestsRecorder = NotificationRequestsRecorder()
         var initialState = AppFeature.State()
         initialState.settings.authorizationStatus = .authorized
         let store = TestStore(initialState: initialState) {
             AppFeature()
         } withDependencies: {
+            $0.dateClient.now = { testNow }
+            $0.dateClient.timeZone = { testTimeZone }
+            $0.notificationClient.schedule = { requests in
+                await requestsRecorder.record(requests)
+            }
             $0.persistenceClient.loadNotificationSettings = { nil }
             $0.persistenceClient.saveNotificationSettings = { settings in
                 await recorder.record(settings)
@@ -324,7 +330,64 @@ struct AppFeatureTests {
         await store.finish()
 
         let savedSettings = await recorder.last
+        let scheduledRequests = await requestsRecorder.last
         #expect(savedSettings == store.state.settings.notificationSettings)
+        #expect(scheduledRequests.isEmpty)
+    }
+
+    @MainActor
+    @Test("AppFeature reschedules notifications when snapshot is refreshed")
+    func snapshotResponseReschedulesNotifications() async {
+        let requestsRecorder = NotificationRequestsRecorder()
+        var initialState = AppFeature.State()
+        initialState.settings.notificationSettings.notificationsEnabled = true
+        initialState.settings.notificationSettings.notifyDailyMinimum = true
+        initialState.settings.notificationSettings.notifyDailyMaximum = false
+
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        } withDependencies: {
+            $0.dateClient.now = { testNow }
+            $0.dateClient.timeZone = { testTimeZone }
+            $0.notificationClient.schedule = { requests in
+                await requestsRecorder.record(requests)
+            }
+        }
+
+        let payload = DailyPricingSnapshotPayload(
+            dayStart: testNow,
+            fetchedAt: testNow,
+            hourlyPrices: [
+                HourlyPrice(
+                    classification: .mid,
+                    date: testNow.addingTimeInterval(3_600),
+                    daypart: .morning,
+                    eurPerKWh: 0.18
+                ),
+                HourlyPrice(
+                    classification: .cheap,
+                    date: testNow.addingTimeInterval(7_200),
+                    daypart: .morning,
+                    eurPerKWh: 0.11
+                ),
+            ],
+            summary: nil
+        )
+
+        await store.send(.snapshotResponse(.fresh(payload))) {
+            $0.rootStatus = .content
+            $0.prices.hourlyPrices = payload.hourlyPrices
+            $0.prices.isFromCache = false
+            $0.prices.summary = nil
+        }
+        await store.receive(.chart(.syncHourlyPrices(payload.hourlyPrices))) {
+            $0.chart.hourlyPrices = payload.hourlyPrices
+        }
+        await store.finish()
+
+        let scheduledRequests = await requestsRecorder.last
+        #expect(scheduledRequests.count == 1)
+        #expect(scheduledRequests.first?.id.contains("dailyMinimum") == true)
     }
 
     @MainActor
@@ -400,6 +463,14 @@ private actor NotificationSettingsRecorder {
 
     func record(_ settings: NotificationSettings) {
         last = settings
+    }
+}
+
+private actor NotificationRequestsRecorder {
+    private(set) var last: [NotificationClient.Request] = []
+
+    func record(_ requests: [NotificationClient.Request]) {
+        last = requests
     }
 }
 
