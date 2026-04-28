@@ -307,7 +307,9 @@ struct AppFeatureTests {
     @Test("AppFeature persists notification settings after settings changes")
     func settingsActionSavesNotificationSettings() async {
         let recorder = NotificationSettingsRecorder()
-        let store = TestStore(initialState: AppFeature.State()) {
+        var initialState = AppFeature.State()
+        initialState.settings.authorizationStatus = .authorized
+        let store = TestStore(initialState: initialState) {
             AppFeature()
         } withDependencies: {
             $0.persistenceClient.loadNotificationSettings = { nil }
@@ -323,6 +325,66 @@ struct AppFeatureTests {
 
         let savedSettings = await recorder.last
         #expect(savedSettings == store.state.settings.notificationSettings)
+    }
+
+    @MainActor
+    @Test("AppFeature enables notifications immediately when authorization is authorized")
+    func notificationsEnabledWhenAuthorized() async {
+        var initialState = AppFeature.State()
+        initialState.settings.authorizationStatus = .authorized
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        }
+
+        await store.send(.settings(.notificationsEnabledChanged(true))) {
+            $0.settings.notificationSettings.notificationsEnabled = true
+        }
+    }
+
+    @MainActor
+    @Test("AppFeature keeps notifications disabled when authorization is denied")
+    func notificationsStayDisabledWhenDenied() async {
+        var initialState = AppFeature.State()
+        initialState.settings.authorizationStatus = .denied
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        }
+
+        await store.send(.settings(.notificationsEnabledChanged(true)))
+        #expect(store.state.settings.notificationSettings.notificationsEnabled == false)
+    }
+
+    @MainActor
+    @Test("AppFeature requests permission when authorization is not determined")
+    func notificationsRequestPermissionWhenNotDetermined() async {
+        var initialState = AppFeature.State()
+        initialState.settings.authorizationStatus = .notDetermined
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        } withDependencies: {
+            $0.notificationClient.requestAuthorization = { true }
+        }
+
+        await store.send(.settings(.notificationsEnabledChanged(true)))
+        await store.receive(.notificationPermissionRequestFinished(true)) {
+            $0.settings.authorizationStatus = .authorized
+            $0.settings.notificationSettings.notificationsEnabled = true
+        }
+    }
+
+    @MainActor
+    @Test("AppFeature applies denied authorization status and forces notifications off")
+    func authorizationStatusDeniedForcesNotificationsOff() async {
+        var initialState = AppFeature.State()
+        initialState.settings.notificationSettings.notificationsEnabled = true
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        }
+
+        await store.send(.notificationAuthorizationStatusLoaded(.denied)) {
+            $0.settings.authorizationStatus = .denied
+            $0.settings.notificationSettings.notificationsEnabled = false
+        }
     }
 
     @Test("App tabs expose expected SF Symbols")

@@ -59,6 +59,8 @@
 "prices.summary.unavailable" = "N/D";
 "settings.notifications.alerts.section" = "Alertas";
 "settings.notifications.enabled.footer" = "Activa las notificaciones para configurar avisos diarios y por umbral.";
+"settings.notifications.permissions.denied.message" = "Los permisos de notificación están desactivados en el sistema.";
+"settings.notifications.permissions.openSettings.button" = "Abrir Ajustes del sistema";
 "settings.notifications.enabled.title" = "Notificaciones";
 "settings.notifications.maximum.title" = "Aviso de máximo diario";
 "settings.notifications.minimum.title" = "Aviso de mínimo diario";

@@ -8,6 +8,7 @@ struct SettingsFeature: Reducer {
         static let minimumThresholdEURPerKWh = 0.05
         static let thresholdStepEURPerKWh = 0.005
 
+        var authorizationStatus: NotificationClient.AuthorizationStatus = .notDetermined
         var notificationSettings = NotificationSettings.productDefaults
     }
 
@@ -17,6 +18,7 @@ struct SettingsFeature: Reducer {
         case notificationsEnabledChanged(Bool)
         case notifyDailyMaximumChanged(Bool)
         case notifyDailyMinimumChanged(Bool)
+        case openSystemSettingsTapped
     }
 
     var body: some ReducerOf<Self> {
@@ -50,6 +52,9 @@ struct SettingsFeature: Reducer {
             case let .customThresholdEURPerKWhChanged(value):
                 let clampedValue = min(max(value, State.minimumThresholdEURPerKWh), State.maximumThresholdEURPerKWh)
                 state.notificationSettings.customThresholdEURPerKWh = roundedThreshold(clampedValue)
+                return .none
+
+            case .openSystemSettingsTapped:
                 return .none
             }
         }

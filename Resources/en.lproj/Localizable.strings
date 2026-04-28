@@ -59,6 +59,8 @@
 "prices.summary.unavailable" = "N/A";
 "settings.notifications.alerts.section" = "Alerts";
 "settings.notifications.enabled.footer" = "Enable notifications to configure daily and threshold alerts.";
+"settings.notifications.permissions.denied.message" = "Notification permissions are disabled in system settings.";
+"settings.notifications.permissions.openSettings.button" = "Open System Settings";
 "settings.notifications.enabled.title" = "Notifications";
 "settings.notifications.maximum.title" = "Daily maximum alert";
 "settings.notifications.minimum.title" = "Daily minimum alert";

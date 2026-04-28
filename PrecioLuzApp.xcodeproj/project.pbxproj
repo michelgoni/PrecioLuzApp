@@ -15,6 +15,7 @@
 		196585D072C3B209CF086B54 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0FB87B5ABC1BB2B2D7C7837C /* Localizable.strings */; };
 		1BF7BAEA7148C309B55B9DEE /* CostCalculationFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D0097CAC5D657E7AA186A3 /* CostCalculationFeature.swift */; };
 		1D424AF1182B4C4F8273ECA8 /* AppFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D4F8F5962D5F8A19F7EC79 /* AppFeatureTests.swift */; };
+		2ADAB557F766934A2E7E9453 /* SettingsDeniedPermissionsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0FD7C87035FCE9D4CF7334 /* SettingsDeniedPermissionsSectionView.swift */; };
 		2C7A88ECC9F97A3203DEB45D /* PricesFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4F1D582D8DBA50B34C8BD4 /* PricesFeatureTests.swift */; };
 		324A8B65E4B3AE6929DAC3AF /* PricingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD7FDA5CB1305816A882113 /* PricingClient.swift */; };
 		4C0BAE6A4CB9433F43182C37 /* DomainModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75905F6274FE9F8BFD18AA70 /* DomainModels.swift */; };
@@ -51,6 +52,7 @@
 		E4A687F3008BBA0F8B3C409C /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288DF63F4693A0161011B4A4 /* AppFeature.swift */; };
 		E4D16D99F8ECC1CCCDBC5AF2 /* PricesSummaryCardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9011A556C752E49F174F0AFE /* PricesSummaryCardsView.swift */; };
 		E6E7A2E30ED90CDEB11D9C79 /* RootStatusBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3602E82D1AA957F3DBC53EB5 /* RootStatusBanner.swift */; };
+		E853F5684632167738D06D19 /* SettingsNotificationsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC0E732B44B69678D9DFA62 /* SettingsNotificationsSectionView.swift */; };
 		EAA54D0786CB11AB8762B373 /* Issue5AcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD4ED9252AA55CABFF1E90B /* Issue5AcceptanceTests.swift */; };
 		EED5F452F96BA33B52E73AF8 /* Perception in Frameworks */ = {isa = PBXBuildFile; productRef = A766A56786864703170D8E16 /* Perception */; };
 		F02EB597525D2E87BB6DF231 /* PricesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DFEC270AECA2B51E278782 /* PricesView.swift */; };
@@ -81,6 +83,7 @@
 		07E8C05629B788AE315B0D11 /* PrecioLuzAppTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PrecioLuzAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A1DBD42E1BBDDF4FD2891FE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		0BD95CAC54FDB663633913B0 /* PricesViewPreviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesViewPreviews.swift; sourceTree = "<group>"; };
+		0EC0E732B44B69678D9DFA62 /* SettingsNotificationsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotificationsSectionView.swift; sourceTree = "<group>"; };
 		1942F66E100388ADAE896898 /* CostCalculationFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostCalculationFeatureTests.swift; sourceTree = "<group>"; };
 		1A951194E5023185C583A951 /* PricesPresetCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesPresetCatalog.swift; sourceTree = "<group>"; };
 		1FC5C7E5F151FC11C56A3D19 /* ChartFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartFeature.swift; sourceTree = "<group>"; };
@@ -103,6 +106,7 @@
 		741F0D1CD612C8F05168C6B2 /* PrecioLuzApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PrecioLuzApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75905F6274FE9F8BFD18AA70 /* DomainModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainModels.swift; sourceTree = "<group>"; };
 		79A349F2AC054DD803DF26D6 /* PricesHourlyListSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesHourlyListSectionView.swift; sourceTree = "<group>"; };
+		7A0FD7C87035FCE9D4CF7334 /* SettingsDeniedPermissionsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDeniedPermissionsSectionView.swift; sourceTree = "<group>"; };
 		8560ED2DC8C618B58A3BF47D /* PersistenceClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceClient.swift; sourceTree = "<group>"; };
 		85CBEA5E1ECD0491F94E0DBA /* SettingsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFeature.swift; sourceTree = "<group>"; };
 		9011A556C752E49F174F0AFE /* PricesSummaryCardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesSummaryCardsView.swift; sourceTree = "<group>"; };
@@ -222,7 +226,9 @@
 			isa = PBXGroup;
 			children = (
 				4C472C577421FFAA1639BEBF /* SettingsAlertsSectionView.swift */,
+				7A0FD7C87035FCE9D4CF7334 /* SettingsDeniedPermissionsSectionView.swift */,
 				85CBEA5E1ECD0491F94E0DBA /* SettingsFeature.swift */,
+				0EC0E732B44B69678D9DFA62 /* SettingsNotificationsSectionView.swift */,
 				C679E8989B60162052A21292 /* SettingsThresholdSectionView.swift */,
 				0A1DBD42E1BBDDF4FD2891FE /* SettingsView.swift */,
 			);
@@ -522,7 +528,9 @@
 				324A8B65E4B3AE6929DAC3AF /* PricingClient.swift in Sources */,
 				E6E7A2E30ED90CDEB11D9C79 /* RootStatusBanner.swift in Sources */,
 				A24CC7F8FF1B4D7C68C2979C /* SettingsAlertsSectionView.swift in Sources */,
+				2ADAB557F766934A2E7E9453 /* SettingsDeniedPermissionsSectionView.swift in Sources */,
 				85ABD8BD485CCA4876B101A7 /* SettingsFeature.swift in Sources */,
+				E853F5684632167738D06D19 /* SettingsNotificationsSectionView.swift in Sources */,
 				59B463544DEE1688110EA083 /* SettingsThresholdSectionView.swift in Sources */,
 				5A1A24247057150A4F915D15 /* SettingsView.swift in Sources */,
 			);

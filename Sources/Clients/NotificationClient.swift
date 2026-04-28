@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import Foundation
+import UserNotifications
 
 struct NotificationClient: Sendable {
   var authorizationStatus: @Sendable () async -> AuthorizationStatus
@@ -24,8 +25,22 @@ extension NotificationClient {
 
 extension NotificationClient: DependencyKey {
   static let liveValue = NotificationClient(
-    authorizationStatus: { .notDetermined },
-    requestAuthorization: { false },
+    authorizationStatus: {
+      let status = await UNUserNotificationCenter.current().notificationSettings().authorizationStatus
+      switch status {
+      case .authorized, .ephemeral, .provisional:
+        return .authorized
+      case .denied:
+        return .denied
+      case .notDetermined:
+        return .notDetermined
+      @unknown default:
+        return .notDetermined
+      }
+    },
+    requestAuthorization: {
+      try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
+    },
     schedule: { _ in }
   )
 

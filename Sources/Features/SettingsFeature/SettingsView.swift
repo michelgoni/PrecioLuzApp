@@ -6,15 +6,12 @@ struct SettingsView: View {
 
     var body: some View {
         List {
-            Section {
-                Toggle(
-                    String(localized: "settings.notifications.enabled.title"),
-                    isOn: notificationsEnabledBinding
-                )
-                .accessibilityIdentifier("settingsNotificationsEnabledToggle")
-                .tint(.green)
-            } footer: {
-                Text(String(localized: "settings.notifications.enabled.footer"))
+            SettingsNotificationsSectionView(
+                notificationsEnabledBinding: notificationsEnabledBinding
+            )
+
+            if store.authorizationStatus == .denied {
+                SettingsDeniedPermissionsSectionView()
             }
 
             SettingsAlertsSectionView(

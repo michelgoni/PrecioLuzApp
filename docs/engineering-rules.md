@@ -138,6 +138,10 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - mantener tests de aceptación en flujo integrado y tests unitarios en lógica puntual.
 
 ## Validación mínima obligatoria
+- Destino de simulador por defecto (obligatorio):
+  - usar `iPhone 17` como destino estándar en validaciones locales (`build`, `test`, `UI smoke`) mientras no se defina otro baseline de dispositivo en la documentación del proyecto;
+  - no usar `iPhone 16` como destino por defecto;
+  - si `iPhone 17` no está disponible en la máquina, seleccionar el primer runtime iPhone disponible (`xcrun simctl list devices`) y dejar constancia explícita del fallback en el checkpoint.
 - Tras cambios de documentación:
   - revisar consistencia terminológica
   - verificar enlaces o referencias internas
@@ -194,6 +198,8 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - antes de iniciar cada incremento, ejecutar `scripts/hito_guard.sh can-continue`.
 
 ### Checklist ejecutable (DoD transversal para tareas con código)
+- Dispositivo baseline de checklist:
+  - `<Device>` debe resolverse a `iPhone 17` por defecto en este repositorio.
 - Clean build session (cuando haya bloqueo de linker/sesión de build):
   - `xcodebuild -project <Project>.xcodeproj -scheme <Scheme> -destination 'platform=iOS Simulator,name=<Device>' clean`
 - Compilación:

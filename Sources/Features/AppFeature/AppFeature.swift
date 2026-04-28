@@ -49,6 +49,8 @@ struct AppFeature: Reducer {
     @CasePathable
     enum Action: Equatable {
         case chart(ChartFeature.Action)
+        case notificationAuthorizationStatusLoaded(NotificationClient.AuthorizationStatus)
+        case notificationPermissionRequestFinished(Bool)
         case notificationSettingsLoaded(NotificationSettings)
         case onAppear
         case pricesCalculationPlaceholderDismissed
@@ -62,12 +64,15 @@ struct AppFeature: Reducer {
     }
 
     @Dependency(\.dateClient) var dateClient
+    @Dependency(\.notificationClient) var notificationClient
     @Dependency(\.persistenceClient) var persistenceClient
     @Dependency(\.pricingClient) var pricingClient
 
     private enum CancelID {
+        case fetchAuthorizationStatus
         case loadSnapshot
         case loadSettings
+        case requestNotificationPermission
         case saveSettings
     }
 
@@ -81,6 +86,7 @@ struct AppFeature: Reducer {
             case .onAppear, .retryTapped:
                 state.rootStatus = .loading
                 return .merge(
+                    loadNotificationAuthorizationStatusEffect(),
                     loadNotificationSettingsEffect(),
                     loadSnapshotEffect()
                 )
@@ -115,12 +121,24 @@ struct AppFeature: Reducer {
                 return .none
 
             case let .settings(settingsAction):
-                applySettingsAction(settingsAction, to: &state.settings)
-                return saveNotificationSettingsEffect(state.settings.notificationSettings)
+                return handleSettingsAction(settingsAction, state: &state)
 
             case let .notificationSettingsLoaded(notificationSettings):
                 state.settings.notificationSettings = notificationSettings
                 return .none
+
+            case let .notificationAuthorizationStatusLoaded(status):
+                state.settings.authorizationStatus = status
+                if status == .denied {
+                    state.settings.notificationSettings.notificationsEnabled = false
+                    return saveNotificationSettingsEffect(state.settings.notificationSettings)
+                }
+                return .none
+
+            case let .notificationPermissionRequestFinished(isGranted):
+                state.settings.authorizationStatus = isGranted ? .authorized : .denied
+                state.settings.notificationSettings.notificationsEnabled = isGranted
+                return saveNotificationSettingsEffect(state.settings.notificationSettings)
 
             case let .snapshotResponse(result):
                 state.rootStatus = mapRootStatus(from: result)
@@ -141,6 +159,14 @@ struct AppFeature: Reducer {
             await send(.snapshotResponse(result))
         }
         .cancellable(id: CancelID.loadSnapshot, cancelInFlight: true)
+    }
+
+    private func loadNotificationAuthorizationStatusEffect() -> Effect<Action> {
+        .run { [notificationClient] send in
+            let status = await notificationClient.authorizationStatus()
+            await send(.notificationAuthorizationStatusLoaded(status))
+        }
+        .cancellable(id: CancelID.fetchAuthorizationStatus, cancelInFlight: true)
     }
 
     private func loadNotificationSettingsEffect() -> Effect<Action> {
@@ -167,6 +193,14 @@ struct AppFeature: Reducer {
             try? await persistenceClient.saveNotificationSettings(settings)
         }
         .cancellable(id: CancelID.saveSettings, cancelInFlight: true)
+    }
+
+    private func requestNotificationPermissionEffect() -> Effect<Action> {
+        .run { [notificationClient] send in
+            let isGranted = (try? await notificationClient.requestAuthorization()) ?? false
+            await send(.notificationPermissionRequestFinished(isGranted))
+        }
+        .cancellable(id: CancelID.requestNotificationPermission, cancelInFlight: true)
     }
 
     private func mapStatus(from payload: DailyPricingSnapshotPayload, whenNotEmpty status: RootStatus) -> RootStatus {
@@ -236,6 +270,39 @@ struct AppFeature: Reducer {
             )
             let step = SettingsFeature.State.thresholdStepEURPerKWh
             state.notificationSettings.customThresholdEURPerKWh = (clampedValue / step).rounded() * step
+
+        case .openSystemSettingsTapped:
+            break
+        }
+    }
+
+    private func handleSettingsAction(_ action: SettingsFeature.Action, state: inout State) -> Effect<Action> {
+        switch action {
+        case .notificationsEnabledChanged(false):
+            state.settings.notificationSettings.notificationsEnabled = false
+            return saveNotificationSettingsEffect(state.settings.notificationSettings)
+
+        case .notificationsEnabledChanged(true):
+            switch state.settings.authorizationStatus {
+            case .authorized:
+                state.settings.notificationSettings.notificationsEnabled = true
+                return saveNotificationSettingsEffect(state.settings.notificationSettings)
+
+            case .denied:
+                state.settings.notificationSettings.notificationsEnabled = false
+                return saveNotificationSettingsEffect(state.settings.notificationSettings)
+
+            case .notDetermined:
+                state.settings.notificationSettings.notificationsEnabled = false
+                return requestNotificationPermissionEffect()
+            }
+
+        case .openSystemSettingsTapped:
+            return .none
+
+        default:
+            applySettingsAction(action, to: &state.settings)
+            return saveNotificationSettingsEffect(state.settings.notificationSettings)
         }
     }
 

@@ -40,6 +40,9 @@ Tipo de cambio: [documentación | código sin impacto visible | UI/comportamient
 </response_expectations>
 
 <checkpoint_example>
+- Baseline de destino local:
+  - usar `-destination 'platform=iOS Simulator,name=iPhone 17'` en build/test por defecto;
+  - si no existe ese simulador, usar un fallback explícito documentado en el checkpoint.
 - Build:
   - `xcodebuild ... build 2>&1 | tee /tmp/precioluzapp-build.log`
 - TCA warning scan (bloqueante):
