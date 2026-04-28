@@ -43,8 +43,10 @@ struct AppFeature: Reducer {
         var prices = PricesFeature.State()
         var rootStatus: RootStatus = .loading
         var selectedTab: AppTab = .prices
+        var settings = SettingsFeature.State()
     }
 
+    @CasePathable
     enum Action: Equatable {
         case chart(ChartFeature.Action)
         case onAppear
@@ -54,6 +56,7 @@ struct AppFeature: Reducer {
         case pricesPresetSelected(AppliancePreset.Kind)
         case retryTapped
         case selectedTabChanged(AppTab)
+        case settings(SettingsFeature.Action)
         case snapshotResponse(DailyPricingSnapshotPipelineResult)
     }
 
@@ -103,6 +106,10 @@ struct AppFeature: Reducer {
                 if tab != .prices {
                     state.prices.costCalculation.isPresented = false
                 }
+                return .none
+
+            case let .settings(settingsAction):
+                applySettingsAction(settingsAction, to: &state.settings)
                 return .none
 
             case let .snapshotResponse(result):
@@ -171,6 +178,39 @@ struct AppFeature: Reducer {
             if let inspectedDate = state.inspectedHour?.date {
                 state.inspectedHour = state.filteredPrices.first { $0.date == inspectedDate }
             }
+        }
+    }
+
+    private func applySettingsAction(_ action: SettingsFeature.Action, to state: inout SettingsFeature.State) {
+        switch action {
+        case let .notificationsEnabledChanged(isEnabled):
+            state.notificationSettings.notificationsEnabled = isEnabled
+
+        case let .notifyDailyMinimumChanged(isEnabled):
+            guard state.notificationSettings.notificationsEnabled else {
+                return
+            }
+            state.notificationSettings.notifyDailyMinimum = isEnabled
+
+        case let .notifyDailyMaximumChanged(isEnabled):
+            guard state.notificationSettings.notificationsEnabled else {
+                return
+            }
+            state.notificationSettings.notifyDailyMaximum = isEnabled
+
+        case let .customThresholdEnabledChanged(isEnabled):
+            guard state.notificationSettings.notificationsEnabled else {
+                return
+            }
+            state.notificationSettings.customThresholdEnabled = isEnabled
+
+        case let .customThresholdEURPerKWhChanged(value):
+            let clampedValue = min(
+                max(value, SettingsFeature.State.minimumThresholdEURPerKWh),
+                SettingsFeature.State.maximumThresholdEURPerKWh
+            )
+            let step = SettingsFeature.State.thresholdStepEURPerKWh
+            state.notificationSettings.customThresholdEURPerKWh = (clampedValue / step).rounded() * step
         }
     }
 

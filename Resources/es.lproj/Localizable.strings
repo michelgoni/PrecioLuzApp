@@ -57,6 +57,16 @@
 "prices.summary.maximum" = "Máximo";
 "prices.summary.minimum" = "Mínimo";
 "prices.summary.unavailable" = "N/D";
+"settings.notifications.alerts.section" = "Alertas";
+"settings.notifications.enabled.footer" = "Activa las notificaciones para configurar avisos diarios y por umbral.";
+"settings.notifications.enabled.title" = "Notificaciones";
+"settings.notifications.maximum.title" = "Aviso de máximo diario";
+"settings.notifications.minimum.title" = "Aviso de mínimo diario";
+"settings.threshold.enabled.title" = "Umbral personalizado";
+"settings.threshold.footer" = "Se avisará para cada franja futura igual o inferior al umbral.";
+"settings.threshold.section" = "Umbral";
+"settings.threshold.stepper.title" = "Ajustar umbral";
+"settings.threshold.value.title" = "Valor";
 "tab.chart.title" = "Gráfica";
 "tab.prices.title" = "Precios";
 "tab.settings.title" = "Ajustes";

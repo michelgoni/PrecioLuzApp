@@ -57,6 +57,16 @@
 "prices.summary.maximum" = "Maximum";
 "prices.summary.minimum" = "Minimum";
 "prices.summary.unavailable" = "N/A";
+"settings.notifications.alerts.section" = "Alerts";
+"settings.notifications.enabled.footer" = "Enable notifications to configure daily and threshold alerts.";
+"settings.notifications.enabled.title" = "Notifications";
+"settings.notifications.maximum.title" = "Daily maximum alert";
+"settings.notifications.minimum.title" = "Daily minimum alert";
+"settings.threshold.enabled.title" = "Custom threshold";
+"settings.threshold.footer" = "Alerts are scheduled for every future slot at or below this threshold.";
+"settings.threshold.section" = "Threshold";
+"settings.threshold.stepper.title" = "Adjust threshold";
+"settings.threshold.value.title" = "Value";
 "tab.chart.title" = "Chart";
 "tab.prices.title" = "Prices";
 "tab.settings.title" = "Settings";

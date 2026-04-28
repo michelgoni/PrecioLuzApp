@@ -144,6 +144,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - confirmar que no se contradice `AGENTS.md`
 - Tras cambios de código sin impacto visual:
   - ejecutar compilación del target/scheme afectado
+  - en proyectos con scheme que agrupa múltiples targets (app + tests), validar compilación de todos los targets mediante `xcodebuild test` del scheme principal; no cerrar checkpoint con compilación parcial
   - guardar log de compilación (`tee`) y escanear warnings/deprecations de `TCA` con `scripts/check_tca_warnings.sh`
   - ejecutar `SwiftLint` en modo estricto
   - ejecutar tests automáticos del área afectada (o suite completa si no hay filtrado útil)
@@ -219,6 +220,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - `build` + tests de lógica del scope tocado;
   - `UI smoke tests` cuando aplique por wiring/flujo visible;
   - evidencia visual versionada (screenshot o preview documentada con limitación explícita).
+- En cualquier mini incremento con código, el checkpoint queda bloqueado si falla la compilación de cualquier target del scheme principal (`app`, `tests` unitarios o `UI tests`).
 - Si no existe proyecto Xcode todavía, ejecutar lo que sí esté disponible y reportar explícitamente la limitación restante.
 - Si `SwiftLint` no está instalado, tratar la validación como incompleta hasta instalarlo o dejar el bloqueo documentado.
 - En el alcance base actual no existe backend propio; revisión de logs backend no aplica salvo que se añada un servicio en el repo.
