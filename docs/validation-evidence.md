@@ -41,3 +41,18 @@
   - valida navegación a tab `Gráfica`, cambio de tramo y gesto de interacción sin crash
 - Evidencia visual:
   - [docs/evidence-issue9-chart-shell.png](/Users/michelgoni/Documents/repos/PrecioLuzApp/docs/evidence-issue9-chart-shell.png)
+
+## Issue #10 — Settings + Local Notifications Validation Trace
+- Acceptance (`Testing + TestStore`):
+  - `Tests/Acceptance/Issue10AcceptanceTests.swift`
+  - `Acceptance #10: settings changes trigger notification re-scheduling`
+  - `Acceptance #10: denied authorization forces notifications off and clears scheduling`
+- Dominio puro de scheduling:
+  - `Tests/Domain/NotificationSchedulingPlannerTests.swift`
+  - cobertura de filtro temporal (futuro + mismo día), mínimo/máximo, umbral y fallback ASAP
+- UI smoke (`XCUITest`):
+  - `UITests/PrecioLuzAppUITests.swift`
+  - `testSettingsTabSmokeInteractionsAreStable`
+  - valida navegación a `Ajustes`, toggles principales y presencia operativa del stepper sin crash
+- Evidencia visual:
+  - [docs/evidence-issue10-settings-shell.png](/Users/michelgoni/Documents/repos/PrecioLuzApp/docs/evidence-issue10-settings-shell.png)
