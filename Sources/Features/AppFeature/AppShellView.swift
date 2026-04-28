@@ -2,6 +2,7 @@ import ComposableArchitecture
 import SwiftUI
 
 struct AppShellView: View {
+    @Environment(\.scenePhase) private var scenePhase
     let store: StoreOf<AppFeature>
 
     var body: some View {
@@ -29,6 +30,12 @@ struct AppShellView: View {
         }
         .task {
             store.send(.onAppear)
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            guard newPhase == .active else {
+                return
+            }
+            store.send(.appDidBecomeActive)
         }
     }
 
@@ -101,7 +108,7 @@ struct AppShellView: View {
             ChartView(
                 store: store.scope(
                     state: \.chart,
-                    action: { .chart($0) }
+                    action: \.chart
                 )
             )
                 .tabItem {
@@ -110,7 +117,12 @@ struct AppShellView: View {
                 }
                 .tag(AppTab.chart)
 
-            SettingsView()
+            SettingsView(
+                store: store.scope(
+                    state: \.settings,
+                    action: \.settings
+                )
+            )
                 .tabItem {
                     Label(AppTab.settings.title, systemImage: AppTab.settings.systemImage)
                         .accessibilityIdentifier("tabSettings")

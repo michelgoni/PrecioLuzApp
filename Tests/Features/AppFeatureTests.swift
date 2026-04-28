@@ -284,11 +284,312 @@ struct AppFeatureTests {
         }
     }
 
+    @MainActor
+    @Test("AppFeature applies loaded notification settings")
+    func notificationSettingsLoadedUpdatesState() async {
+        let loadedSettings = NotificationSettings(
+            customThresholdEnabled: true,
+            customThresholdEURPerKWh: 0.225,
+            notificationsEnabled: true,
+            notifyDailyMaximum: true,
+            notifyDailyMinimum: false
+        )
+        let store = TestStore(initialState: AppFeature.State()) {
+            AppFeature()
+        }
+
+        await store.send(.notificationSettingsLoaded(loadedSettings)) {
+            $0.settings.notificationSettings = loadedSettings
+        }
+    }
+
+    @MainActor
+    @Test("AppFeature sanitizes loaded settings when authorization is denied")
+    func notificationSettingsLoadedStaysDisabledWhenAuthorizationIsDenied() async {
+        let requestsRecorder = NotificationRequestsRecorder()
+        var initialState = AppFeature.State()
+        initialState.settings.authorizationStatus = .denied
+
+        let loadedSettings = NotificationSettings(
+            customThresholdEnabled: true,
+            customThresholdEURPerKWh: 0.20,
+            notificationsEnabled: true,
+            notifyDailyMaximum: true,
+            notifyDailyMinimum: true
+        )
+
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        } withDependencies: {
+            $0.dateClient.now = { testNow }
+            $0.dateClient.timeZone = { testTimeZone }
+            $0.notificationClient.schedule = { requests in
+                await requestsRecorder.record(requests)
+            }
+        }
+
+        await store.send(.notificationSettingsLoaded(loadedSettings)) {
+            $0.settings.notificationSettings = NotificationSettings(
+                customThresholdEnabled: true,
+                customThresholdEURPerKWh: 0.20,
+                notificationsEnabled: false,
+                notifyDailyMaximum: true,
+                notifyDailyMinimum: true
+            )
+        }
+        await store.finish()
+
+        let scheduledRequests = await requestsRecorder.last
+        #expect(scheduledRequests.isEmpty)
+    }
+
+    @MainActor
+    @Test("AppFeature reschedules notifications when persisted settings load after snapshot")
+    func notificationSettingsLoadedReschedulesAfterSnapshot() async {
+        let requestsRecorder = NotificationRequestsRecorder()
+        let payload = DailyPricingSnapshotPayload(
+            dayStart: testNow,
+            fetchedAt: testNow,
+            hourlyPrices: [HourlyPrice.mockFutureValue],
+            summary: nil
+        )
+
+        let loadedSettings = NotificationSettings(
+            customThresholdEnabled: false,
+            customThresholdEURPerKWh: nil,
+            notificationsEnabled: true,
+            notifyDailyMaximum: false,
+            notifyDailyMinimum: true
+        )
+
+        let store = TestStore(initialState: AppFeature.State()) {
+            AppFeature()
+        } withDependencies: {
+            $0.dateClient.now = { testNow }
+            $0.dateClient.timeZone = { testTimeZone }
+            $0.notificationClient.schedule = { requests in
+                await requestsRecorder.record(requests)
+            }
+        }
+
+        await store.send(.snapshotResponse(.fresh(payload))) {
+            $0.rootStatus = .content
+            $0.prices.hourlyPrices = payload.hourlyPrices
+            $0.prices.isFromCache = false
+            $0.prices.summary = nil
+        }
+        await store.receive(.chart(.syncHourlyPrices(payload.hourlyPrices))) {
+            $0.chart.hourlyPrices = payload.hourlyPrices
+        }
+
+        await store.send(.notificationSettingsLoaded(loadedSettings)) {
+            $0.settings.notificationSettings = loadedSettings
+        }
+        await store.finish()
+
+        let scheduledRequests = await requestsRecorder.last
+        #expect(scheduledRequests.count == 1)
+        #expect(scheduledRequests.first?.id.contains("dailyMinimum") == true)
+    }
+
+    @MainActor
+    @Test("AppFeature persists notification settings after settings changes")
+    func settingsActionSavesNotificationSettings() async {
+        let recorder = NotificationSettingsRecorder()
+        let requestsRecorder = NotificationRequestsRecorder()
+        var initialState = AppFeature.State()
+        initialState.settings.authorizationStatus = .authorized
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        } withDependencies: {
+            $0.dateClient.now = { testNow }
+            $0.dateClient.timeZone = { testTimeZone }
+            $0.notificationClient.schedule = { requests in
+                await requestsRecorder.record(requests)
+            }
+            $0.persistenceClient.loadNotificationSettings = { nil }
+            $0.persistenceClient.saveNotificationSettings = { settings in
+                await recorder.record(settings)
+            }
+        }
+
+        await store.send(.settings(.notificationsEnabledChanged(true))) {
+            $0.settings.notificationSettings.notificationsEnabled = true
+        }
+        await store.finish()
+
+        let savedSettings = await recorder.last
+        let scheduledRequests = await requestsRecorder.last
+        #expect(savedSettings == store.state.settings.notificationSettings)
+        #expect(scheduledRequests.isEmpty)
+    }
+
+    @MainActor
+    @Test("AppFeature reschedules notifications when snapshot is refreshed")
+    func snapshotResponseReschedulesNotifications() async {
+        let requestsRecorder = NotificationRequestsRecorder()
+        var initialState = AppFeature.State()
+        initialState.settings.notificationSettings.notificationsEnabled = true
+        initialState.settings.notificationSettings.notifyDailyMinimum = true
+        initialState.settings.notificationSettings.notifyDailyMaximum = false
+
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        } withDependencies: {
+            $0.dateClient.now = { testNow }
+            $0.dateClient.timeZone = { testTimeZone }
+            $0.notificationClient.schedule = { requests in
+                await requestsRecorder.record(requests)
+            }
+        }
+
+        let payload = DailyPricingSnapshotPayload(
+            dayStart: testNow,
+            fetchedAt: testNow,
+            hourlyPrices: [
+                HourlyPrice(
+                    classification: .mid,
+                    date: testNow.addingTimeInterval(3_600),
+                    daypart: .morning,
+                    eurPerKWh: 0.18
+                ),
+                HourlyPrice(
+                    classification: .cheap,
+                    date: testNow.addingTimeInterval(7_200),
+                    daypart: .morning,
+                    eurPerKWh: 0.11
+                ),
+            ],
+            summary: nil
+        )
+
+        await store.send(.snapshotResponse(.fresh(payload))) {
+            $0.rootStatus = .content
+            $0.prices.hourlyPrices = payload.hourlyPrices
+            $0.prices.isFromCache = false
+            $0.prices.summary = nil
+        }
+        await store.receive(.chart(.syncHourlyPrices(payload.hourlyPrices))) {
+            $0.chart.hourlyPrices = payload.hourlyPrices
+        }
+        await store.finish()
+
+        let scheduledRequests = await requestsRecorder.last
+        #expect(scheduledRequests.count == 1)
+        #expect(scheduledRequests.first?.id.contains("dailyMinimum") == true)
+    }
+
+    @MainActor
+    @Test("AppFeature enables notifications immediately when authorization is authorized")
+    func notificationsEnabledWhenAuthorized() async {
+        var initialState = AppFeature.State()
+        initialState.settings.authorizationStatus = .authorized
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        }
+
+        await store.send(.settings(.notificationsEnabledChanged(true))) {
+            $0.settings.notificationSettings.notificationsEnabled = true
+        }
+    }
+
+    @MainActor
+    @Test("AppFeature keeps notifications disabled when authorization is denied")
+    func notificationsStayDisabledWhenDenied() async {
+        var initialState = AppFeature.State()
+        initialState.settings.authorizationStatus = .denied
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        }
+
+        await store.send(.settings(.notificationsEnabledChanged(true)))
+        #expect(store.state.settings.notificationSettings.notificationsEnabled == false)
+    }
+
+    @MainActor
+    @Test("AppFeature requests permission when authorization is not determined")
+    func notificationsRequestPermissionWhenNotDetermined() async {
+        var initialState = AppFeature.State()
+        initialState.settings.authorizationStatus = .notDetermined
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        } withDependencies: {
+            $0.notificationClient.requestAuthorization = { true }
+        }
+
+        await store.send(.settings(.notificationsEnabledChanged(true)))
+        await store.receive(.notificationPermissionRequestFinished(true)) {
+            $0.settings.authorizationStatus = .authorized
+            $0.settings.notificationSettings.notificationsEnabled = true
+        }
+    }
+
+    @MainActor
+    @Test("AppFeature applies denied authorization status and forces notifications off")
+    func authorizationStatusDeniedForcesNotificationsOff() async {
+        var initialState = AppFeature.State()
+        initialState.settings.notificationSettings.notificationsEnabled = true
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        }
+
+        await store.send(.notificationAuthorizationStatusLoaded(.denied)) {
+            $0.settings.authorizationStatus = .denied
+            $0.settings.notificationSettings.notificationsEnabled = false
+        }
+    }
+
+    @MainActor
+    @Test("AppFeature reloads authorization when app becomes active")
+    func appDidBecomeActiveReloadsAuthorization() async {
+        let store = TestStore(initialState: AppFeature.State()) {
+            AppFeature()
+        } withDependencies: {
+            $0.notificationClient.authorizationStatus = { .authorized }
+        }
+
+        await store.send(.appDidBecomeActive)
+        await store.receive(.notificationAuthorizationStatusLoaded(.authorized)) {
+            $0.settings.authorizationStatus = .authorized
+        }
+    }
+
+    @MainActor
+    @Test("AppFeature reloads authorization when open settings is tapped")
+    func openSystemSettingsTappedReloadsAuthorization() async {
+        let store = TestStore(initialState: AppFeature.State()) {
+            AppFeature()
+        } withDependencies: {
+            $0.notificationClient.authorizationStatus = { .authorized }
+        }
+
+        await store.send(.settings(.openSystemSettingsTapped))
+        await store.receive(.notificationAuthorizationStatusLoaded(.authorized)) {
+            $0.settings.authorizationStatus = .authorized
+        }
+    }
+
     @Test("App tabs expose expected SF Symbols")
     func tabSymbolsAreConfigured() {
         #expect(AppTab.chart.systemImage == "chart.xyaxis.line")
         #expect(AppTab.prices.systemImage == "eurosign.circle")
         #expect(AppTab.settings.systemImage == "gearshape")
+    }
+}
+
+private actor NotificationSettingsRecorder {
+    private(set) var last: NotificationSettings?
+
+    func record(_ settings: NotificationSettings) {
+        last = settings
+    }
+}
+
+private actor NotificationRequestsRecorder {
+    private(set) var last: [NotificationClient.Request] = []
+
+    func record(_ requests: [NotificationClient.Request]) {
+        last = requests
     }
 }
 

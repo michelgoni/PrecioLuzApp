@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import Foundation
+import UserNotifications
 
 struct NotificationClient: Sendable {
   var authorizationStatus: @Sendable () async -> AuthorizationStatus
@@ -24,9 +25,48 @@ extension NotificationClient {
 
 extension NotificationClient: DependencyKey {
   static let liveValue = NotificationClient(
-    authorizationStatus: { .notDetermined },
-    requestAuthorization: { false },
-    schedule: { _ in }
+    authorizationStatus: {
+      let status = await UNUserNotificationCenter.current().notificationSettings().authorizationStatus
+      switch status {
+      case .authorized, .ephemeral, .provisional:
+        return .authorized
+      case .denied:
+        return .denied
+      case .notDetermined:
+        return .notDetermined
+      @unknown default:
+        return .notDetermined
+      }
+    },
+    requestAuthorization: {
+      try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
+    },
+    schedule: { requests in
+      try Task.checkCancellation()
+      let center = UNUserNotificationCenter.current()
+      center.removeAllDeliveredNotifications()
+      center.removeAllPendingNotificationRequests()
+
+      for request in requests {
+        try Task.checkCancellation()
+        let content = UNMutableNotificationContent()
+        content.body = request.body
+        content.sound = .default
+        content.title = request.title
+
+        let components = Calendar.current.dateComponents(
+          [.year, .month, .day, .hour, .minute, .second],
+          from: request.triggerDate
+        )
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        let notificationRequest = UNNotificationRequest(
+          identifier: request.id,
+          content: content,
+          trigger: trigger
+        )
+        try await center.add(notificationRequest)
+      }
+    }
   )
 
   static let testValue = NotificationClient(
@@ -34,6 +74,20 @@ extension NotificationClient: DependencyKey {
     requestAuthorization: { true },
     schedule: { _ in }
   )
+}
+
+private extension UNUserNotificationCenter {
+  func add(_ request: UNNotificationRequest) async throws {
+    try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+      add(request) { error in
+        if let error {
+          continuation.resume(throwing: error)
+        } else {
+          continuation.resume(returning: ())
+        }
+      }
+    }
+  }
 }
 
 extension DependencyValues {

@@ -109,6 +109,37 @@ final class PrecioLuzAppUITests: XCTestCase {
     XCTAssertTrue(chartSeries.exists)
   }
 
+  func testSettingsTabSmokeInteractionsAreStable() throws {
+    let app = makeApp()
+    app.launch()
+
+    let tabBar = app.tabBars.firstMatch
+    XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+
+    let settingsButton = tabButton(in: tabBar, names: ["Ajustes", "tab.settings.title"])
+    settingsButton.tap()
+    XCTAssertTrue(settingsButton.isSelected)
+
+    let settingsScreen = app.descendants(matching: .any)["settingsScreen"]
+    XCTAssertTrue(settingsScreen.waitForExistence(timeout: 5))
+
+    let notificationsToggle = app.switches["settingsNotificationsEnabledToggle"]
+    XCTAssertTrue(notificationsToggle.waitForExistence(timeout: 5))
+    notificationsToggle.tap()
+
+    let minimumToggle = app.switches["settingsNotifyDailyMinimumToggle"]
+    XCTAssertTrue(minimumToggle.waitForExistence(timeout: 5))
+    minimumToggle.tap()
+
+    let thresholdToggle = app.switches["settingsCustomThresholdEnabledToggle"]
+    XCTAssertTrue(thresholdToggle.waitForExistence(timeout: 5))
+    thresholdToggle.tap()
+
+    let thresholdStepper = app.steppers["settingsThresholdStepper"]
+    XCTAssertTrue(thresholdStepper.waitForExistence(timeout: 5))
+    XCTAssertTrue(thresholdStepper.isHittable)
+  }
+
   private func makeApp() -> XCUIApplication {
     let app = XCUIApplication()
     app.launchArguments += ["-AppleLanguages", "(es)", "-AppleLocale", "es_ES"]

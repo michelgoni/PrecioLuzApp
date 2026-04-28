@@ -138,12 +138,17 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - mantener tests de aceptación en flujo integrado y tests unitarios en lógica puntual.
 
 ## Validación mínima obligatoria
+- Destino de simulador por defecto (obligatorio):
+  - usar `iPhone 17` como destino estándar en validaciones locales (`build`, `test`, `UI smoke`) mientras no se defina otro baseline de dispositivo en la documentación del proyecto;
+  - no usar `iPhone 16` como destino por defecto;
+  - si `iPhone 17` no está disponible en la máquina, seleccionar el primer runtime iPhone disponible (`xcrun simctl list devices`) y dejar constancia explícita del fallback en el checkpoint.
 - Tras cambios de documentación:
   - revisar consistencia terminológica
   - verificar enlaces o referencias internas
   - confirmar que no se contradice `AGENTS.md`
 - Tras cambios de código sin impacto visual:
   - ejecutar compilación del target/scheme afectado
+  - en proyectos con scheme que agrupa múltiples targets (app + tests), validar compilación de todos los targets mediante `xcodebuild test` del scheme principal; no cerrar checkpoint con compilación parcial
   - guardar log de compilación (`tee`) y escanear warnings/deprecations de `TCA` con `scripts/check_tca_warnings.sh`
   - ejecutar `SwiftLint` en modo estricto
   - ejecutar tests automáticos del área afectada (o suite completa si no hay filtrado útil)
@@ -193,6 +198,8 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - antes de iniciar cada incremento, ejecutar `scripts/hito_guard.sh can-continue`.
 
 ### Checklist ejecutable (DoD transversal para tareas con código)
+- Dispositivo baseline de checklist:
+  - `<Device>` debe resolverse a `iPhone 17` por defecto en este repositorio.
 - Clean build session (cuando haya bloqueo de linker/sesión de build):
   - `xcodebuild -project <Project>.xcodeproj -scheme <Scheme> -destination 'platform=iOS Simulator,name=<Device>' clean`
 - Compilación:
@@ -219,6 +226,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - `build` + tests de lógica del scope tocado;
   - `UI smoke tests` cuando aplique por wiring/flujo visible;
   - evidencia visual versionada (screenshot o preview documentada con limitación explícita).
+- En cualquier mini incremento con código, el checkpoint queda bloqueado si falla la compilación de cualquier target del scheme principal (`app`, `tests` unitarios o `UI tests`).
 - Si no existe proyecto Xcode todavía, ejecutar lo que sí esté disponible y reportar explícitamente la limitación restante.
 - Si `SwiftLint` no está instalado, tratar la validación como incompleta hasta instalarlo o dejar el bloqueo documentado.
 - En el alcance base actual no existe backend propio; revisión de logs backend no aplica salvo que se añada un servicio en el repo.
@@ -229,6 +237,8 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - El título y la descripción de la `Pull Request` deben estar en inglés.
 - Gestión de comentarios de review en PR (obligatorio):
   - responder siempre a cada comentario de review con el contexto del cambio aplicado o la justificación técnica;
+  - prohibido resolver un hilo sin respuesta explícita en GitHub: primero `reply`, después `resolve`;
+  - la respuesta debe incluir trazabilidad mínima (`commit`/archivo afectado + validación ejecutada);
   - no aceptar comentarios “porque sí”: antes de cambiar, evaluar si la propuesta mejora realmente el diseño/código/tests y explicar el porqué (incluyendo tradeoffs si aplica);
   - declarar una decisión explícita por comentario: `aplicar`, `aplicar con ajuste` o `no aplicar` con motivo técnico;
   - después de editar, listar de forma explícita qué se cambió (archivo y comportamiento afectado);

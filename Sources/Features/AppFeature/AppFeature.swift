@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import Foundation
 
 enum AppTab: Hashable {
     case chart
@@ -43,10 +44,16 @@ struct AppFeature: Reducer {
         var prices = PricesFeature.State()
         var rootStatus: RootStatus = .loading
         var selectedTab: AppTab = .prices
+        var settings = SettingsFeature.State()
     }
 
+    @CasePathable
     enum Action: Equatable {
+        case appDidBecomeActive
         case chart(ChartFeature.Action)
+        case notificationAuthorizationStatusLoaded(NotificationClient.AuthorizationStatus)
+        case notificationPermissionRequestFinished(Bool)
+        case notificationSettingsLoaded(NotificationSettings)
         case onAppear
         case pricesCalculationPlaceholderDismissed
         case pricesDurationHoursChanged(Double)
@@ -54,27 +61,41 @@ struct AppFeature: Reducer {
         case pricesPresetSelected(AppliancePreset.Kind)
         case retryTapped
         case selectedTabChanged(AppTab)
+        case settings(SettingsFeature.Action)
         case snapshotResponse(DailyPricingSnapshotPipelineResult)
     }
 
     @Dependency(\.dateClient) var dateClient
+    @Dependency(\.notificationClient) var notificationClient
     @Dependency(\.persistenceClient) var persistenceClient
     @Dependency(\.pricingClient) var pricingClient
 
     private enum CancelID {
+        case fetchAuthorizationStatus
         case loadSnapshot
+        case loadSettings
+        case requestNotificationPermission
+        case rescheduleNotifications
+        case saveSettings
     }
 
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
+            case .appDidBecomeActive:
+                return loadNotificationAuthorizationStatusEffect()
+
             case let .chart(chartAction):
                 applyChartAction(chartAction, to: &state.chart)
                 return .none
 
             case .onAppear, .retryTapped:
                 state.rootStatus = .loading
-                return loadSnapshotEffect()
+                return .merge(
+                    loadNotificationAuthorizationStatusEffect(),
+                    loadNotificationSettingsEffect(),
+                    loadSnapshotEffect()
+                )
 
             case .pricesCalculationPlaceholderDismissed:
                 state.prices.costCalculation.isPresented = false
@@ -105,10 +126,64 @@ struct AppFeature: Reducer {
                 }
                 return .none
 
+            case let .settings(settingsAction):
+                return handleSettingsAction(settingsAction, state: &state)
+
+            case let .notificationSettingsLoaded(notificationSettings):
+                let sanitizedSettings = sanitizeLoadedSettings(
+                    notificationSettings,
+                    authorizationStatus: state.settings.authorizationStatus
+                )
+                state.settings.notificationSettings = sanitizedSettings
+
+                var effects: [Effect<Action>] = [
+                    rescheduleNotificationsEffect(
+                        hourlyPrices: state.prices.hourlyPrices,
+                        settings: sanitizedSettings
+                    )
+                ]
+
+                if sanitizedSettings != notificationSettings {
+                    effects.append(saveNotificationSettingsEffect(sanitizedSettings))
+                }
+
+                return .merge(effects)
+
+            case let .notificationAuthorizationStatusLoaded(status):
+                state.settings.authorizationStatus = status
+                if status == .denied {
+                    state.settings.notificationSettings.notificationsEnabled = false
+                    return .merge(
+                        saveNotificationSettingsEffect(state.settings.notificationSettings),
+                        rescheduleNotificationsEffect(
+                            hourlyPrices: state.prices.hourlyPrices,
+                            settings: state.settings.notificationSettings
+                        )
+                    )
+                }
+                return .none
+
+            case let .notificationPermissionRequestFinished(isGranted):
+                state.settings.authorizationStatus = isGranted ? .authorized : .denied
+                state.settings.notificationSettings.notificationsEnabled = isGranted
+                return .merge(
+                    saveNotificationSettingsEffect(state.settings.notificationSettings),
+                    rescheduleNotificationsEffect(
+                        hourlyPrices: state.prices.hourlyPrices,
+                        settings: state.settings.notificationSettings
+                    )
+                )
+
             case let .snapshotResponse(result):
                 state.rootStatus = mapRootStatus(from: result)
                 updateFeatureStates(&state, from: result)
-                return chartSyncEffect(from: result)
+                return .merge(
+                    chartSyncEffect(from: result),
+                    scheduleNotificationsFromSnapshotEffect(
+                        result: result,
+                        settings: state.settings.notificationSettings
+                    )
+                )
             }
         }
     }
@@ -126,6 +201,22 @@ struct AppFeature: Reducer {
         .cancellable(id: CancelID.loadSnapshot, cancelInFlight: true)
     }
 
+    private func loadNotificationAuthorizationStatusEffect() -> Effect<Action> {
+        .run { [notificationClient] send in
+            let status = await notificationClient.authorizationStatus()
+            await send(.notificationAuthorizationStatusLoaded(status))
+        }
+        .cancellable(id: CancelID.fetchAuthorizationStatus, cancelInFlight: true)
+    }
+
+    private func loadNotificationSettingsEffect() -> Effect<Action> {
+        .run { [persistenceClient] send in
+            let loadedSettings = try? await persistenceClient.loadNotificationSettings()
+            await send(.notificationSettingsLoaded(loadedSettings ?? NotificationSettings.productDefaults))
+        }
+        .cancellable(id: CancelID.loadSettings, cancelInFlight: true)
+    }
+
     private func mapRootStatus(from result: DailyPricingSnapshotPipelineResult) -> RootStatus {
         switch result {
         case .failed:
@@ -135,6 +226,57 @@ struct AppFeature: Reducer {
         case let .fresh(payload):
             mapStatus(from: payload, whenNotEmpty: .content)
         }
+    }
+
+    private func saveNotificationSettingsEffect(_ settings: NotificationSettings) -> Effect<Action> {
+        .run { [persistenceClient] _ in
+            try? await persistenceClient.saveNotificationSettings(settings)
+        }
+        .cancellable(id: CancelID.saveSettings, cancelInFlight: true)
+    }
+
+    private func sanitizeLoadedSettings(_ settings: NotificationSettings, authorizationStatus: NotificationClient.AuthorizationStatus) -> NotificationSettings {
+        guard authorizationStatus == .denied else {
+            return settings
+        }
+        var sanitizedSettings = settings
+        sanitizedSettings.notificationsEnabled = false
+        return sanitizedSettings
+    }
+
+    private func scheduleNotificationsFromSnapshotEffect(result: DailyPricingSnapshotPipelineResult, settings: NotificationSettings) -> Effect<Action> {
+        switch result {
+        case .failed:
+            return .none
+        case let .cached(payload), let .fresh(payload):
+            return rescheduleNotificationsEffect(hourlyPrices: payload.hourlyPrices, settings: settings)
+        }
+    }
+
+    private func rescheduleNotificationsEffect(hourlyPrices: [HourlyPrice], settings: NotificationSettings) -> Effect<Action> {
+        .run { [dateClient, notificationClient] _ in
+            let now = dateClient.now()
+            var calendar = Calendar(identifier: .gregorian)
+            calendar.timeZone = dateClient.timeZone()
+
+            let plan = NotificationSchedulingPlanner.makePlan(
+                hourlyPrices: hourlyPrices,
+                settings: settings,
+                now: now,
+                calendar: calendar
+            )
+            let requests = plan.map(makeNotificationRequest(from:))
+            try? await notificationClient.schedule(requests)
+        }
+        .cancellable(id: CancelID.rescheduleNotifications, cancelInFlight: true)
+    }
+
+    private func requestNotificationPermissionEffect() -> Effect<Action> {
+        .run { [notificationClient] send in
+            let isGranted = (try? await notificationClient.requestAuthorization()) ?? false
+            await send(.notificationPermissionRequestFinished(isGranted))
+        }
+        .cancellable(id: CancelID.requestNotificationPermission, cancelInFlight: true)
     }
 
     private func mapStatus(from payload: DailyPricingSnapshotPayload, whenNotEmpty status: RootStatus) -> RootStatus {
@@ -171,6 +313,141 @@ struct AppFeature: Reducer {
             if let inspectedDate = state.inspectedHour?.date {
                 state.inspectedHour = state.filteredPrices.first { $0.date == inspectedDate }
             }
+        }
+    }
+
+    private func applySettingsAction(_ action: SettingsFeature.Action, to state: inout SettingsFeature.State) {
+        switch action {
+        case let .notificationsEnabledChanged(isEnabled):
+            state.notificationSettings.notificationsEnabled = isEnabled
+
+        case let .notifyDailyMinimumChanged(isEnabled):
+            guard state.notificationSettings.notificationsEnabled else {
+                return
+            }
+            state.notificationSettings.notifyDailyMinimum = isEnabled
+
+        case let .notifyDailyMaximumChanged(isEnabled):
+            guard state.notificationSettings.notificationsEnabled else {
+                return
+            }
+            state.notificationSettings.notifyDailyMaximum = isEnabled
+
+        case let .customThresholdEnabledChanged(isEnabled):
+            guard state.notificationSettings.notificationsEnabled else {
+                return
+            }
+            state.notificationSettings.customThresholdEnabled = isEnabled
+
+        case let .customThresholdEURPerKWhChanged(value):
+            let clampedValue = min(
+                max(value, SettingsFeature.State.minimumThresholdEURPerKWh),
+                SettingsFeature.State.maximumThresholdEURPerKWh
+            )
+            let step = SettingsFeature.State.thresholdStepEURPerKWh
+            state.notificationSettings.customThresholdEURPerKWh = (clampedValue / step).rounded() * step
+
+        case .openSystemSettingsTapped:
+            break
+        }
+    }
+
+    private func handleSettingsAction(_ action: SettingsFeature.Action, state: inout State) -> Effect<Action> {
+        switch action {
+        case .notificationsEnabledChanged(false):
+            state.settings.notificationSettings.notificationsEnabled = false
+            return .merge(
+                saveNotificationSettingsEffect(state.settings.notificationSettings),
+                rescheduleNotificationsEffect(
+                    hourlyPrices: state.prices.hourlyPrices,
+                    settings: state.settings.notificationSettings
+                )
+            )
+
+        case .notificationsEnabledChanged(true):
+            switch state.settings.authorizationStatus {
+            case .authorized:
+                state.settings.notificationSettings.notificationsEnabled = true
+                return .merge(
+                    saveNotificationSettingsEffect(state.settings.notificationSettings),
+                    rescheduleNotificationsEffect(
+                        hourlyPrices: state.prices.hourlyPrices,
+                        settings: state.settings.notificationSettings
+                    )
+                )
+
+            case .denied:
+                state.settings.notificationSettings.notificationsEnabled = false
+                return .merge(
+                    saveNotificationSettingsEffect(state.settings.notificationSettings),
+                    rescheduleNotificationsEffect(
+                        hourlyPrices: state.prices.hourlyPrices,
+                        settings: state.settings.notificationSettings
+                    )
+                )
+
+            case .notDetermined:
+                state.settings.notificationSettings.notificationsEnabled = false
+                return requestNotificationPermissionEffect()
+            }
+
+        case .openSystemSettingsTapped:
+            return loadNotificationAuthorizationStatusEffect()
+
+        default:
+            applySettingsAction(action, to: &state.settings)
+            return .merge(
+                saveNotificationSettingsEffect(state.settings.notificationSettings),
+                rescheduleNotificationsEffect(
+                    hourlyPrices: state.prices.hourlyPrices,
+                    settings: state.settings.notificationSettings
+                )
+            )
+        }
+    }
+
+    private func makeNotificationRequest(from planItem: NotificationSchedulingPlanner.PlanItem) -> NotificationClient.Request {
+        NotificationClient.Request(
+            id: notificationIdentifier(for: planItem),
+            title: notificationTitle(for: planItem.kind),
+            body: notificationBody(for: planItem.kind),
+            triggerDate: planItem.triggerDate
+        )
+    }
+
+    private func notificationIdentifier(for planItem: NotificationSchedulingPlanner.PlanItem) -> String {
+        let kindToken: String
+        switch planItem.kind {
+        case .dailyMaximum:
+            kindToken = "dailyMaximum"
+        case .dailyMinimum:
+            kindToken = "dailyMinimum"
+        case .threshold:
+            kindToken = "threshold"
+        }
+        let timestampToken = Int(planItem.hour.date.timeIntervalSince1970)
+        return "pricing.\(kindToken).\(timestampToken)"
+    }
+
+    private func notificationTitle(for kind: NotificationSchedulingPlanner.PlanItem.Kind) -> String {
+        switch kind {
+        case .dailyMaximum:
+            String(localized: "notifications.dailyMaximum.title")
+        case .dailyMinimum:
+            String(localized: "notifications.dailyMinimum.title")
+        case .threshold:
+            String(localized: "notifications.threshold.title")
+        }
+    }
+
+    private func notificationBody(for kind: NotificationSchedulingPlanner.PlanItem.Kind) -> String {
+        switch kind {
+        case .dailyMaximum:
+            String(localized: "notifications.dailyMaximum.body")
+        case .dailyMinimum:
+            String(localized: "notifications.dailyMinimum.body")
+        case .threshold:
+            String(localized: "notifications.threshold.body")
         }
     }
 
