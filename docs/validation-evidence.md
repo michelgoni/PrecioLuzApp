@@ -56,3 +56,18 @@
   - valida navegación a `Ajustes`, toggles principales y presencia operativa del stepper sin crash
 - Evidencia visual:
   - [docs/evidence-issue10-settings-shell.png](/Users/michelgoni/Documents/repos/PrecioLuzApp/docs/evidence-issue10-settings-shell.png)
+
+## Issue #11 — QA and Delivery Readiness Validation Trace
+- Contrato de ejecución cerrado en incremento documental `11.0`:
+  - hardening de resiliencia primero
+  - expansión de cobertura de tests después
+  - validación final secuencial de entrega al final
+- Checkpoints obligatorios de `#11`:
+  - `11A`: hardening offline/caché/error + validación de estados raíz y reconciliación
+  - `11B`: expansión `Testing + TestStore` y aceptación (`Issue11AcceptanceTests`)
+  - `11C`: snapshots críticos + `UI smoke` estable sin redundancia
+  - `11D`: `clean build session` + `build` + `PrecioLuzAppTests` + `PrecioLuzAppUITests` + `TCA warnings/deprecations: 0`
+- Evidencias esperadas de cierre:
+  - logs y comandos de validación final documentados
+  - capturas versionadas de estados visuales críticos
+  - trazabilidad de PR final lista para merge
