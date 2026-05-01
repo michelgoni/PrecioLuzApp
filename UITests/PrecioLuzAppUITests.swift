@@ -17,14 +17,12 @@ final class PrecioLuzAppUITests: XCTestCase {
     XCTAssertTrue(tabButton(in: tabs, names: ["Ajustes", "tab.settings.title"]).exists)
   }
 
-  func testRootStatusTransitionsOutOfLoading() throws {
+  func testRootStatusBannerHidesWhenContentIsLoaded() throws {
     let app = makeApp()
     app.launch()
 
-    let updatedStatus = staticText(in: app, names: ["Datos actualizados", "app.rootStatus.content.label"])
-    let predicate = NSPredicate(format: "exists == true")
-    expectation(for: predicate, evaluatedWith: updatedStatus)
-    waitForExpectations(timeout: 5)
+    let banner = app.otherElements["appRootStatusBanner"]
+    XCTAssertFalse(banner.waitForExistence(timeout: 5))
   }
 
   func testTabNavigationIsStable() throws {
