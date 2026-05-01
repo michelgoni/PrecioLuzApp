@@ -254,8 +254,7 @@ struct AppFeature: Reducer {
             .cancel(id: CancelID.loadSettings),
             .cancel(id: CancelID.loadSnapshot),
             .cancel(id: CancelID.requestNotificationPermission),
-            .cancel(id: CancelID.rescheduleNotifications),
-            .cancel(id: CancelID.saveSettings)
+            .cancel(id: CancelID.rescheduleNotifications)
         )
     }
 
