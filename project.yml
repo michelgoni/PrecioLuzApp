@@ -21,6 +21,9 @@ packages:
   SQLiteData:
     url: https://github.com/pointfreeco/sqlite-data
     from: 1.6.1
+  SnapshotTesting:
+    url: https://github.com/pointfreeco/swift-snapshot-testing
+    from: 1.19.2
 targets:
   PrecioLuzApp:
     type: application
@@ -62,6 +65,8 @@ targets:
       - target: PrecioLuzApp
       - package: ComposableArchitecture
         product: ComposableArchitecture
+      - package: SnapshotTesting
+        product: SnapshotTesting
 
   PrecioLuzAppUITests:
     type: bundle.ui-testing
