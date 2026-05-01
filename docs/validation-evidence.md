@@ -71,3 +71,20 @@
   - logs y comandos de validación final documentados
   - capturas versionadas de estados visuales críticos
   - trazabilidad de PR final lista para merge
+
+### Checkpoint 11D — Final Delivery Validation (2026-05-01)
+- Device baseline: `iPhone 17` (iOS Simulator).
+- Ejecución secuencial:
+  1. `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17' clean | tee /tmp/issue11_11D_clean.log`
+  2. `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17' build 2>&1 | tee /tmp/issue11_11D_build.log`
+  3. `scripts/check_tca_warnings.sh --log /tmp/issue11_11D_build.log`
+  4. `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17' test -only-testing:PrecioLuzAppTests | tee /tmp/issue11_11D_tests.log`
+  5. `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17' test -only-testing:PrecioLuzAppUITests | tee /tmp/issue11_11D_ui.log`
+- Resultado:
+  - `clean`: OK (`** CLEAN SUCCEEDED **`)
+  - `build`: OK (`** BUILD SUCCEEDED **`)
+  - `TCA warnings/deprecations`: `0`
+  - `PrecioLuzAppTests`: OK (`82 tests`, `0 failures`)
+  - `PrecioLuzAppUITests`: OK (`7 tests`, `0 failures`)
+- Evidencia visual final:
+  - [docs/evidence-issue11-11D-final.png](/Users/michelgoni/Documents/repos/PrecioLuzApp/docs/evidence-issue11-11D-final.png)
