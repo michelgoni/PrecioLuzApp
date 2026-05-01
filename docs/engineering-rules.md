@@ -67,6 +67,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Orden y consistencia (cuando aplique):
   - Ordenar alfabéticamente `import`s.
   - Ordenar alfabéticamente las propiedades en `struct`s y `class`es si no existe un orden semántico más claro.
+  - Ordenar alfabéticamente las funciones `private` dentro del mismo tipo cuando no haya dependencia de lectura secuencial.
   - Ordenar alfabéticamente los `case` en `enum`s.
   - Excepción: mantener orden semántico cuando mejore la lectura del dominio (por ejemplo `Daypart`, o enums que representan un flujo temporal).
 - Regla de seguridad (anti-crash, obligatoria):

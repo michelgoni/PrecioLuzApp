@@ -26,7 +26,10 @@ struct AppFeatureTests {
     @MainActor
     @Test("AppFeature sets loading on onAppear")
     func onAppearSetsLoading() async {
-        let store = TestStore(initialState: AppFeature.State()) {
+        var initialState = AppFeature.State()
+        initialState.chart.inspectedHour = HourlyPrice.mockValue
+        initialState.prices.costCalculation.isPresented = true
+        let store = TestStore(initialState: initialState) {
             AppFeature()
         } withDependencies: {
             $0.dateClient.now = { testNow }
@@ -35,6 +38,8 @@ struct AppFeatureTests {
         store.exhaustivity = .off
 
         await store.send(.onAppear) {
+            $0.chart.inspectedHour = nil
+            $0.prices.costCalculation.isPresented = false
             $0.rootStatus = .loading
         }
     }
