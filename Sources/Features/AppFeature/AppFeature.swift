@@ -91,11 +91,14 @@ struct AppFeature: Reducer {
 
             case .onAppear, .retryTapped:
                 prepareForSnapshotLoad(&state)
-                return .merge(
-                    cancelInFlightEffects(),
+                let loadEffects = Effect<Action>.merge(
                     loadNotificationAuthorizationStatusEffect(),
                     loadNotificationSettingsEffect(),
                     loadSnapshotEffect()
+                )
+                return .concatenate(
+                    cancelInFlightEffects(),
+                    loadEffects
                 )
 
             case .pricesCalculationPlaceholderDismissed:
