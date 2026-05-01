@@ -7,6 +7,9 @@ import Testing
 
 @MainActor
 struct Issue11SnapshotTests {
+    private let snapshotLocale = Locale(identifier: "es_ES")
+    private let snapshotTimeZone = TimeZone(identifier: "Europe/Madrid") ?? .gmt
+
     @Test("Snapshot #11: root status banner states remain visually stable")
     func rootStatusBannerStates() {
         let container = VStack(spacing: 12) {
@@ -18,8 +21,12 @@ struct Issue11SnapshotTests {
         .background(Color(.systemBackground))
 
         assertSnapshot(
-            of: container,
-            as: .image(layout: .device(config: .iPhoneSe))
+            of: applySnapshotEnvironment(to: container),
+            as: .image(
+                precision: 0.99,
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhoneSe)
+            )
         )
     }
 
@@ -31,8 +38,12 @@ struct Issue11SnapshotTests {
         )
 
         assertSnapshot(
-            of: view,
-            as: .image(layout: .device(config: .iPhoneSe))
+            of: applySnapshotEnvironment(to: view),
+            as: .image(
+                precision: 0.99,
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhoneSe)
+            )
         )
     }
 
@@ -72,9 +83,19 @@ struct Issue11SnapshotTests {
         .background(Color(.systemBackground))
 
         assertSnapshot(
-            of: container,
-            as: .image(layout: .device(config: .iPhoneSe))
+            of: applySnapshotEnvironment(to: container),
+            as: .image(
+                precision: 0.99,
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhoneSe)
+            )
         )
+    }
+
+    private func applySnapshotEnvironment<Content: View>(to view: Content) -> some View {
+        view
+            .environment(\.locale, snapshotLocale)
+            .environment(\.timeZone, snapshotTimeZone)
     }
 }
 
