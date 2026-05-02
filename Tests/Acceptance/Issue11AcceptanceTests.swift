@@ -14,6 +14,7 @@ struct Issue11AcceptanceTests {
 
         await store.send(.snapshotResponse(.failed)) {
             $0.rootStatus = .error
+            $0.prices.isLoading = false
         }
     }
 
@@ -38,6 +39,7 @@ struct Issue11AcceptanceTests {
             $0.prices.costCalculation.selectedHour = nil
             $0.prices.hourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = true
+            $0.prices.isLoading = false
             $0.prices.summary = payload.summary
             $0.rootStatus = .cached
         }
@@ -61,6 +63,7 @@ struct Issue11AcceptanceTests {
         await store.send(.snapshotResponse(.fresh(payload))) {
             $0.prices.hourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
+            $0.prices.isLoading = false
             $0.prices.summary = payload.summary
             $0.rootStatus = .content
         }

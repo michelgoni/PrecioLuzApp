@@ -7,22 +7,26 @@ struct PricesView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: PricesViewLayout.verticalSpacing) {
-                if state.isFromCache {
+                if state.isLoading {
+                    PricesLoadingSkeletonView()
+                } else if state.isFromCache {
                     cacheBadge
                 }
 
-                if let summary = state.summary {
-                    PricesSummaryCardsView(summary: summary)
-                } else {
-                    noSummaryView
-                }
+                if !state.isLoading {
+                    if let summary = state.summary {
+                        PricesSummaryCardsView(summary: summary)
+                    } else {
+                        noSummaryView
+                    }
 
-                PricesHourlyListSectionView(
-                    currentDate: state.summary?.current?.date,
-                    hourlyPrices: state.hourlyPrices,
-                    onHourTapped: onHourTapped
-                )
-                .padding(.top, PricesViewLayout.sectionSpacing)
+                    PricesHourlyListSectionView(
+                        currentDate: state.summary?.current?.date,
+                        hourlyPrices: state.hourlyPrices,
+                        onHourTapped: onHourTapped
+                    )
+                    .padding(.top, PricesViewLayout.sectionSpacing)
+                }
             }
             .padding(PricesViewLayout.contentPadding)
         }
@@ -50,6 +54,44 @@ struct PricesView: View {
 
 }
 
+private struct PricesLoadingSkeletonView: View {
+    private let placeholderRows = 8
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: PricesViewLayout.sectionSpacing) {
+            RoundedRectangle(cornerRadius: PricesViewLayout.cardCornerRadius)
+                .fill(Color(.systemGray5))
+                .frame(height: PricesViewLayout.skeletonBadgeHeight)
+
+            VStack(spacing: PricesViewLayout.gridSpacing) {
+                ForEach(0..<2, id: \.self) { _ in
+                    HStack(spacing: PricesViewLayout.gridSpacing) {
+                        skeletonCard
+                        skeletonCard
+                    }
+                }
+            }
+
+            VStack(spacing: PricesViewLayout.hourlyListSpacing) {
+                ForEach(0..<placeholderRows, id: \.self) { _ in
+                    RoundedRectangle(cornerRadius: PricesViewLayout.cardCornerRadius)
+                        .fill(Color(.systemGray5))
+                        .frame(height: PricesViewLayout.skeletonRowHeight)
+                }
+            }
+        }
+        .redacted(reason: .placeholder)
+        .accessibilityIdentifier("pricesLoadingSkeleton")
+    }
+
+    private var skeletonCard: some View {
+        RoundedRectangle(cornerRadius: PricesViewLayout.cardCornerRadius)
+            .fill(Color(.systemGray5))
+            .frame(maxWidth: .infinity)
+            .frame(height: PricesViewLayout.skeletonCardHeight)
+    }
+}
+
 enum PricesViewLayout {
     static let cardBorderOpacity = 0.15
     static let cardCornerRadius: CGFloat = 12
@@ -66,6 +108,9 @@ enum PricesViewLayout {
     static let presetCardWidth: CGFloat = 156
     static let safeAreaTopPadding: CGFloat = 8
     static let sectionSpacing: CGFloat = 18
+    static let skeletonBadgeHeight: CGFloat = 24
+    static let skeletonCardHeight: CGFloat = 74
+    static let skeletonRowHeight: CGFloat = 52
     static let summaryCardSpacing: CGFloat = 6
     static let verticalSpacing: CGFloat = 16
 }

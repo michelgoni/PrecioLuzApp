@@ -24,6 +24,7 @@ struct Issue9AcceptanceTests {
         await store.send(.snapshotResponse(.fresh(payload))) {
             $0.prices.hourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
+            $0.prices.isLoading = false
             $0.prices.summary = payload.summary
             $0.rootStatus = .content
         }
@@ -58,6 +59,7 @@ struct Issue9AcceptanceTests {
         await store.send(.snapshotResponse(.fresh(firstPayload))) {
             $0.prices.hourlyPrices = firstPayload.hourlyPrices
             $0.prices.isFromCache = false
+            $0.prices.isLoading = false
             $0.prices.summary = firstPayload.summary
             $0.rootStatus = .content
         }
@@ -74,6 +76,7 @@ struct Issue9AcceptanceTests {
         await store.send(.snapshotResponse(.fresh(refreshedPayload))) {
             $0.prices.hourlyPrices = refreshedPayload.hourlyPrices
             $0.prices.isFromCache = false
+            $0.prices.isLoading = false
             $0.prices.summary = refreshedPayload.summary
             $0.rootStatus = .content
         }

@@ -6,6 +6,7 @@ struct PricesFeature: Reducer {
         var costCalculation = CostCalculationFeature.State()
         var hourlyPrices: [HourlyPrice] = []
         var isFromCache = false
+        var isLoading = true
         var summary: PriceSummary?
     }
 
@@ -25,6 +26,7 @@ struct PricesFeature: Reducer {
             case let .snapshotLoaded(payload, isCached):
                 state.hourlyPrices = payload.hourlyPrices
                 state.isFromCache = isCached
+                state.isLoading = false
                 state.summary = payload.summary
                 CostCalculationFeature.State.apply(
                     .reconcileSelectedHour(payload.hourlyPrices),

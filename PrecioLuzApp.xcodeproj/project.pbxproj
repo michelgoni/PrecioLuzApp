@@ -21,6 +21,7 @@
 		324A8B65E4B3AE6929DAC3AF /* PricingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD7FDA5CB1305816A882113 /* PricingClient.swift */; };
 		496689F53D5AA62269939AA6 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 15434F83F7C47328886E8E7C /* SnapshotTesting */; };
 		4C0BAE6A4CB9433F43182C37 /* DomainModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75905F6274FE9F8BFD18AA70 /* DomainModels.swift */; };
+		4EEE6FB604EC3E2E8F636CAC /* PricingClientRealAPIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369D5D2B2592842B8DB7FF51 /* PricingClientRealAPIIntegrationTests.swift */; };
 		565381298FCF678EFE583514 /* ChartEmptyStateCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31365554D523EA674F4D99AE /* ChartEmptyStateCardView.swift */; };
 		593628AFC7B815D234E34500 /* PricesCalculationSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CF32CE8FA1797C28B789D1 /* PricesCalculationSheetView.swift */; };
 		59B463544DEE1688110EA083 /* SettingsThresholdSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C679E8989B60162052A21292 /* SettingsThresholdSectionView.swift */; };
@@ -36,8 +37,11 @@
 		7880C9163CD98D0FD0362EC9 /* SQLiteData in Frameworks */ = {isa = PBXBuildFile; productRef = 4188B8C7C367C21C44A8C549 /* SQLiteData */; };
 		800D4B667AA0009EDF34F4A4 /* CasePaths in Frameworks */ = {isa = PBXBuildFile; productRef = F3959B2AF0CD932CDFA800A1 /* CasePaths */; };
 		80BD3178175AB2DBD4009A5C /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C01278E60DB2DB16B036AF /* ChartView.swift */; };
+		8167C1ACA3993C022E94ADF6 /* settingsStates.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C2478FDC49D5ABE5B80426C /* settingsStates.1.png */; };
 		85ABD8BD485CCA4876B101A7 /* SettingsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CBEA5E1ECD0491F94E0DBA /* SettingsFeature.swift */; };
 		87A27EA53BFD0397DBAE5371 /* PrecioLuzAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51625C05A57E37064CEBE3EF /* PrecioLuzAppUITests.swift */; };
+		897C53EF3046CAF8D5372B20 /* PricingClientESIOSLiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C7481B9BEBDEA97D125614 /* PricingClientESIOSLiveTests.swift */; };
+		8BD5517225A03B27FCE93725 /* pricesContent.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C9D7D9690BD42C457418C6A /* pricesContent.1.png */; };
 		92FBFFE0D2AAE87BCF1EAFC5 /* CostCalculationFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1942F66E100388ADAE896898 /* CostCalculationFeatureTests.swift */; };
 		9B13DE84E95AAB6D55816805 /* PricesFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A349262256B13A6827F96952 /* PricesFeature.swift */; };
 		9B97B0F81D357EC8B3FB0E2A /* ChartDailySeriesCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CD20A78360C41B3821FCCD /* ChartDailySeriesCardView.swift */; };
@@ -62,6 +66,7 @@
 		EAA54D0786CB11AB8762B373 /* Issue5AcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD4ED9252AA55CABFF1E90B /* Issue5AcceptanceTests.swift */; };
 		EED5F452F96BA33B52E73AF8 /* Perception in Frameworks */ = {isa = PBXBuildFile; productRef = A766A56786864703170D8E16 /* Perception */; };
 		F02EB597525D2E87BB6DF231 /* PricesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DFEC270AECA2B51E278782 /* PricesView.swift */; };
+		F1211AA198CEF903AF41A094 /* rootStatusBannerStates.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DD080326EEB140FEF131A0A /* rootStatusBannerStates.1.png */; };
 		F168999E428C6DF0216FF573 /* ChartFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55A21AF9891907D054C7D46 /* ChartFeatureTests.swift */; };
 		FE626B826E8DC20501C5B924 /* DailyPricingSnapshotPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2271894EDF7E0F475C376F87 /* DailyPricingSnapshotPipelineTests.swift */; };
 		FFD909BEA040F73D5FEDDC2D /* NotificationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DEBD7F1E386956FE512E3D6 /* NotificationClient.swift */; };
@@ -103,16 +108,21 @@
 		31365554D523EA674F4D99AE /* ChartEmptyStateCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartEmptyStateCardView.swift; sourceTree = "<group>"; };
 		34CF32CE8FA1797C28B789D1 /* PricesCalculationSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesCalculationSheetView.swift; sourceTree = "<group>"; };
 		3602E82D1AA957F3DBC53EB5 /* RootStatusBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootStatusBanner.swift; sourceTree = "<group>"; };
+		369D5D2B2592842B8DB7FF51 /* PricingClientRealAPIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingClientRealAPIIntegrationTests.swift; sourceTree = "<group>"; };
 		4C472C577421FFAA1639BEBF /* SettingsAlertsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAlertsSectionView.swift; sourceTree = "<group>"; };
+		4C9D7D9690BD42C457418C6A /* pricesContent.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pricesContent.1.png; sourceTree = "<group>"; };
 		51625C05A57E37064CEBE3EF /* PrecioLuzAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrecioLuzAppUITests.swift; sourceTree = "<group>"; };
 		52A5F075A317A7D493C8A567 /* Issue11AcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue11AcceptanceTests.swift; sourceTree = "<group>"; };
 		54F12ACD9082A00AD5001375 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		59D4F8F5962D5F8A19F7EC79 /* AppFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeatureTests.swift; sourceTree = "<group>"; };
 		5A1D1D0EBF01088EFBD9E3B7 /* SettingsFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFeatureTests.swift; sourceTree = "<group>"; };
 		5CD7FDA5CB1305816A882113 /* PricingClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingClient.swift; sourceTree = "<group>"; };
+		5DD080326EEB140FEF131A0A /* rootStatusBannerStates.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rootStatusBannerStates.1.png; sourceTree = "<group>"; };
 		613AC733428459896683DAAC /* ChartDaypartPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDaypartPickerView.swift; sourceTree = "<group>"; };
 		642F4C674FBA509E43E81971 /* ChartInspectionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartInspectionCardView.swift; sourceTree = "<group>"; };
+		6C2478FDC49D5ABE5B80426C /* settingsStates.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settingsStates.1.png; sourceTree = "<group>"; };
 		7107E689FEBFDF0CE85B5766 /* PrecioLuzAppUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PrecioLuzAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		72C7481B9BEBDEA97D125614 /* PricingClientESIOSLiveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingClientESIOSLiveTests.swift; sourceTree = "<group>"; };
 		741F0D1CD612C8F05168C6B2 /* PrecioLuzApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PrecioLuzApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75905F6274FE9F8BFD18AA70 /* DomainModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainModels.swift; sourceTree = "<group>"; };
 		79A349F2AC054DD803DF26D6 /* PricesHourlyListSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesHourlyListSectionView.swift; sourceTree = "<group>"; };
@@ -304,8 +314,19 @@
 			isa = PBXGroup;
 			children = (
 				1AFBD3F0A411469C167A5075 /* Issue11SnapshotTests.swift */,
+				D2948BD684EF522BFD18BE0A /* __Snapshots__ */,
 			);
 			path = Snapshots;
+			sourceTree = "<group>";
+		};
+		B7D1C31CE1B62D3EBBF9308C /* Issue11SnapshotTests */ = {
+			isa = PBXGroup;
+			children = (
+				4C9D7D9690BD42C457418C6A /* pricesContent.1.png */,
+				5DD080326EEB140FEF131A0A /* rootStatusBannerStates.1.png */,
+				6C2478FDC49D5ABE5B80426C /* settingsStates.1.png */,
+			);
+			path = Issue11SnapshotTests;
 			sourceTree = "<group>";
 		};
 		C563F2CBC5E981184D00E1E6 /* Clients */ = {
@@ -331,6 +352,14 @@
 			path = Features;
 			sourceTree = "<group>";
 		};
+		D2948BD684EF522BFD18BE0A /* __Snapshots__ */ = {
+			isa = PBXGroup;
+			children = (
+				B7D1C31CE1B62D3EBBF9308C /* Issue11SnapshotTests */,
+			);
+			path = __Snapshots__;
+			sourceTree = "<group>";
+		};
 		DA6AA6158E4981E3EAB7B4E6 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -348,6 +377,8 @@
 			isa = PBXGroup;
 			children = (
 				D9580A221A5C7CD6CCF6C022 /* ClientDependenciesTests.swift */,
+				72C7481B9BEBDEA97D125614 /* PricingClientESIOSLiveTests.swift */,
+				369D5D2B2592842B8DB7FF51 /* PricingClientRealAPIIntegrationTests.swift */,
 			);
 			path = Clients;
 			sourceTree = "<group>";
@@ -445,6 +476,7 @@
 			buildConfigurationList = 0F3CDBE861B3396C75F0DF5B /* Build configuration list for PBXNativeTarget "PrecioLuzAppTests" */;
 			buildPhases = (
 				EFE359D821683D6F02A5BE33 /* Sources */,
+				6F0948408F49256FE37FCEDB /* Resources */,
 				D5B29FC16A8D6E7CE1EC77A8 /* Frameworks */,
 			);
 			buildRules = (
@@ -511,6 +543,16 @@
 			files = (
 				047E6887D249675B2877C50E /* LaunchScreen.storyboard in Resources */,
 				196585D072C3B209CF086B54 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F0948408F49256FE37FCEDB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BD5517225A03B27FCE93725 /* pricesContent.1.png in Resources */,
+				F1211AA198CEF903AF41A094 /* rootStatusBannerStates.1.png in Resources */,
+				8167C1ACA3993C022E94ADF6 /* settingsStates.1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -582,6 +624,8 @@
 				C41724ED25C88587D77820D1 /* Issue9AcceptanceTests.swift in Sources */,
 				D4CB180C3283A7E29F3AC3DD /* NotificationSchedulingPlannerTests.swift in Sources */,
 				2C7A88ECC9F97A3203DEB45D /* PricesFeatureTests.swift in Sources */,
+				897C53EF3046CAF8D5372B20 /* PricingClientESIOSLiveTests.swift in Sources */,
+				4EEE6FB604EC3E2E8F636CAC /* PricingClientRealAPIIntegrationTests.swift in Sources */,
 				D439C31ED58457B59CB2F5D6 /* SettingsFeatureTests.swift in Sources */,
 				00FB8BC052CFF7B1164C485D /* TCASmokeTests.swift in Sources */,
 			);
