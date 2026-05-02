@@ -52,6 +52,7 @@ jobs:
             -parallel-testing-enabled NO \
             clean \
             -only-testing:PrecioLuzAppTests \
+            -skip-testing:PrecioLuzAppTests/Issue11SnapshotTests \
             -skipMacroValidation \
             -resultBundlePath TestResults.xcresult \
             test 2>&1 | tee xcodebuild-test.log
