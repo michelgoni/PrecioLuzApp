@@ -90,11 +90,15 @@ struct AppFeature: Reducer {
                 return .none
 
             case .onAppear, .retryTapped:
-                state.rootStatus = .loading
-                return .merge(
+                prepareForSnapshotLoad(&state)
+                let loadEffects = Effect<Action>.merge(
                     loadNotificationAuthorizationStatusEffect(),
                     loadNotificationSettingsEffect(),
                     loadSnapshotEffect()
+                )
+                return .concatenate(
+                    cancelInFlightEffects(),
+                    loadEffects
                 )
 
             case .pricesCalculationPlaceholderDismissed:
@@ -188,114 +192,6 @@ struct AppFeature: Reducer {
         }
     }
 
-    private func loadSnapshotEffect() -> Effect<Action> {
-        .run { [dateClient, persistenceClient, pricingClient] send in
-            let pipeline = DailyPricingSnapshotPipeline(
-                dateClient: dateClient,
-                persistenceClient: persistenceClient,
-                pricingClient: pricingClient
-            )
-            let result = await pipeline.load()
-            await send(.snapshotResponse(result))
-        }
-        .cancellable(id: CancelID.loadSnapshot, cancelInFlight: true)
-    }
-
-    private func loadNotificationAuthorizationStatusEffect() -> Effect<Action> {
-        .run { [notificationClient] send in
-            let status = await notificationClient.authorizationStatus()
-            await send(.notificationAuthorizationStatusLoaded(status))
-        }
-        .cancellable(id: CancelID.fetchAuthorizationStatus, cancelInFlight: true)
-    }
-
-    private func loadNotificationSettingsEffect() -> Effect<Action> {
-        .run { [persistenceClient] send in
-            let loadedSettings = try? await persistenceClient.loadNotificationSettings()
-            await send(.notificationSettingsLoaded(loadedSettings ?? NotificationSettings.productDefaults))
-        }
-        .cancellable(id: CancelID.loadSettings, cancelInFlight: true)
-    }
-
-    private func mapRootStatus(from result: DailyPricingSnapshotPipelineResult) -> RootStatus {
-        switch result {
-        case .failed:
-            .error
-        case let .cached(payload):
-            mapStatus(from: payload, whenNotEmpty: .cached)
-        case let .fresh(payload):
-            mapStatus(from: payload, whenNotEmpty: .content)
-        }
-    }
-
-    private func saveNotificationSettingsEffect(_ settings: NotificationSettings) -> Effect<Action> {
-        .run { [persistenceClient] _ in
-            try? await persistenceClient.saveNotificationSettings(settings)
-        }
-        .cancellable(id: CancelID.saveSettings, cancelInFlight: true)
-    }
-
-    private func sanitizeLoadedSettings(_ settings: NotificationSettings, authorizationStatus: NotificationClient.AuthorizationStatus) -> NotificationSettings {
-        guard authorizationStatus == .denied else {
-            return settings
-        }
-        var sanitizedSettings = settings
-        sanitizedSettings.notificationsEnabled = false
-        return sanitizedSettings
-    }
-
-    private func scheduleNotificationsFromSnapshotEffect(result: DailyPricingSnapshotPipelineResult, settings: NotificationSettings) -> Effect<Action> {
-        switch result {
-        case .failed:
-            return .none
-        case let .cached(payload), let .fresh(payload):
-            return rescheduleNotificationsEffect(hourlyPrices: payload.hourlyPrices, settings: settings)
-        }
-    }
-
-    private func rescheduleNotificationsEffect(hourlyPrices: [HourlyPrice], settings: NotificationSettings) -> Effect<Action> {
-        .run { [dateClient, notificationClient] _ in
-            let now = dateClient.now()
-            var calendar = Calendar(identifier: .gregorian)
-            calendar.timeZone = dateClient.timeZone()
-
-            let plan = NotificationSchedulingPlanner.makePlan(
-                hourlyPrices: hourlyPrices,
-                settings: settings,
-                now: now,
-                calendar: calendar
-            )
-            let requests = plan.map(makeNotificationRequest(from:))
-            try? await notificationClient.schedule(requests)
-        }
-        .cancellable(id: CancelID.rescheduleNotifications, cancelInFlight: true)
-    }
-
-    private func requestNotificationPermissionEffect() -> Effect<Action> {
-        .run { [notificationClient] send in
-            let isGranted = (try? await notificationClient.requestAuthorization()) ?? false
-            await send(.notificationPermissionRequestFinished(isGranted))
-        }
-        .cancellable(id: CancelID.requestNotificationPermission, cancelInFlight: true)
-    }
-
-    private func mapStatus(from payload: DailyPricingSnapshotPayload, whenNotEmpty status: RootStatus) -> RootStatus {
-        payload.hourlyPrices.isEmpty ? .empty : status
-    }
-
-    private func chartSyncEffect(from result: DailyPricingSnapshotPipelineResult) -> Effect<Action> {
-        switch result {
-        case .failed:
-            return .none
-        case let .cached(payload), let .fresh(payload):
-            return .send(.chart(.syncHourlyPrices(payload.hourlyPrices)))
-        }
-    }
-
-    private func updateFeatureStates(_ state: inout State, from result: DailyPricingSnapshotPipelineResult) {
-        updatePricesState(&state.prices, from: result)
-    }
-
     private func applyChartAction(_ action: ChartFeature.Action, to state: inout ChartFeature.State) {
         switch action {
         case let .inspectedHourChanged(hour):
@@ -349,6 +245,25 @@ struct AppFeature: Reducer {
 
         case .openSystemSettingsTapped:
             break
+        }
+    }
+
+    private func cancelInFlightEffects() -> Effect<Action> {
+        .merge(
+            .cancel(id: CancelID.fetchAuthorizationStatus),
+            .cancel(id: CancelID.loadSettings),
+            .cancel(id: CancelID.loadSnapshot),
+            .cancel(id: CancelID.requestNotificationPermission),
+            .cancel(id: CancelID.rescheduleNotifications)
+        )
+    }
+
+    private func chartSyncEffect(from result: DailyPricingSnapshotPipelineResult) -> Effect<Action> {
+        switch result {
+        case .failed:
+            return .none
+        case let .cached(payload), let .fresh(payload):
+            return .send(.chart(.syncHourlyPrices(payload.hourlyPrices)))
         }
     }
 
@@ -406,6 +321,35 @@ struct AppFeature: Reducer {
         }
     }
 
+    private func loadNotificationAuthorizationStatusEffect() -> Effect<Action> {
+        .run { [notificationClient] send in
+            let status = await notificationClient.authorizationStatus()
+            await send(.notificationAuthorizationStatusLoaded(status))
+        }
+        .cancellable(id: CancelID.fetchAuthorizationStatus, cancelInFlight: true)
+    }
+
+    private func loadNotificationSettingsEffect() -> Effect<Action> {
+        .run { [persistenceClient] send in
+            let loadedSettings = try? await persistenceClient.loadNotificationSettings()
+            await send(.notificationSettingsLoaded(loadedSettings ?? NotificationSettings.productDefaults))
+        }
+        .cancellable(id: CancelID.loadSettings, cancelInFlight: true)
+    }
+
+    private func loadSnapshotEffect() -> Effect<Action> {
+        .run { [dateClient, persistenceClient, pricingClient] send in
+            let pipeline = DailyPricingSnapshotPipeline(
+                dateClient: dateClient,
+                persistenceClient: persistenceClient,
+                pricingClient: pricingClient
+            )
+            let result = await pipeline.load()
+            await send(.snapshotResponse(result))
+        }
+        .cancellable(id: CancelID.loadSnapshot, cancelInFlight: true)
+    }
+
     private func makeNotificationRequest(from planItem: NotificationSchedulingPlanner.PlanItem) -> NotificationClient.Request {
         NotificationClient.Request(
             id: notificationIdentifier(for: planItem),
@@ -413,6 +357,32 @@ struct AppFeature: Reducer {
             body: notificationBody(for: planItem.kind),
             triggerDate: planItem.triggerDate
         )
+    }
+
+    private func mapRootStatus(from result: DailyPricingSnapshotPipelineResult) -> RootStatus {
+        switch result {
+        case .failed:
+            .error
+        case let .cached(payload):
+            mapStatus(from: payload, whenNotEmpty: .cached)
+        case let .fresh(payload):
+            mapStatus(from: payload, whenNotEmpty: .content)
+        }
+    }
+
+    private func mapStatus(from payload: DailyPricingSnapshotPayload, whenNotEmpty status: RootStatus) -> RootStatus {
+        payload.hourlyPrices.isEmpty ? .empty : status
+    }
+
+    private func notificationBody(for kind: NotificationSchedulingPlanner.PlanItem.Kind) -> String {
+        switch kind {
+        case .dailyMaximum:
+            String(localized: "notifications.dailyMaximum.body")
+        case .dailyMinimum:
+            String(localized: "notifications.dailyMinimum.body")
+        case .threshold:
+            String(localized: "notifications.threshold.body")
+        }
     }
 
     private func notificationIdentifier(for planItem: NotificationSchedulingPlanner.PlanItem) -> String {
@@ -440,15 +410,65 @@ struct AppFeature: Reducer {
         }
     }
 
-    private func notificationBody(for kind: NotificationSchedulingPlanner.PlanItem.Kind) -> String {
-        switch kind {
-        case .dailyMaximum:
-            String(localized: "notifications.dailyMaximum.body")
-        case .dailyMinimum:
-            String(localized: "notifications.dailyMinimum.body")
-        case .threshold:
-            String(localized: "notifications.threshold.body")
+    private func prepareForSnapshotLoad(_ state: inout State) {
+        state.rootStatus = .loading
+        state.chart.inspectedHour = nil
+        state.prices.costCalculation.isPresented = false
+    }
+
+    private func requestNotificationPermissionEffect() -> Effect<Action> {
+        .run { [notificationClient] send in
+            let isGranted = (try? await notificationClient.requestAuthorization()) ?? false
+            await send(.notificationPermissionRequestFinished(isGranted))
         }
+        .cancellable(id: CancelID.requestNotificationPermission, cancelInFlight: true)
+    }
+
+    private func rescheduleNotificationsEffect(hourlyPrices: [HourlyPrice], settings: NotificationSettings) -> Effect<Action> {
+        .run { [dateClient, notificationClient] _ in
+            let now = dateClient.now()
+            var calendar = Calendar(identifier: .gregorian)
+            calendar.timeZone = dateClient.timeZone()
+
+            let plan = NotificationSchedulingPlanner.makePlan(
+                hourlyPrices: hourlyPrices,
+                settings: settings,
+                now: now,
+                calendar: calendar
+            )
+            let requests = plan.map(makeNotificationRequest(from:))
+            try? await notificationClient.schedule(requests)
+        }
+        .cancellable(id: CancelID.rescheduleNotifications, cancelInFlight: true)
+    }
+
+    private func sanitizeLoadedSettings(_ settings: NotificationSettings, authorizationStatus: NotificationClient.AuthorizationStatus) -> NotificationSettings {
+        guard authorizationStatus == .denied else {
+            return settings
+        }
+        var sanitizedSettings = settings
+        sanitizedSettings.notificationsEnabled = false
+        return sanitizedSettings
+    }
+
+    private func saveNotificationSettingsEffect(_ settings: NotificationSettings) -> Effect<Action> {
+        .run { [persistenceClient] _ in
+            try? await persistenceClient.saveNotificationSettings(settings)
+        }
+        .cancellable(id: CancelID.saveSettings, cancelInFlight: true)
+    }
+
+    private func scheduleNotificationsFromSnapshotEffect(result: DailyPricingSnapshotPipelineResult, settings: NotificationSettings) -> Effect<Action> {
+        switch result {
+        case .failed:
+            return .none
+        case let .cached(payload), let .fresh(payload):
+            return rescheduleNotificationsEffect(hourlyPrices: payload.hourlyPrices, settings: settings)
+        }
+    }
+
+    private func updateFeatureStates(_ state: inout State, from result: DailyPricingSnapshotPipelineResult) {
+        updatePricesState(&state.prices, from: result)
     }
 
     private func updatePricesState(_ state: inout PricesFeature.State, from result: DailyPricingSnapshotPipelineResult) {

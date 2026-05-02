@@ -67,6 +67,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Orden y consistencia (cuando aplique):
   - Ordenar alfabéticamente `import`s.
   - Ordenar alfabéticamente las propiedades en `struct`s y `class`es si no existe un orden semántico más claro.
+  - Ordenar alfabéticamente las funciones `private` dentro del mismo tipo cuando no haya dependencia de lectura secuencial.
   - Ordenar alfabéticamente los `case` en `enum`s.
   - Excepción: mantener orden semántico cuando mejore la lectura del dominio (por ejemplo `Daypart`, o enums que representan un flujo temporal).
 - Regla de seguridad (anti-crash, obligatoria):
@@ -230,6 +231,10 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Si no existe proyecto Xcode todavía, ejecutar lo que sí esté disponible y reportar explícitamente la limitación restante.
 - Si `SwiftLint` no está instalado, tratar la validación como incompleta hasta instalarlo o dejar el bloqueo documentado.
 - En el alcance base actual no existe backend propio; revisión de logs backend no aplica salvo que se añada un servicio en el repo.
+- En hitos de QA final y preparación de entrega:
+  - ejecutar validación **secuencial** en `iPhone 17`: `clean build session` -> `build` -> `PrecioLuzAppTests` -> `PrecioLuzAppUITests` smoke;
+  - no cerrar checkpoint final sin registrar explícitamente resultado de `scripts/check_tca_warnings.sh` con `TCA warnings/deprecations: 0`;
+  - registrar en `docs/validation-evidence.md` los comandos ejecutados y evidencias visuales finales.
 
 ## Integración y entrega
 - No mergear trabajo directamente en `main`.

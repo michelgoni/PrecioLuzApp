@@ -153,3 +153,25 @@ Convert the documentation-first repository into a production-ready native iPhone
 - endurecer offline/caché/error
 - ampliar cobertura de tests (incluyendo expansión de snapshots visuales y `UI E2E` sobre baseline smoke)
 - validar simulador y CI antes de merge por PR
+
+#### Incremento 11.0 — Contrato QA de cierre (documental)
+- tipo: documental (sin código app)
+- issue objetivo: `#11`
+- alcance cerrado:
+  - hardening de resiliencia (`offline/cached/error/retry`) en reducers + pipeline
+  - expansión de tests por capas (`Testing + TestStore`, aceptación, snapshots, UI smoke)
+  - validación final secuencial para entrega (`clean build session`, `build`, tests, UI smoke, warnings TCA)
+- orden de ejecución obligatorio:
+  1. `11A` hardening
+  2. `11B` expansión de tests
+  3. `11C` QA visual (`snapshots` + smoke estable)
+  4. `11D` validación final + evidencia + PR
+- checkpoints obligatorios por miniincremento:
+  - `build` + tests del scope tocado
+  - `UI smoke` cuando haya wiring/flujo visible
+  - evidencia visual versionada si hay cambios visibles
+  - pausa obligatoria para revisión manual antes del siguiente incremento
+- criterio de cierre `#11`:
+  - validaciones técnicas completas en verde (local + CI)
+  - evidencias documentadas en `docs/validation-evidence.md`
+  - PR final de integración lista para merge

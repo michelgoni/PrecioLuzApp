@@ -11,9 +11,11 @@ struct AppShellView: View {
             tabView
         }
         .safeAreaInset(edge: .top) {
-            statusBannerOverlay
-                .padding(.horizontal, 16)
-                .padding(.top, 8)
+            if store.rootStatus != .content {
+                statusBannerOverlay
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
+            }
         }
         .sheet(isPresented: calculationSheetPresentedBinding) {
             PricesCalculationSheetView(

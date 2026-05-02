@@ -26,7 +26,10 @@ struct AppFeatureTests {
     @MainActor
     @Test("AppFeature sets loading on onAppear")
     func onAppearSetsLoading() async {
-        let store = TestStore(initialState: AppFeature.State()) {
+        var initialState = AppFeature.State()
+        initialState.chart.inspectedHour = HourlyPrice.mockValue
+        initialState.prices.costCalculation.isPresented = true
+        let store = TestStore(initialState: initialState) {
             AppFeature()
         } withDependencies: {
             $0.dateClient.now = { testNow }
@@ -35,7 +38,51 @@ struct AppFeatureTests {
         store.exhaustivity = .off
 
         await store.send(.onAppear) {
+            $0.chart.inspectedHour = nil
+            $0.prices.costCalculation.isPresented = false
             $0.rootStatus = .loading
+        }
+    }
+
+    @MainActor
+    @Test("AppFeature keeps latest snapshot response as source of truth")
+    func latestSnapshotResponseWins() async {
+        let stalePayload = DailyPricingSnapshotPayload(
+            dayStart: .mockNow,
+            fetchedAt: .mockNow,
+            hourlyPrices: [HourlyPrice.mockValue],
+            summary: nil
+        )
+        let latestPayload = DailyPricingSnapshotPayload(
+            dayStart: .mockNow,
+            fetchedAt: .mockNow,
+            hourlyPrices: [HourlyPrice.mockFutureValue],
+            summary: nil
+        )
+        let store = TestStore(initialState: AppFeature.State()) {
+            AppFeature()
+        }
+
+        await store.send(.snapshotResponse(.failed)) {
+            $0.rootStatus = .error
+        }
+        await store.send(.snapshotResponse(.fresh(stalePayload))) {
+            $0.rootStatus = .content
+            $0.prices.hourlyPrices = stalePayload.hourlyPrices
+            $0.prices.isFromCache = false
+            $0.prices.summary = nil
+        }
+        await store.receive(.chart(.syncHourlyPrices(stalePayload.hourlyPrices))) {
+            $0.chart.hourlyPrices = stalePayload.hourlyPrices
+        }
+        await store.send(.snapshotResponse(.fresh(latestPayload))) {
+            $0.rootStatus = .content
+            $0.prices.hourlyPrices = latestPayload.hourlyPrices
+            $0.prices.isFromCache = false
+            $0.prices.summary = nil
+        }
+        await store.receive(.chart(.syncHourlyPrices(latestPayload.hourlyPrices))) {
+            $0.chart.hourlyPrices = latestPayload.hourlyPrices
         }
     }
 

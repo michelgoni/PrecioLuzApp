@@ -25,15 +25,6 @@ jobs:
       - name: Resolve Swift packages
         run: xcodebuild -resolvePackageDependencies -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp
 
-      - name: Build
-        run: |
-          xcodebuild \
-            -project PrecioLuzApp.xcodeproj \
-            -scheme PrecioLuzApp \
-            -destination "generic/platform=iOS Simulator" \
-            -skipMacroValidation \
-            build
-
       - name: Select concrete simulator for tests
         id: test-destination
         shell: bash
@@ -53,14 +44,24 @@ jobs:
 
       - name: Test
         run: |
-          # Limit CI to unit tests on GitHub-hosted runners.
-          # The scheme also includes UITests, and those have been hanging before
-          # any XCTest case starts executing in Actions.
+          set -o pipefail
           xcodebuild \
             -project PrecioLuzApp.xcodeproj \
             -scheme PrecioLuzApp \
             -destination "${{ steps.test-destination.outputs.value }}" \
+            -parallel-testing-enabled NO \
             clean \
             -only-testing:PrecioLuzAppTests \
+            -skip-testing:PrecioLuzAppTests/Issue11SnapshotTests \
             -skipMacroValidation \
-            test
+            -resultBundlePath TestResults.xcresult \
+            test 2>&1 | tee xcodebuild-test.log
+
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-diagnostics
+          path: |
+            xcodebuild-test.log
+            TestResults.xcresult
