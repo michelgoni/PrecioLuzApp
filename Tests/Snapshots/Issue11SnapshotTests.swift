@@ -7,7 +7,10 @@ import Testing
 
 @MainActor
 struct Issue11SnapshotTests {
-    private let isCI = ProcessInfo.processInfo.environment["CI"] == "true"
+    private let isCI: Bool = {
+        let environment = ProcessInfo.processInfo.environment
+        return environment["CI"] == "true" || environment["GITHUB_ACTIONS"] == "true"
+    }()
     private let snapshotLocale = Locale(identifier: "es_ES")
     private let snapshotTimeZone = TimeZone(identifier: "Europe/Madrid") ?? .gmt
 
