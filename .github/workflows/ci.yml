@@ -25,15 +25,6 @@ jobs:
       - name: Resolve Swift packages
         run: xcodebuild -resolvePackageDependencies -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp
 
-      - name: Build
-        run: |
-          xcodebuild \
-            -project PrecioLuzApp.xcodeproj \
-            -scheme PrecioLuzApp \
-            -destination "generic/platform=iOS Simulator" \
-            -skipMacroValidation \
-            build
-
       - name: Select concrete simulator for tests
         id: test-destination
         shell: bash
