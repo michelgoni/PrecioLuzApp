@@ -414,6 +414,7 @@ struct AppFeature: Reducer {
         state.rootStatus = .loading
         state.chart.inspectedHour = nil
         state.prices.costCalculation.isPresented = false
+        state.prices.isLoading = true
     }
 
     private func requestNotificationPermissionEffect() -> Effect<Action> {
@@ -474,10 +475,11 @@ struct AppFeature: Reducer {
     private func updatePricesState(_ state: inout PricesFeature.State, from result: DailyPricingSnapshotPipelineResult) {
         switch result {
         case .failed:
-            break
+            state.isLoading = false
         case let .cached(payload):
             state.hourlyPrices = payload.hourlyPrices
             state.isFromCache = true
+            state.isLoading = false
             state.costCalculation.selectedHour = payload.hourlyPrices.first {
                 $0.date == state.costCalculation.selectedHour?.date
             }
@@ -488,6 +490,7 @@ struct AppFeature: Reducer {
         case let .fresh(payload):
             state.hourlyPrices = payload.hourlyPrices
             state.isFromCache = false
+            state.isLoading = false
             state.costCalculation.selectedHour = payload.hourlyPrices.first {
                 $0.date == state.costCalculation.selectedHour?.date
             }

@@ -16,6 +16,7 @@ struct PricesFeatureTests {
         await store.send(.snapshotLoaded(payload, isCached: true)) {
             $0.hourlyPrices = payload.hourlyPrices
             $0.isFromCache = true
+            $0.isLoading = false
             $0.summary = payload.summary
         }
     }
@@ -73,6 +74,7 @@ struct PricesFeatureTests {
         await store.send(.snapshotLoaded(payload, isCached: false)) {
             $0.hourlyPrices = []
             $0.costCalculation.selectedHour = nil
+            $0.isLoading = false
             $0.summary = nil
         }
     }

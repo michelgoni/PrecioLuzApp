@@ -163,6 +163,15 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - arrancar la app y revisar logs de ejecución para detectar errores no visibles
   - realizar chequeo visual básico del flujo tocado y recoger evidencia mínima obligatoria
   - guardar al menos un screenshot por feature tocada dentro de `docs/` y referenciar su ruta en el resumen final de la tarea/PR (si el simulador falla, adjuntar evidencia de preview y dejar la limitación documentada)
+- Tras cambios en integración con APIs externas (obligatorio):
+  - no cerrar la tarea solo con tests unitarios/mocks;
+  - validar al menos una ejecución real end-to-end en runtime de app (simulador) con credencial/configuración local activa;
+  - confirmar explícitamente que la UI de destino muestra datos reales no vacíos (no solo estado `loading/error/empty`);
+  - registrar en el checkpoint la fecha consultada, endpoint usado y resultado observable en pantalla;
+  - si la credencial se inyecta por entorno (`.env`), documentar el mecanismo de inyección en el `Run Scheme` local y verificar que el proceso de la app recibe la variable;
+  - queda prohibido guardar credenciales en schemes compartidos (`PrecioLuzApp.xcodeproj/xcshareddata/...`);
+  - ejecutar `Scripts/check_secrets.sh` como validación bloqueante antes de cerrar checkpoint o hacer push;
+  - si no se puede hacer esta validación real (servicio caído, credenciales faltantes, rate-limit), el estado de la tarea debe quedar `blocked` y no `done`.
 - Si no existe proyecto Xcode o no es posible validar, dejar constancia explícita y no presentar la validación como realizada.
 - Si aparece un bloqueo de linker/build session (por ejemplo símbolos no resueltos intermitentes):
   - ejecutar `clean build session` del scheme afectado;
@@ -217,6 +226,8 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - `xcodebuild -project <Project>.xcodeproj -scheme <Scheme> -destination 'platform=iOS Simulator,name=<Device>' -only-testing:<SnapshotTestsTarget> test`
 - Logs en ejecución:
   - `xcrun simctl spawn booted log show --style compact --last 5m --predicate 'process == "<AppBinaryName>" AND messageType == error'`
+- Secret check (obligatorio cuando haya credenciales/API):
+  - `Scripts/check_secrets.sh`
 - Evidencia visual mínima (si hay cambio visible):
   - `xcrun simctl io booted screenshot /tmp/precioluzapp-validation.png`
   - mover el archivo a una ruta versionada en el repo, por ejemplo `docs/evidence-<issue>-<feature>.png`

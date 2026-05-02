@@ -66,22 +66,21 @@ The project documentation currently defines this stack:
 
 ## 🚧 Current status
 
-`Milestone 1` bootstrap is in place:
+Roadmap implementation is currently delivered through `Milestone 8` at local-repo level:
 
 - ✅ iPhone Xcode project generated via `project.yml` (`XcodeGen`)
 - ✅ `TCA` + `sqlite-data` dependencies integrated
 - ✅ base `TabView` shell with `Precios`, `Gráfica`, `Ajustes`
 - ✅ SF Symbols configured for tabs (`eurosign.circle`, `chart.xyaxis.line`, `gearshape`)
 - ✅ localized tab titles via `Localizable.strings` (`es` and `en`)
-- ✅ minimal placeholder content for each tab
-- ✅ baseline shell tests + TCA smoke test
+- ✅ domain models + injectable clients (`pricing`, `persistence`, `date`, `notifications`)
+- ✅ `Prices`, `Chart`, `Settings`, and `CostCalculation` features
+- ✅ resilience + QA hardening baseline (`offline/cached/error/retry`) with acceptance/snapshot/ui smoke coverage
+- ✅ baseline shell tests + TCA smoke tests
 - ✅ GitHub Actions CI workflow for `build` + `test`
+- ✅ validation evidence documented up to `Issue #11` final checkpoint in `docs/validation-evidence.md`
 
-Still pending (next milestones):
-
-- ⏳ product feature implementation (prices, chart behavior, settings behavior)
-- ⏳ domain and client layers
-- ⏳ persistence and notifications flows
+Pending roadmap work is now mainly integration traceability (`Done-Integrated`) and follow-up increments/issues after milestone closure.
 
 ## 📚 Documentation map
 

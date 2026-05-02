@@ -62,12 +62,13 @@ private extension PricesFeature.State {
                 date: Date(timeIntervalSince1970: 1_700_007_200),
                 daypart: .afternoon,
                 eurPerKWh: 0.215
-            ),
+            )
         ]
         return PricesFeature.State(
             costCalculation: CostCalculationFeature.State(),
             hourlyPrices: prices,
             isFromCache: false,
+            isLoading: false,
             summary: PriceSummary(
                 average: 0.158,
                 current: prices[1],

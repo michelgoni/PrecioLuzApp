@@ -65,11 +65,13 @@ struct AppFeatureTests {
 
         await store.send(.snapshotResponse(.failed)) {
             $0.rootStatus = .error
+            $0.prices.isLoading = false
         }
         await store.send(.snapshotResponse(.fresh(stalePayload))) {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = stalePayload.hourlyPrices
             $0.prices.isFromCache = false
+            $0.prices.isLoading = false
             $0.prices.summary = nil
         }
         await store.receive(.chart(.syncHourlyPrices(stalePayload.hourlyPrices))) {
@@ -79,6 +81,7 @@ struct AppFeatureTests {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = latestPayload.hourlyPrices
             $0.prices.isFromCache = false
+            $0.prices.isLoading = false
             $0.prices.summary = nil
         }
         await store.receive(.chart(.syncHourlyPrices(latestPayload.hourlyPrices))) {
@@ -125,6 +128,7 @@ struct AppFeatureTests {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
+            $0.prices.isLoading = false
             $0.prices.summary = payload.summary
         }
         await store.receive(.chart(.syncHourlyPrices(payload.hourlyPrices))) {
@@ -144,6 +148,7 @@ struct AppFeatureTests {
             $0.rootStatus = .cached
             $0.prices.hourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = true
+            $0.prices.isLoading = false
             $0.prices.summary = payload.summary
         }
         await store.receive(.chart(.syncHourlyPrices(payload.hourlyPrices))) {
@@ -171,6 +176,7 @@ struct AppFeatureTests {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
+            $0.prices.isLoading = false
             $0.prices.costCalculation.selectedHour = nil
             $0.prices.summary = nil
         }
@@ -191,6 +197,7 @@ struct AppFeatureTests {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
+            $0.prices.isLoading = false
             $0.prices.summary = payload.summary
         }
         await store.receive(.chart(.syncHourlyPrices(payload.hourlyPrices))) {
@@ -220,6 +227,7 @@ struct AppFeatureTests {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = refreshedPayload.hourlyPrices
             $0.prices.isFromCache = false
+            $0.prices.isLoading = false
             $0.prices.summary = nil
         }
         await store.receive(.chart(.syncHourlyPrices(refreshedPayload.hourlyPrices))) {
@@ -264,6 +272,7 @@ struct AppFeatureTests {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = refreshedPayload.hourlyPrices
             $0.prices.isFromCache = false
+            $0.prices.isLoading = false
             $0.prices.summary = nil
         }
         await store.receive(.chart(.syncHourlyPrices(refreshedPayload.hourlyPrices))) {
@@ -281,6 +290,7 @@ struct AppFeatureTests {
 
         await store.send(.snapshotResponse(.failed)) {
             $0.rootStatus = .error
+            $0.prices.isLoading = false
         }
     }
 
@@ -296,6 +306,7 @@ struct AppFeatureTests {
             $0.rootStatus = .empty
             $0.prices.hourlyPrices = []
             $0.prices.isFromCache = false
+            $0.prices.isLoading = false
             $0.prices.summary = nil
         }
         await store.receive(.chart(.syncHourlyPrices(payload.hourlyPrices)))
@@ -423,6 +434,7 @@ struct AppFeatureTests {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
+            $0.prices.isLoading = false
             $0.prices.summary = nil
         }
         await store.receive(.chart(.syncHourlyPrices(payload.hourlyPrices))) {
@@ -514,6 +526,7 @@ struct AppFeatureTests {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
+            $0.prices.isLoading = false
             $0.prices.summary = nil
         }
         await store.receive(.chart(.syncHourlyPrices(payload.hourlyPrices))) {

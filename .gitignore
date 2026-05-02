@@ -9,3 +9,7 @@ Packages/
 *.xcworkspace/xcuserdata/
 *.xcuserdatad/
 *.xcuserstate
+
+# Local secrets
+.env
+.env.*
