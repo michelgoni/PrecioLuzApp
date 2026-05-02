@@ -49,6 +49,7 @@ jobs:
             -project PrecioLuzApp.xcodeproj \
             -scheme PrecioLuzApp \
             -destination "${{ steps.test-destination.outputs.value }}" \
+            -parallel-testing-enabled NO \
             clean \
             -only-testing:PrecioLuzAppTests \
             -skipMacroValidation \
