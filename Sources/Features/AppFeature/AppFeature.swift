@@ -113,6 +113,9 @@ struct AppFeature: Reducer {
                 return .none
 
             case let .pricesHourTapped(hour):
+                guard state.prices.isVisibleHour(hour) else {
+                    return .none
+                }
                 state.prices.costCalculation.durationHours = CostCalculationFeature.State.defaultDurationHours
                 state.prices.costCalculation.selectedPresetKind = .washingMachine
                 state.prices.costCalculation.selectedHour = hour
@@ -350,7 +353,9 @@ struct AppFeature: Reducer {
         .cancellable(id: CancelID.loadSnapshot, cancelInFlight: true)
     }
 
-    private func makeNotificationRequest(from planItem: NotificationSchedulingPlanner.PlanItem) -> NotificationClient.Request {
+    private func makeNotificationRequest(
+        from planItem: NotificationSchedulingPlanner.PlanItem
+    ) -> NotificationClient.Request {
         NotificationClient.Request(
             id: notificationIdentifier(for: planItem),
             title: notificationTitle(for: planItem.kind),
@@ -425,7 +430,10 @@ struct AppFeature: Reducer {
         .cancellable(id: CancelID.requestNotificationPermission, cancelInFlight: true)
     }
 
-    private func rescheduleNotificationsEffect(hourlyPrices: [HourlyPrice], settings: NotificationSettings) -> Effect<Action> {
+    private func rescheduleNotificationsEffect(
+        hourlyPrices: [HourlyPrice],
+        settings: NotificationSettings
+    ) -> Effect<Action> {
         .run { [dateClient, notificationClient] _ in
             let now = dateClient.now()
             var calendar = Calendar(identifier: .gregorian)
@@ -443,7 +451,10 @@ struct AppFeature: Reducer {
         .cancellable(id: CancelID.rescheduleNotifications, cancelInFlight: true)
     }
 
-    private func sanitizeLoadedSettings(_ settings: NotificationSettings, authorizationStatus: NotificationClient.AuthorizationStatus) -> NotificationSettings {
+    private func sanitizeLoadedSettings(
+        _ settings: NotificationSettings,
+        authorizationStatus: NotificationClient.AuthorizationStatus
+    ) -> NotificationSettings {
         guard authorizationStatus == .denied else {
             return settings
         }
@@ -459,7 +470,10 @@ struct AppFeature: Reducer {
         .cancellable(id: CancelID.saveSettings, cancelInFlight: true)
     }
 
-    private func scheduleNotificationsFromSnapshotEffect(result: DailyPricingSnapshotPipelineResult, settings: NotificationSettings) -> Effect<Action> {
+    private func scheduleNotificationsFromSnapshotEffect(
+        result: DailyPricingSnapshotPipelineResult,
+        settings: NotificationSettings
+    ) -> Effect<Action> {
         switch result {
         case .failed:
             return .none
@@ -472,32 +486,33 @@ struct AppFeature: Reducer {
         updatePricesState(&state.prices, from: result)
     }
 
-    private func updatePricesState(_ state: inout PricesFeature.State, from result: DailyPricingSnapshotPipelineResult) {
+    private func updatePricesState(
+        _ state: inout PricesFeature.State,
+        from result: DailyPricingSnapshotPipelineResult
+    ) {
         switch result {
         case .failed:
             state.isLoading = false
         case let .cached(payload):
-            state.hourlyPrices = payload.hourlyPrices
-            state.isFromCache = true
-            state.isLoading = false
-            state.costCalculation.selectedHour = payload.hourlyPrices.first {
-                $0.date == state.costCalculation.selectedHour?.date
-            }
-            if state.costCalculation.selectedHour == nil {
-                state.costCalculation.isPresented = false
-            }
-            state.summary = payload.summary
+            state.applySnapshot(
+                payload,
+                isCached: true,
+                now: dateClient.now(),
+                calendar: currentCalendar()
+            )
         case let .fresh(payload):
-            state.hourlyPrices = payload.hourlyPrices
-            state.isFromCache = false
-            state.isLoading = false
-            state.costCalculation.selectedHour = payload.hourlyPrices.first {
-                $0.date == state.costCalculation.selectedHour?.date
-            }
-            if state.costCalculation.selectedHour == nil {
-                state.costCalculation.isPresented = false
-            }
-            state.summary = payload.summary
+            state.applySnapshot(
+                payload,
+                isCached: false,
+                now: dateClient.now(),
+                calendar: currentCalendar()
+            )
         }
+    }
+
+    private func currentCalendar() -> Calendar {
+        var calendar = dateClient.calendar()
+        calendar.timeZone = dateClient.timeZone()
+        return calendar
     }
 }

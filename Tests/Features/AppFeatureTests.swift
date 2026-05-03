@@ -70,6 +70,7 @@ struct AppFeatureTests {
         await store.send(.snapshotResponse(.fresh(stalePayload))) {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = stalePayload.hourlyPrices
+            $0.prices.visibleHourlyPrices = stalePayload.hourlyPrices
             $0.prices.isFromCache = false
             $0.prices.isLoading = false
             $0.prices.summary = nil
@@ -80,6 +81,7 @@ struct AppFeatureTests {
         await store.send(.snapshotResponse(.fresh(latestPayload))) {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = latestPayload.hourlyPrices
+            $0.prices.visibleHourlyPrices = latestPayload.hourlyPrices
             $0.prices.isFromCache = false
             $0.prices.isLoading = false
             $0.prices.summary = nil
@@ -127,6 +129,7 @@ struct AppFeatureTests {
         await store.send(.snapshotResponse(.fresh(payload))) {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = payload.hourlyPrices
+            $0.prices.visibleHourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
             $0.prices.isLoading = false
             $0.prices.summary = payload.summary
@@ -147,6 +150,7 @@ struct AppFeatureTests {
         await store.send(.snapshotResponse(.cached(payload))) {
             $0.rootStatus = .cached
             $0.prices.hourlyPrices = payload.hourlyPrices
+            $0.prices.visibleHourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = true
             $0.prices.isLoading = false
             $0.prices.summary = payload.summary
@@ -175,6 +179,7 @@ struct AppFeatureTests {
         await store.send(.snapshotResponse(.fresh(payload))) {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = payload.hourlyPrices
+            $0.prices.visibleHourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
             $0.prices.isLoading = false
             $0.prices.costCalculation.selectedHour = nil
@@ -196,6 +201,7 @@ struct AppFeatureTests {
         await store.send(.snapshotResponse(.fresh(payload))) {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = payload.hourlyPrices
+            $0.prices.visibleHourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
             $0.prices.isLoading = false
             $0.prices.summary = payload.summary
@@ -226,6 +232,7 @@ struct AppFeatureTests {
         await store.send(.snapshotResponse(.fresh(refreshedPayload))) {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = refreshedPayload.hourlyPrices
+            $0.prices.visibleHourlyPrices = refreshedPayload.hourlyPrices
             $0.prices.isFromCache = false
             $0.prices.isLoading = false
             $0.prices.summary = nil
@@ -271,6 +278,7 @@ struct AppFeatureTests {
         await store.send(.snapshotResponse(.fresh(refreshedPayload))) {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = refreshedPayload.hourlyPrices
+            $0.prices.visibleHourlyPrices = refreshedPayload.hourlyPrices
             $0.prices.isFromCache = false
             $0.prices.isLoading = false
             $0.prices.summary = nil
@@ -305,6 +313,7 @@ struct AppFeatureTests {
         await store.send(.snapshotResponse(.fresh(payload))) {
             $0.rootStatus = .empty
             $0.prices.hourlyPrices = []
+            $0.prices.visibleHourlyPrices = []
             $0.prices.isFromCache = false
             $0.prices.isLoading = false
             $0.prices.summary = nil
@@ -316,7 +325,10 @@ struct AppFeatureTests {
     @Test("AppFeature opens calculation modal when an hourly price is selected")
     func pricesHourTappedPresentsCalculationModal() async {
         let selectedHour = HourlyPrice.mockValue
-        let store = TestStore(initialState: AppFeature.State()) {
+        var initialState = AppFeature.State()
+        initialState.prices.hourlyPrices = [selectedHour]
+        initialState.prices.visibleHourlyPrices = [selectedHour]
+        let store = TestStore(initialState: initialState) {
             AppFeature()
         }
 
@@ -433,6 +445,7 @@ struct AppFeatureTests {
         await store.send(.snapshotResponse(.fresh(payload))) {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = payload.hourlyPrices
+            $0.prices.visibleHourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
             $0.prices.isLoading = false
             $0.prices.summary = nil
@@ -517,7 +530,7 @@ struct AppFeatureTests {
                     date: testNow.addingTimeInterval(7_200),
                     daypart: .morning,
                     eurPerKWh: 0.11
-                ),
+                )
             ],
             summary: nil
         )
@@ -525,6 +538,7 @@ struct AppFeatureTests {
         await store.send(.snapshotResponse(.fresh(payload))) {
             $0.rootStatus = .content
             $0.prices.hourlyPrices = payload.hourlyPrices
+            $0.prices.visibleHourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
             $0.prices.isLoading = false
             $0.prices.summary = nil

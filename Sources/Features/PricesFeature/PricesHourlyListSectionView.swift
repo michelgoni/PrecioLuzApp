@@ -2,8 +2,21 @@ import SwiftUI
 
 struct PricesHourlyListSectionView: View {
     let currentDate: Date?
+    let emptyMessage: LocalizedStringResource
     let hourlyPrices: [HourlyPrice]
     let onHourTapped: (HourlyPrice) -> Void
+
+    init(
+        currentDate: Date?,
+        emptyMessage: LocalizedStringResource = "prices.hourly.empty",
+        hourlyPrices: [HourlyPrice],
+        onHourTapped: @escaping (HourlyPrice) -> Void
+    ) {
+        self.currentDate = currentDate
+        self.emptyMessage = emptyMessage
+        self.hourlyPrices = hourlyPrices
+        self.onHourTapped = onHourTapped
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: PricesViewLayout.hourlyListSpacing) {
@@ -18,7 +31,7 @@ struct PricesHourlyListSectionView: View {
     }
 
     private var emptyState: some View {
-        Text(String(localized: "prices.hourly.empty"))
+        Text(emptyMessage)
             .font(.subheadline)
             .foregroundStyle(.secondary)
             .accessibilityIdentifier("pricesHourlyEmpty")

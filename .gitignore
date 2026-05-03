@@ -13,3 +13,6 @@ Packages/
 # Local secrets
 .env
 .env.*
+
+# Local design scratch
+.superdesign/

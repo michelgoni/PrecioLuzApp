@@ -4,11 +4,20 @@ import Testing
 @testable import PrecioLuzApp
 
 struct PricingClientRealAPIIntegrationTests {
+  @Test("Local scheme env file provides REE_API_KEY when .env exists")
+  func localSchemeEnvFileProvidesAPIKey() {
+    let environment = ProcessInfo.processInfo.environment
+    guard let envFilePath = environment["PRECIOLUZ_ENV_FILE"],
+          FileManager.default.fileExists(atPath: envFilePath) else {
+      return
+    }
+
+    #expect(LocalAPIKeyProvider.apiKey() != nil)
+  }
+
   @Test("ESIOS real API returns non-empty hourly prices for previous day when REE_API_KEY is configured")
   func esiosRealAPIProducesPrices() async throws {
-    let key = ProcessInfo.processInfo.environment["REE_API_KEY"]?.trimmingCharacters(
-      in: .whitespacesAndNewlines
-    )
+    let key = LocalAPIKeyProvider.apiKey()
     guard let key, !key.isEmpty else {
       return
     }

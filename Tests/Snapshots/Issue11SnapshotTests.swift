@@ -146,7 +146,8 @@ private extension PricesFeature.State {
                 maximumHour: prices[2].date,
                 minimum: 0.10,
                 minimumHour: prices[0].date
-            )
+            ),
+            visibleHourlyPrices: prices
         )
     }
 }

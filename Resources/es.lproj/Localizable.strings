@@ -56,6 +56,7 @@
 "prices.calculation.result.title" = "Coste estimado";
 "prices.hourly.current.badge" = "Ahora";
 "prices.hourly.empty" = "No hay precios horarios disponibles";
+"prices.hourly.noRemainingToday" = "No quedan franjas disponibles hoy";
 "prices.hourly.title" = "Precios por hora";
 "prices.summary.average" = "Media";
 "prices.summary.current" = "Actual";

@@ -22,7 +22,10 @@ struct PricesView: View {
 
                     PricesHourlyListSectionView(
                         currentDate: state.summary?.current?.date,
-                        hourlyPrices: state.hourlyPrices,
+                        emptyMessage: state.hourlyPrices.isEmpty
+                            ? "prices.hourly.empty"
+                            : "prices.hourly.noRemainingToday",
+                        hourlyPrices: state.visibleHourlyPrices,
                         onHourTapped: onHourTapped
                     )
                     .padding(.top, PricesViewLayout.sectionSpacing)

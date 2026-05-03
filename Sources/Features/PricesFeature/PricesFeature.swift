@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import Foundation
 
 struct PricesFeature: Reducer {
     @ObservableState
@@ -8,6 +9,7 @@ struct PricesFeature: Reducer {
         var isFromCache = false
         var isLoading = true
         var summary: PriceSummary?
+        var visibleHourlyPrices: [HourlyPrice] = []
     }
 
     enum Action: Equatable {
@@ -16,21 +18,24 @@ struct PricesFeature: Reducer {
         case snapshotLoaded(DailyPricingSnapshotPayload, isCached: Bool)
     }
 
+    @Dependency(\.dateClient) var dateClient
+
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case let .hourTapped(hour):
+                guard state.isVisibleHour(hour) else {
+                    return .none
+                }
                 CostCalculationFeature.State.apply(.hourSelected(hour), to: &state.costCalculation)
                 return .none
 
             case let .snapshotLoaded(payload, isCached):
-                state.hourlyPrices = payload.hourlyPrices
-                state.isFromCache = isCached
-                state.isLoading = false
-                state.summary = payload.summary
-                CostCalculationFeature.State.apply(
-                    .reconcileSelectedHour(payload.hourlyPrices),
-                    to: &state.costCalculation
+                state.applySnapshot(
+                    payload,
+                    isCached: isCached,
+                    now: dateClient.now(),
+                    calendar: dateClient.currentCalendar()
                 )
                 return .none
 
@@ -39,5 +44,42 @@ struct PricesFeature: Reducer {
                 return .none
             }
         }
+    }
+}
+
+extension PricesFeature.State {
+    mutating func applySnapshot(_ payload: DailyPricingSnapshotPayload, isCached: Bool, now: Date, calendar: Calendar) {
+        hourlyPrices = payload.hourlyPrices
+        isFromCache = isCached
+        isLoading = false
+        summary = payload.summary
+        refreshVisibleHours(now: now, calendar: calendar)
+        reconcileSelectedHour()
+    }
+
+    func isVisibleHour(_ hour: HourlyPrice) -> Bool {
+        visibleHourlyPrices.contains { $0.date == hour.date }
+    }
+
+    mutating func refreshVisibleHours(now: Date, calendar: Calendar) {
+        let currentHourStart = calendar.dateInterval(of: .hour, for: now)?.start ?? now
+        visibleHourlyPrices = hourlyPrices.filter { $0.date >= currentHourStart }
+    }
+
+    private mutating func reconcileSelectedHour() {
+        costCalculation.selectedHour = visibleHourlyPrices.first {
+            $0.date == costCalculation.selectedHour?.date
+        }
+        if costCalculation.selectedHour == nil {
+            costCalculation.isPresented = false
+        }
+    }
+}
+
+private extension DateClient {
+    func currentCalendar() -> Calendar {
+        var calendar = calendar()
+        calendar.timeZone = timeZone()
+        return calendar
     }
 }
