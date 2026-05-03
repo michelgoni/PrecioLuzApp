@@ -45,6 +45,7 @@
 		92FBFFE0D2AAE87BCF1EAFC5 /* CostCalculationFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1942F66E100388ADAE896898 /* CostCalculationFeatureTests.swift */; };
 		9B13DE84E95AAB6D55816805 /* PricesFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A349262256B13A6827F96952 /* PricesFeature.swift */; };
 		9B97B0F81D357EC8B3FB0E2A /* ChartDailySeriesCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CD20A78360C41B3821FCCD /* ChartDailySeriesCardView.swift */; };
+		9C765BACC520E486AACA9600 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ACFC1ACFFCB452F8053B28AD /* Assets.xcassets */; };
 		9D1BFB5C87E001509F4A3B7E /* PricesHourlyListSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A349F2AC054DD803DF26D6 /* PricesHourlyListSectionView.swift */; };
 		A24CC7F8FF1B4D7C68C2979C /* SettingsAlertsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C472C577421FFAA1639BEBF /* SettingsAlertsSectionView.swift */; };
 		AE0C627B0ED689EA484A29AA /* Issue10AcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38B1972E86DEC1621A2B365 /* Issue10AcceptanceTests.swift */; };
@@ -140,6 +141,7 @@
 		A349262256B13A6827F96952 /* PricesFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesFeature.swift; sourceTree = "<group>"; };
 		A79D3713AFCF1EB48194466D /* Issue8AcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue8AcceptanceTests.swift; sourceTree = "<group>"; };
 		ACADDCB130E4F2949415F1B1 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		ACFC1ACFFCB452F8053B28AD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C4DFEC270AECA2B51E278782 /* PricesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesView.swift; sourceTree = "<group>"; };
 		C679E8989B60162052A21292 /* SettingsThresholdSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsThresholdSectionView.swift; sourceTree = "<group>"; };
 		D55A21AF9891907D054C7D46 /* ChartFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartFeatureTests.swift; sourceTree = "<group>"; };
@@ -292,6 +294,7 @@
 		957A69449152EB3F501EA7CB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				ACFC1ACFFCB452F8053B28AD /* Assets.xcassets */,
 				ACADDCB130E4F2949415F1B1 /* LaunchScreen.storyboard */,
 				0FB87B5ABC1BB2B2D7C7837C /* Localizable.strings */,
 			);
@@ -541,6 +544,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C765BACC520E486AACA9600 /* Assets.xcassets in Resources */,
 				047E6887D249675B2877C50E /* LaunchScreen.storyboard in Resources */,
 				196585D072C3B209CF086B54 /* Localizable.strings in Resources */,
 			);
@@ -787,6 +791,7 @@
 		A8D0CE691CED97227609137D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = AppIconDark;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Resources/Info.plist;
@@ -868,6 +873,7 @@
 		FB06B89154F5636A17941736 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = AppIconDark;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Resources/Info.plist;
