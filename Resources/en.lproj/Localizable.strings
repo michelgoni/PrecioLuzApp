@@ -56,6 +56,7 @@
 "prices.calculation.result.title" = "Estimated cost";
 "prices.hourly.current.badge" = "Now";
 "prices.hourly.empty" = "No hourly prices available";
+"prices.hourly.noRemainingToday" = "No remaining time slots today";
 "prices.hourly.title" = "Hourly prices";
 "prices.summary.average" = "Average";
 "prices.summary.current" = "Current";

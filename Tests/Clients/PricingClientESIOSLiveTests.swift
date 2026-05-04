@@ -4,6 +4,45 @@ import Testing
 @testable import PrecioLuzApp
 
 struct PricingClientESIOSLiveTests {
+  @Test("Local API key provider reads REE_API_KEY directly from environment")
+  func localAPIKeyProviderReadsEnvironmentValue() {
+    let key = LocalAPIKeyProvider.apiKey(
+      environment: ["REE_API_KEY": " token-value "],
+      readFile: { _ in nil }
+    )
+
+    #expect(key == "token-value")
+  }
+
+  @Test("Local API key provider reads REE_API_KEY from configured env file")
+  func localAPIKeyProviderReadsEnvFile() {
+    let key = LocalAPIKeyProvider.apiKey(
+      environment: ["PRECIOLUZ_ENV_FILE": "/local/.env"],
+      readFile: { path in
+        #expect(path == "/local/.env")
+        return """
+        # Local development secrets
+        \(["REE_API_KEY", "\"file-token\""].joined(separator: "="))
+        """
+      }
+    )
+
+    #expect(key == "file-token")
+  }
+
+  @Test("Local API key provider reads bundled Debug env resource")
+  func localAPIKeyProviderReadsBundledEnvResource() {
+    let key = LocalAPIKeyProvider.apiKey(
+      environment: [:],
+      readFile: { _ in nil },
+      bundledEnvFileContents: {
+        ["REE_API_KEY", "\"bundled-token\""].joined(separator: "=")
+      }
+    )
+
+    #expect(key == "bundled-token")
+  }
+
   @Test("ESIOS client maps PVPC hourly values and converts EUR/MWh to EUR/kWh")
   func mapsHourlyValuesForPeninsula() async throws {
     let day = Date(timeIntervalSince1970: 1_700_000_000)

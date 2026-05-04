@@ -70,6 +70,25 @@ final class PrecioLuzAppUITests: XCTestCase {
     XCTAssertFalse(modalTitle.waitForExistence(timeout: 2))
   }
 
+  func testLiveREEDataLoadsIntoPricesScreenWhenLocalEnvExists() throws {
+    try XCTSkipUnless(localEnvFileExists(), "Local .env is required for live REE UI validation.")
+
+    let app = makeApp()
+    app.launch()
+
+    let hourlyRow = app.buttons.matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "pricesHourlyRow")
+    ).firstMatch
+    XCTAssertTrue(
+      hourlyRow.waitForExistence(timeout: 20),
+      "Expected live REE data to render at least one hourly row. Root status: \(rootStatusDescription(in: app))"
+    )
+    XCTAssertFalse(
+      app.staticTexts["pricesHourlyEmpty"].exists,
+      "Live REE validation must not finish in the hourly empty state."
+    )
+  }
+
   func testChartTabDoesNotPresentCalculationModal() throws {
     let app = makeApp()
     app.launch()
@@ -156,6 +175,21 @@ final class PrecioLuzAppUITests: XCTestCase {
     let app = XCUIApplication()
     app.launchArguments += ["-AppleLanguages", "(es)", "-AppleLocale", "es_ES"]
     return app
+  }
+
+  private func localEnvFileExists() -> Bool {
+    guard let envFilePath = ProcessInfo.processInfo.environment["PRECIOLUZ_ENV_FILE"] else {
+      return false
+    }
+    return FileManager.default.fileExists(atPath: envFilePath)
+  }
+
+  private func rootStatusDescription(in app: XCUIApplication) -> String {
+    let statusLabel = app.staticTexts["appRootStatusLabel"]
+    guard statusLabel.exists else {
+      return "content"
+    }
+    return statusLabel.label
   }
 
   private func staticText(in app: XCUIApplication, names: [String]) -> XCUIElement {

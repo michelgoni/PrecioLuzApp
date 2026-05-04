@@ -34,13 +34,7 @@ enum PricingClientError: Error, Equatable, Sendable {
 extension PricingClient {
   static func esiosLive(
     apiKeyProvider: @escaping @Sendable () -> String? = {
-      let envValue = ProcessInfo.processInfo.environment["REE_API_KEY"]?.trimmingCharacters(
-        in: .whitespacesAndNewlines
-      )
-      if let envValue, !envValue.isEmpty {
-        return envValue
-      }
-      return nil
+      LocalAPIKeyProvider.apiKey()
     },
     fetcher: @escaping @Sendable (URLRequest) async throws -> (Data, URLResponse) = { request in
       try await URLSession.shared.data(for: request)
@@ -54,6 +48,62 @@ extension PricingClient {
         fetcher: fetcher
       )
     }
+  }
+}
+
+enum LocalAPIKeyProvider {
+  private static let bundledEnvResourceName = "PrecioLuzLocal"
+  private static let bundledEnvResourceExtension = "env"
+
+  static func apiKey(
+    environment: [String: String] = ProcessInfo.processInfo.environment,
+    readFile: (String) -> String? = { try? String(contentsOfFile: $0, encoding: .utf8) },
+    bundledEnvFileContents: () -> String? = {
+      guard let url = Bundle.main.url(
+        forResource: bundledEnvResourceName,
+        withExtension: bundledEnvResourceExtension
+      ) else {
+        return nil
+      }
+      return try? String(contentsOf: url, encoding: .utf8)
+    }
+  ) -> String? {
+    if let apiKey = normalizedValue(environment["REE_API_KEY"]) {
+      return apiKey
+    }
+    if let envFilePath = normalizedValue(environment["PRECIOLUZ_ENV_FILE"]),
+       let apiKey = apiKey(fromEnvFileContents: readFile(envFilePath) ?? "") {
+      return apiKey
+    }
+    return apiKey(fromEnvFileContents: bundledEnvFileContents() ?? "")
+  }
+
+  static func apiKey(fromEnvFileContents contents: String) -> String? {
+    contents
+      .split(whereSeparator: \.isNewline)
+      .compactMap { line -> String? in
+        let trimmedLine = line.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedLine.hasPrefix("#") else {
+          return nil
+        }
+        let parts = trimmedLine.split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
+        guard parts.count == 2,
+              parts[0].trimmingCharacters(in: .whitespacesAndNewlines) == "REE_API_KEY" else {
+          return nil
+        }
+        return normalizedValue(String(parts[1]))
+      }
+      .first ?? nil
+  }
+
+  private static func normalizedValue(_ value: String?) -> String? {
+    let normalizedValue = value?
+      .trimmingCharacters(in: .whitespacesAndNewlines)
+      .trimmingCharacters(in: CharacterSet(charactersIn: "\"'"))
+    guard let normalizedValue, !normalizedValue.isEmpty else {
+      return nil
+    }
+    return normalizedValue
   }
 }
 

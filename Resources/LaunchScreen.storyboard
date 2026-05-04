@@ -4,7 +4,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23620"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -15,30 +14,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="T9K-7r-z0q">
-                                <rect key="frame" x="111.66666666666669" y="422.33333333333331" width="207" height="88"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="bolt.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="JWp-I2-rxD">
-                                        <rect key="frame" x="0.0" y="0.0" width="207" height="36"/>
-                                        <color key="tintColor" red="0.0" green="0.47843137250000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="36" id="dA9-7J-ZVX"/>
-                                        </constraints>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="PrecioLuzApp" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TSr-37-mQk">
-                                        <rect key="frame" x="0.0" y="52" width="207" height="36"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
-                                        <color key="textColor" systemColor="labelColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                            </stackView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="SplashLogo" translatesAutoresizingMaskIntoConstraints="NO" id="Ayh-1L-nB5">
+                                <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <constraints>
-                            <constraint firstItem="T9K-7r-z0q" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="KJR-i0-C1w"/>
-                            <constraint firstItem="T9K-7r-z0q" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="qvR-iw-2vQ"/>
+                            <constraint firstItem="Ayh-1L-nB5" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="1mm-XF-1z3"/>
+                            <constraint firstAttribute="trailing" secondItem="Ayh-1L-nB5" secondAttribute="trailing" id="A8c-f9-JxR"/>
+                            <constraint firstItem="Ayh-1L-nB5" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="DR7-dw-Erk"/>
+                            <constraint firstAttribute="bottom" secondItem="Ayh-1L-nB5" secondAttribute="bottom" id="ajR-U0-C8i"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -48,10 +33,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bolt.fill" catalog="system" width="128" height="115"/>
-        <systemColor name="labelColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
+        <image name="SplashLogo" width="375" height="812"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

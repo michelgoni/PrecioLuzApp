@@ -12,7 +12,7 @@ struct Issue8AcceptanceTests {
       prices: [
         Self.makeHourlyPrice(hourOffset: 0, price: 0.10),
         Self.makeHourlyPrice(hourOffset: 1, price: 0.20),
-        Self.makeHourlyPrice(hourOffset: 2, price: 0.30),
+        Self.makeHourlyPrice(hourOffset: 2, price: 0.30)
       ]
     )
     let selectedHour = payload.hourlyPrices[1]
@@ -22,6 +22,7 @@ struct Issue8AcceptanceTests {
 
     await store.send(.snapshotResponse(.fresh(payload))) {
       $0.prices.hourlyPrices = payload.hourlyPrices
+            $0.prices.visibleHourlyPrices = payload.hourlyPrices
       $0.prices.isFromCache = false
             $0.prices.isLoading = false
       $0.prices.summary = payload.summary
@@ -60,14 +61,14 @@ struct Issue8AcceptanceTests {
     let firstPayload = Self.makePayload(
       prices: [
         Self.makeHourlyPrice(hourOffset: 0, price: 0.10),
-        Self.makeHourlyPrice(hourOffset: 1, price: 0.20),
+        Self.makeHourlyPrice(hourOffset: 1, price: 0.20)
       ]
     )
     let selectedHour = firstPayload.hourlyPrices[1]
     let refreshedPayload = Self.makePayload(
       prices: [
         Self.makeHourlyPrice(hourOffset: 3, price: 0.15),
-        Self.makeHourlyPrice(hourOffset: 4, price: 0.25),
+        Self.makeHourlyPrice(hourOffset: 4, price: 0.25)
       ]
     )
     let store = TestStore(initialState: AppFeature.State()) {
@@ -76,6 +77,7 @@ struct Issue8AcceptanceTests {
 
     await store.send(.snapshotResponse(.fresh(firstPayload))) {
       $0.prices.hourlyPrices = firstPayload.hourlyPrices
+            $0.prices.visibleHourlyPrices = firstPayload.hourlyPrices
       $0.prices.isFromCache = false
             $0.prices.isLoading = false
       $0.prices.summary = firstPayload.summary
@@ -94,6 +96,7 @@ struct Issue8AcceptanceTests {
 
     await store.send(.snapshotResponse(.fresh(refreshedPayload))) {
       $0.prices.hourlyPrices = refreshedPayload.hourlyPrices
+            $0.prices.visibleHourlyPrices = refreshedPayload.hourlyPrices
       $0.prices.isFromCache = false
             $0.prices.isLoading = false
       $0.prices.costCalculation.isPresented = false

@@ -38,6 +38,7 @@ struct Issue11AcceptanceTests {
             $0.prices.costCalculation.isPresented = false
             $0.prices.costCalculation.selectedHour = nil
             $0.prices.hourlyPrices = payload.hourlyPrices
+            $0.prices.visibleHourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = true
             $0.prices.isLoading = false
             $0.prices.summary = payload.summary
@@ -62,6 +63,7 @@ struct Issue11AcceptanceTests {
 
         await store.send(.snapshotResponse(.fresh(payload))) {
             $0.prices.hourlyPrices = payload.hourlyPrices
+            $0.prices.visibleHourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
             $0.prices.isLoading = false
             $0.prices.summary = payload.summary

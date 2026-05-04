@@ -64,6 +64,16 @@ The project documentation currently defines this stack:
 - `The Composable Architecture`
 - `sqlite-data`
 
+## 🔐 Local REE/ESIOS API key
+
+Real REE/ESIOS data is loaded from the local `REE_API_KEY` secret. The key must not be committed.
+
+For local development, create a repo-root `.env` file and add the `REE_API_KEY` entry with your local token.
+
+The shared Xcode scheme only stores `PRECIOLUZ_ENV_FILE=$(SRCROOT)/.env`, which is a non-secret path. Unit tests read that local file when the variable is not already present in the process environment.
+
+For simulator Debug app runs, XcodeGen config copies the local `.env` into the built app bundle as `PrecioLuzLocal.env`. That generated bundle resource is local build output only; it is not tracked and is removed for non-Debug configurations.
+
 ## 🚧 Current status
 
 Roadmap implementation is currently delivered through `Milestone 8` at local-repo level:

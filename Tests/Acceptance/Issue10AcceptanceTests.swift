@@ -14,7 +14,7 @@ struct Issue10AcceptanceTests {
             prices: [
                 Self.makeHourlyPrice(hourOffset: 1, price: 0.11),
                 Self.makeHourlyPrice(hourOffset: 2, price: 0.19),
-                Self.makeHourlyPrice(hourOffset: 3, price: 0.23),
+                Self.makeHourlyPrice(hourOffset: 3, price: 0.23)
             ]
         )
 
@@ -34,6 +34,7 @@ struct Issue10AcceptanceTests {
 
         await store.send(.snapshotResponse(.fresh(payload))) {
             $0.prices.hourlyPrices = payload.hourlyPrices
+            $0.prices.visibleHourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
             $0.prices.isLoading = false
             $0.prices.summary = payload.summary
@@ -70,7 +71,7 @@ struct Issue10AcceptanceTests {
         let payload = Self.makePayload(
             prices: [
                 Self.makeHourlyPrice(hourOffset: 1, price: 0.11),
-                Self.makeHourlyPrice(hourOffset: 2, price: 0.19),
+                Self.makeHourlyPrice(hourOffset: 2, price: 0.19)
             ]
         )
 
@@ -91,6 +92,7 @@ struct Issue10AcceptanceTests {
 
         await store.send(.snapshotResponse(.fresh(payload))) {
             $0.prices.hourlyPrices = payload.hourlyPrices
+            $0.prices.visibleHourlyPrices = payload.hourlyPrices
             $0.prices.isFromCache = false
             $0.prices.isLoading = false
             $0.prices.summary = payload.summary

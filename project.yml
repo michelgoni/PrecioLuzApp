@@ -39,6 +39,8 @@ targets:
       base:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: AppIconDark
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: R55L2F35DV
         PRODUCT_BUNDLE_IDENTIFIER: com.michelgoni.PrecioLuzApp
         INFOPLIST_FILE: Resources/Info.plist
         TARGETED_DEVICE_FAMILY: "1"
@@ -53,6 +55,18 @@ targets:
         product: Perception
       - package: SQLiteData
         product: SQLiteData
+    postBuildScripts:
+      - name: Copy Local Debug Secrets
+        outputFiles:
+          - $(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/PrecioLuzLocal.env
+        script: |
+          LOCAL_ENV_FILE="${SRCROOT}/.env"
+          BUNDLED_ENV_FILE="${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/PrecioLuzLocal.env"
+          rm -f "$BUNDLED_ENV_FILE"
+
+          if [ "$CONFIGURATION" = "Debug" ] && [ -f "$LOCAL_ENV_FILE" ]; then
+            cp "$LOCAL_ENV_FILE" "$BUNDLED_ENV_FILE"
+          fi
 
   PrecioLuzAppTests:
     type: bundle.unit-test
@@ -81,3 +95,22 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
     dependencies:
       - target: PrecioLuzApp
+
+schemes:
+  PrecioLuzApp:
+    build:
+      targets:
+        PrecioLuzApp: all
+        PrecioLuzAppTests: [test]
+        PrecioLuzAppUITests: [test]
+    run:
+      config: Debug
+      environmentVariables:
+        PRECIOLUZ_ENV_FILE: $(SRCROOT)/.env
+    test:
+      config: Debug
+      targets:
+        - name: PrecioLuzAppTests
+        - name: PrecioLuzAppUITests
+      environmentVariables:
+        PRECIOLUZ_ENV_FILE: $(SRCROOT)/.env
