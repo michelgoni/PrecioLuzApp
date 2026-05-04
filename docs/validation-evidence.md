@@ -88,3 +88,15 @@
   - `PrecioLuzAppUITests`: OK (`7 tests`, `0 failures`)
 - Evidencia visual final:
   - [docs/evidence-issue11-11D-final.png](/Users/michelgoni/Documents/repos/PrecioLuzApp/docs/evidence-issue11-11D-final.png)
+
+## Issue #33 — Today Summary Icons
+- Scope:
+  - iconography added to Today summary cards (`average`, `current`, `maximum`, `minimum`) using SF Symbols.
+  - consistent icon/text alignment and spacing in summary cards.
+  - accessibility combined per card (`icon + title + value`) with stable card identifiers.
+- Validation:
+  - `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17' test -only-testing:PrecioLuzAppTests`
+  - snapshot reference updated for summary UI:
+    - `Tests/Snapshots/__Snapshots__/Issue11SnapshotTests/pricesContent.1.png`
+- Evidence:
+  - [docs/evidence-issue33-today-summary-icons.png](/Users/michelgoni/Documents/repos/PrecioLuzApp/docs/evidence-issue33-today-summary-icons.png)
