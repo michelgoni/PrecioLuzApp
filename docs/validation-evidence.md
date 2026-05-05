@@ -100,3 +100,14 @@
     - `Tests/Snapshots/__Snapshots__/Issue11SnapshotTests/pricesContent.1.png`
 - Evidence:
   - [docs/evidence-issue33-today-summary-icons.png](/Users/michelgoni/Documents/repos/PrecioLuzApp/docs/evidence-issue33-today-summary-icons.png)
+
+## Issue #34 — Settings Icons Alignment
+- Scope:
+  - iconography aligned to SuperDesign in Settings rows (`notifications`, `daily minimum`, `daily maximum`, `custom threshold`, `threshold value`, `threshold stepper`) with circular semantic color containers.
+  - shared row icon component introduced to keep icon size, spacing and alignment consistent across all settings items.
+  - denied-permissions section updated to the same visual language (semantic warning icon in circular container + settings CTA).
+- Validation:
+  - `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17' test -only-testing:PrecioLuzAppUITests/PrecioLuzAppUITests/testSettingsTabSmokeInteractionsAreStable`
+  - `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17' test -only-testing:PrecioLuzAppTests/SettingsFeatureTests`
+- Evidence:
+  - [docs/evidence-issue34-settings-icons.png](/Users/michelgoni/Documents/repos/PrecioLuzApp/docs/evidence-issue34-settings-icons.png)

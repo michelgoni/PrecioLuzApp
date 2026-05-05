@@ -7,18 +7,24 @@ struct SettingsAlertsSectionView: View {
 
     var body: some View {
         Section {
-            Toggle(
-                String(localized: "settings.notifications.minimum.title"),
-                isOn: notifyDailyMinimumBinding
-            )
+            Toggle(isOn: notifyDailyMinimumBinding) {
+                SettingsRowLabel(
+                    systemImage: "chart.line.downtrend.xyaxis",
+                    title: String(localized: "settings.notifications.minimum.title"),
+                    iconTint: .green
+                )
+            }
             .accessibilityIdentifier("settingsNotifyDailyMinimumToggle")
             .tint(notificationsEnabled ? .green : .gray)
             .disabled(!notificationsEnabled)
 
-            Toggle(
-                String(localized: "settings.notifications.maximum.title"),
-                isOn: notifyDailyMaximumBinding
-            )
+            Toggle(isOn: notifyDailyMaximumBinding) {
+                SettingsRowLabel(
+                    systemImage: "chart.line.uptrend.xyaxis",
+                    title: String(localized: "settings.notifications.maximum.title"),
+                    iconTint: .red
+                )
+            }
             .accessibilityIdentifier("settingsNotifyDailyMaximumToggle")
             .tint(notificationsEnabled ? .green : .gray)
             .disabled(!notificationsEnabled)

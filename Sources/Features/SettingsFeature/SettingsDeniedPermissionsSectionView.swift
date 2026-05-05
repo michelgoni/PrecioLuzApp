@@ -6,13 +6,27 @@ struct SettingsDeniedPermissionsSectionView: View {
 
     var body: some View {
         Section {
-            Text(String(localized: "settings.notifications.permissions.denied.message"))
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            Button(String(localized: "settings.notifications.permissions.openSettings.button")) {
+            HStack(alignment: .top, spacing: SettingsDeniedPermissionsLayout.messageSpacing) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: SettingsDeniedPermissionsLayout.iconSize, weight: .semibold))
+                    .foregroundStyle(.orange)
+                    .frame(width: SettingsDeniedPermissionsLayout.iconCircle, height: SettingsDeniedPermissionsLayout.iconCircle)
+                    .background(Color.orange.opacity(0.16), in: Circle())
+                Text(String(localized: "settings.notifications.permissions.denied.message"))
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            Button {
                 onOpenSystemSettingsTapped()
                 openSystemSettings()
+            } label: {
+                Label(
+                    String(localized: "settings.notifications.permissions.openSettings.button"),
+                    systemImage: "gearshape"
+                )
             }
+            .buttonStyle(.bordered)
+            .controlSize(.small)
             .accessibilityIdentifier("settingsOpenSystemSettingsButton")
         }
     }
@@ -23,4 +37,10 @@ struct SettingsDeniedPermissionsSectionView: View {
         }
         openURL(settingsURL)
     }
+}
+
+private enum SettingsDeniedPermissionsLayout {
+    static let iconCircle: CGFloat = 24
+    static let iconSize: CGFloat = 12
+    static let messageSpacing: CGFloat = 8
 }

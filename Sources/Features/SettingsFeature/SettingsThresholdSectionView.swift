@@ -9,16 +9,23 @@ struct SettingsThresholdSectionView: View {
 
     var body: some View {
         Section {
-            Toggle(
-                String(localized: "settings.threshold.enabled.title"),
-                isOn: customThresholdEnabledBinding
-            )
+            Toggle(isOn: customThresholdEnabledBinding) {
+                SettingsRowLabel(
+                    systemImage: "slider.horizontal.3",
+                    title: String(localized: "settings.threshold.enabled.title"),
+                    iconTint: .orange
+                )
+            }
             .accessibilityIdentifier("settingsCustomThresholdEnabledToggle")
             .tint(notificationsEnabled ? .green : .gray)
             .disabled(!notificationsEnabled)
 
             HStack {
-                Text(String(localized: "settings.threshold.value.title"))
+                SettingsRowLabel(
+                    systemImage: "eurosign",
+                    title: String(localized: "settings.threshold.value.title"),
+                    iconTint: .teal
+                )
                 Spacer()
                 Text(customThresholdValue)
                     .foregroundStyle(.secondary)
@@ -26,11 +33,16 @@ struct SettingsThresholdSectionView: View {
             }
 
             Stepper(
-                String(localized: "settings.threshold.stepper.title"),
                 value: customThresholdBinding,
                 in: SettingsFeature.State.minimumThresholdEURPerKWh...SettingsFeature.State.maximumThresholdEURPerKWh,
                 step: SettingsFeature.State.thresholdStepEURPerKWh
-            )
+            ) {
+                SettingsRowLabel(
+                    systemImage: "slider.horizontal.below.square.and.square.filled",
+                    title: String(localized: "settings.threshold.stepper.title"),
+                    iconTint: .indigo
+                )
+            }
             .accessibilityIdentifier("settingsThresholdStepper")
             .disabled(!thresholdControlEnabled)
         } header: {
