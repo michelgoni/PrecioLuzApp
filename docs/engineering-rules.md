@@ -139,6 +139,9 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - mantener tests de aceptación en flujo integrado y tests unitarios en lógica puntual.
 
 ## Validación mínima obligatoria
+- Regla de cierre (bloqueante):
+  - queda prohibido marcar una tarea como `validada`, `done` o equivalente sin ejecutar `xcodebuild ... test` del scheme principal y obtener resultado global en verde (0 fallos).
+  - ejecutar solo tests parciales (`-only-testing`) no autoriza el cierre de tarea; esos tests parciales solo complementan el diagnóstico.
 - Destino de simulador por defecto (obligatorio):
   - usar `iPhone 17` como destino estándar en validaciones locales (`build`, `test`, `UI smoke`) mientras no se defina otro baseline de dispositivo en la documentación del proyecto;
   - no usar `iPhone 16` como destino por defecto;

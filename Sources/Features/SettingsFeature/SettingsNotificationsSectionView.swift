@@ -7,7 +7,7 @@ struct SettingsNotificationsSectionView: View {
         Section {
             Toggle(isOn: notificationsEnabledBinding) {
                 SettingsRowLabel(
-                    systemImage: "bell.ring.fill",
+                    systemImage: "bell.badge.fill",
                     title: String(localized: "settings.notifications.enabled.title"),
                     iconTint: .blue
                 )
