@@ -42,6 +42,7 @@ struct SettingsRowLabel: View {
                 .foregroundStyle(iconTint.symbol)
                 .frame(width: SettingsRowLabelLayout.iconCircle, height: SettingsRowLabelLayout.iconCircle)
                 .background(iconTint.background, in: Circle())
+                .accessibilityHidden(true)
             Text(title)
         }
     }
