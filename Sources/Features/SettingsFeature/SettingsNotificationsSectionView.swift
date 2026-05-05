@@ -5,10 +5,13 @@ struct SettingsNotificationsSectionView: View {
 
     var body: some View {
         Section {
-            Toggle(
-                String(localized: "settings.notifications.enabled.title"),
-                isOn: notificationsEnabledBinding
-            )
+            Toggle(isOn: notificationsEnabledBinding) {
+                SettingsRowLabel(
+                    systemImage: "bell.badge.fill",
+                    title: String(localized: "settings.notifications.enabled.title"),
+                    iconTint: .blue
+                )
+            }
             .accessibilityIdentifier("settingsNotificationsEnabledToggle")
             .tint(.green)
         } footer: {
