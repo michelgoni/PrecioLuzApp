@@ -168,6 +168,7 @@ struct PricesFeatureTests {
             $0.visibleHourlyPrices = []
         }
     }
+
 }
 
 private extension DailyPricingSnapshotPayload {

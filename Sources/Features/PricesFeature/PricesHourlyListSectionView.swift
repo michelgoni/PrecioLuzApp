@@ -1,19 +1,27 @@
 import SwiftUI
 
 struct PricesHourlyListSectionView: View {
+    struct HourlyPriceSection: Equatable {
+        var dayStart: Date
+        var hourlyPrices: [HourlyPrice]
+    }
+
     let currentDate: Date?
     let emptyMessage: LocalizedStringResource
+    let hourlyListPresentationMode: PricesFeature.State.HourlyListPresentationMode
     let hourlyPrices: [HourlyPrice]
     let onHourTapped: (HourlyPrice) -> Void
 
     init(
         currentDate: Date?,
         emptyMessage: LocalizedStringResource = "prices.hourly.empty",
+        hourlyListPresentationMode: PricesFeature.State.HourlyListPresentationMode,
         hourlyPrices: [HourlyPrice],
         onHourTapped: @escaping (HourlyPrice) -> Void
     ) {
         self.currentDate = currentDate
         self.emptyMessage = emptyMessage
+        self.hourlyListPresentationMode = hourlyListPresentationMode
         self.hourlyPrices = hourlyPrices
         self.onHourTapped = onHourTapped
     }
@@ -25,7 +33,15 @@ struct PricesHourlyListSectionView: View {
             if hourlyPrices.isEmpty {
                 emptyState
             } else {
-                hourlyRows
+                if hourlyListPresentationMode == .flatWithAvailabilityNotice {
+                    nextDayAvailabilityNotice
+                }
+                switch hourlyListPresentationMode {
+                case .flatWithAvailabilityNotice:
+                    hourlyRows(hourlyPrices, rowAccessibilityPrefix: "pricesHourlyRow")
+                case .withDateHeaders:
+                    sectionedHourlyRows
+                }
             }
         }
     }
@@ -37,9 +53,9 @@ struct PricesHourlyListSectionView: View {
             .accessibilityIdentifier("pricesHourlyEmpty")
     }
 
-    private var hourlyRows: some View {
+    private func hourlyRows(_ rows: [HourlyPrice], rowAccessibilityPrefix: String) -> some View {
         VStack(spacing: PricesViewLayout.hourlyListSpacing) {
-            ForEach(Array(hourlyPrices.enumerated()), id: \.element.date) { index, hourlyPrice in
+            ForEach(Array(rows.enumerated()), id: \.element.date) { index, hourlyPrice in
                 Button {
                     onHourTapped(hourlyPrice)
                 } label: {
@@ -49,9 +65,41 @@ struct PricesHourlyListSectionView: View {
                     )
                 }
                 .buttonStyle(.plain)
-                .accessibilityIdentifier("pricesHourlyRow\(index)")
+                .accessibilityIdentifier("\(rowAccessibilityPrefix)\(index)")
             }
         }
+    }
+
+    private var sectionedHourlyRows: some View {
+        let sections = makeSections(from: hourlyPrices)
+        return VStack(alignment: .leading, spacing: PricesViewLayout.sectionSpacing) {
+            ForEach(Array(sections.enumerated()), id: \.element.dayStart) { index, section in
+                VStack(alignment: .leading, spacing: PricesViewLayout.hourlyListSpacing) {
+                    Text(PricesViewFormatting.dayHeader(section.dayStart))
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                        .accessibilityIdentifier("pricesHourlyHeader\(index)")
+
+                    hourlyRows(section.hourlyPrices, rowAccessibilityPrefix: "pricesHourlySection\(index)Row")
+                }
+                .accessibilityIdentifier("pricesHourlySection\(index)")
+            }
+        }
+    }
+
+    private var nextDayAvailabilityNotice: some View {
+        Text(String(localized: "prices.hourly.nextDayAvailableAfter2030"))
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+            .accessibilityIdentifier("pricesHourlyNextDayNotice")
+    }
+
+    private func makeSections(from prices: [HourlyPrice]) -> [HourlyPriceSection] {
+        let calendar = Calendar(identifier: .gregorian)
+        let grouped = Dictionary(grouping: prices) { calendar.startOfDay(for: $0.date) }
+        return grouped
+            .map { HourlyPriceSection(dayStart: $0.key, hourlyPrices: $0.value.sorted { $0.date < $1.date }) }
+            .sorted { $0.dayStart < $1.dayStart }
     }
 
     private var sectionTitle: some View {

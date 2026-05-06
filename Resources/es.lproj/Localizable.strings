@@ -57,6 +57,7 @@
 "prices.hourly.current.badge" = "Ahora";
 "prices.hourly.empty" = "No hay precios horarios disponibles";
 "prices.hourly.noRemainingToday" = "No quedan franjas disponibles hoy";
+"prices.hourly.nextDayAvailableAfter2030" = "Los precios del día siguiente estarán disponibles a partir de las 20:30";
 "prices.hourly.title" = "Precios por hora";
 "prices.summary.average" = "Media";
 "prices.summary.current" = "Actual";

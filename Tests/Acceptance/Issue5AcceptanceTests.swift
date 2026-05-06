@@ -52,11 +52,11 @@ struct Issue5AcceptanceTests {
     let expectedCost = currentHour.eurPerKWh * preset.powerKW * 1.5
     let epsilon = 0.000_001
 
-    #expect(payload.hourlyPrices.count == 24)
+    #expect(payload.hourlyPrices.count == 48)
     #expect(payload.summary != nil)
     #expect(abs(cost.estimatedCostEUR - expectedCost) < epsilon)
     #expect(await recorder.loadCount == 0)
-    #expect(await recorder.savedSnapshots.count == 1)
+    #expect(await recorder.savedSnapshots.count == 2)
     #expect(await recorder.pruneCalls == [30])
   }
 
@@ -137,7 +137,7 @@ struct Issue5AcceptanceTests {
 
     #expect(payload.dayStart == dayStart)
     #expect(payload.summary != nil)
-    #expect(await recorder.loadCount == 1)
+    #expect(await recorder.loadCount == 2)
     #expect(await recorder.savedSnapshots.isEmpty)
     #expect(await recorder.pruneCalls.isEmpty)
   }

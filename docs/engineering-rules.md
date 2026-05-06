@@ -139,6 +139,11 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - mantener tests de aceptación en flujo integrado y tests unitarios en lógica puntual.
 
 ## Validación mínima obligatoria
+- Regla de evidencia de compilación por cambio (bloqueante):
+  - cada modificación de código debe quedar validada con una compilación posterior al último edit de ese archivo;
+  - queda prohibido declarar un cambio como `hecho`, `validado` o equivalente si no existe un `BUILD SUCCEEDED` o `TEST SUCCEEDED` obtenido después de la última edición;
+  - no se aceptan validaciones previas al último patch ni validaciones de otro scope;
+  - si falla compilación, el estado obligatorio es `blocked` hasta corregirlo.
 - Regla de cierre (bloqueante):
   - queda prohibido marcar una tarea como `validada`, `done` o equivalente sin ejecutar `xcodebuild ... test` del scheme principal y obtener resultado global en verde (0 fallos).
   - ejecutar solo tests parciales (`-only-testing`) no autoriza el cierre de tarea; esos tests parciales solo complementan el diagnóstico.
@@ -241,6 +246,10 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - `build` + tests de lógica del scope tocado;
   - `UI smoke tests` cuando aplique por wiring/flujo visible;
   - evidencia visual versionada (screenshot o preview documentada con limitación explícita).
+- Antes de reportar un mini incremento como cerrado:
+  - ejecutar validación final de compilación/tests después del último cambio aplicado;
+  - incluir en el resumen el comando ejecutado y su resultado literal (`BUILD SUCCEEDED` o `TEST SUCCEEDED`);
+  - si no hay resultado literal de éxito, el incremento no puede marcarse como terminado.
 - En cualquier mini incremento con código, el checkpoint queda bloqueado si falla la compilación de cualquier target del scheme principal (`app`, `tests` unitarios o `UI tests`).
 - Si no existe proyecto Xcode todavía, ejecutar lo que sí esté disponible y reportar explícitamente la limitación restante.
 - Si `SwiftLint` no está instalado, tratar la validación como incompleta hasta instalarlo o dejar el bloqueo documentado.

@@ -11,6 +11,9 @@ struct Issue11SnapshotTests {
         let environment = ProcessInfo.processInfo.environment
         return environment["CI"] == "true" || environment["GITHUB_ACTIONS"] == "true"
     }()
+    private let shouldRecordSnapshots: Bool = {
+        ProcessInfo.processInfo.environment["SNAPSHOT_TESTING_RECORD"] == "1"
+    }()
     private let snapshotLocale = Locale(identifier: "es_ES")
     private let snapshotTimeZone = TimeZone(identifier: "Europe/Madrid") ?? .gmt
 
@@ -27,14 +30,7 @@ struct Issue11SnapshotTests {
         .padding()
         .background(Color(.systemBackground))
 
-        assertSnapshot(
-            of: applySnapshotEnvironment(to: container),
-            as: .image(
-                precision: 0.99,
-                perceptualPrecision: 0.98,
-                layout: .device(config: .iPhoneSe)
-            )
-        )
+        assertIssue11Snapshot(of: applySnapshotEnvironment(to: container))
     }
 
     @Test("Snapshot #11: prices summary and hourly list remain visually stable")
@@ -47,14 +43,7 @@ struct Issue11SnapshotTests {
             state: .snapshotContent
         )
 
-        assertSnapshot(
-            of: applySnapshotEnvironment(to: view),
-            as: .image(
-                precision: 0.99,
-                perceptualPrecision: 0.98,
-                layout: .device(config: .iPhoneSe)
-            )
-        )
+        assertIssue11Snapshot(of: applySnapshotEnvironment(to: view))
     }
 
     @Test("Snapshot #11: settings denied and authorized states remain visually stable")
@@ -95,20 +84,33 @@ struct Issue11SnapshotTests {
         .padding()
         .background(Color(.systemBackground))
 
-        assertSnapshot(
-            of: applySnapshotEnvironment(to: container),
-            as: .image(
-                precision: 0.99,
-                perceptualPrecision: 0.98,
-                layout: .device(config: .iPhoneSe)
-            )
-        )
+        assertIssue11Snapshot(of: applySnapshotEnvironment(to: container))
     }
 
     private func applySnapshotEnvironment<Content: View>(to view: Content) -> some View {
         view
             .environment(\.locale, snapshotLocale)
             .environment(\.timeZone, snapshotTimeZone)
+    }
+
+    private func assertIssue11Snapshot<Content: View>(of view: Content) {
+        let assertion = {
+            assertSnapshot(
+                of: view,
+                as: .image(
+                    precision: 0.99,
+                    perceptualPrecision: 0.98,
+                    layout: .device(config: .iPhoneSe)
+                )
+            )
+        }
+        if shouldRecordSnapshots {
+            withSnapshotTesting(record: .all) {
+                assertion()
+            }
+        } else {
+            assertion()
+        }
     }
 }
 

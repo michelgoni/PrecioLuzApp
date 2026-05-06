@@ -49,8 +49,8 @@ final class PrecioLuzAppUITests: XCTestCase {
     let app = makeApp()
     app.launch()
 
-    let hourlyRow = app.buttons["pricesHourlyRow0"]
-    if !hourlyRow.waitForExistence(timeout: 5) {
+    let hourlyRow = firstHourlyRow(in: app)
+    if !hourlyRow.waitForExistence(timeout: 8) {
       let emptyState = app.staticTexts["pricesHourlyEmpty"]
       if emptyState.waitForExistence(timeout: 2) {
         throw XCTSkip("No hourly prices available in current live dataset.")
@@ -77,7 +77,11 @@ final class PrecioLuzAppUITests: XCTestCase {
     app.launch()
 
     let hourlyRow = app.buttons.matching(
-      NSPredicate(format: "identifier BEGINSWITH %@", "pricesHourlyRow")
+      NSPredicate(
+        format: "identifier BEGINSWITH %@ OR identifier BEGINSWITH %@",
+        "pricesHourlyRow",
+        "pricesHourlySection"
+      )
     ).firstMatch
     XCTAssertTrue(
       hourlyRow.waitForExistence(timeout: 20),
@@ -220,5 +224,15 @@ final class PrecioLuzAppUITests: XCTestCase {
       }
     }
     return app.buttons[names[0]]
+  }
+
+  private func firstHourlyRow(in app: XCUIApplication) -> XCUIElement {
+    app.buttons.matching(
+      NSPredicate(
+        format: "identifier BEGINSWITH %@ OR identifier BEGINSWITH %@",
+        "pricesHourlyRow",
+        "pricesHourlySection"
+      )
+    ).firstMatch
   }
 }

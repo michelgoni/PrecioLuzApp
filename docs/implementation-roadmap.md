@@ -154,6 +154,21 @@ Convert the documentation-first repository into a production-ready native iPhone
 - ampliar cobertura de tests (incluyendo expansión de snapshots visuales y `UI E2E` sobre baseline smoke)
 - validar simulador y CI antes de merge por PR
 
+#### Incremento 40.7 — Headers anclados en listado de precios (Issue #40)
+- tipo: técnico UI (mini incremento)
+- objetivo:
+  - reproducir comportamiento tipo UIKit de cabeceras ancladas al hacer scroll en el listado horario
+- alcance:
+  - migrar el contenedor del listado desde `ScrollView + VStack` a variante SwiftUI con cabeceras fijadas (`LazyVStack(pinnedViews: [.sectionHeaders])` con `Section`)
+  - mantener estructura actual de secciones por fecha (hoy/mañana) y accesibilidad existente
+  - conservar el modo de lista plana sin cabeceras sin regresión funcional
+- validación obligatoria:
+  - `build` del scheme principal en `iPhone 17`
+  - tests del scope tocado en verde
+  - evidencia visual versionada mostrando cabecera fija en scroll
+- regla de ejecución:
+  - no se cierra el incremento sin evidencia visual real + resultado literal `BUILD SUCCEEDED` o `TEST SUCCEEDED`
+
 #### Incremento 11.0 — Contrato QA de cierre (documental)
 - tipo: documental (sin código app)
 - issue objetivo: `#11`
