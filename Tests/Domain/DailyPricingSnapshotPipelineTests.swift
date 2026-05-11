@@ -277,6 +277,62 @@ struct DailyPricingSnapshotPipelineTests {
     #expect(await recorder.pruneCalls == [30])
   }
 
+  @Test("Pipeline keeps today prices when tomorrow fails without cache after cutoff")
+  func postCutoffKeepsTodayIfTomorrowFailsWithoutCache() async throws {
+    let recorder = PersistenceRecorder()
+    let calendar: Calendar = {
+      var instance = Calendar(identifier: .gregorian)
+      instance.timeZone = madridTimeZone
+      return instance
+    }()
+    let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 5, day: 6, hour: 20, minute: 31)))
+    let today = calendar.startOfDay(for: now)
+    let tomorrow = try #require(calendar.date(byAdding: .day, value: 1, to: today))
+    let todayPrices = makeRawPrices(dayStart: today, timeZone: madridTimeZone)
+
+    enum TestError: Error { case offline }
+    let dateClient = makeDateClient(now: now, timeZone: madridTimeZone)
+    let pricingClient = PricingClient { day, _ in
+      if calendar.isDate(day, inSameDayAs: tomorrow) {
+        throw TestError.offline
+      }
+      if calendar.isDate(day, inSameDayAs: today) {
+        return todayPrices
+      }
+      return []
+    }
+    let persistenceClient = PersistenceClient(
+      loadSnapshot: { day, _ in
+        await recorder.recordLoad()
+        guard calendar.isDate(day, inSameDayAs: tomorrow) else { return nil }
+        return nil
+      },
+      saveSnapshot: { snapshot in
+        await recorder.recordSave(snapshot)
+      },
+      pruneSnapshots: { keepLastDays in
+        await recorder.recordPrune(keepLastDays)
+      }
+    )
+    let pipeline = DailyPricingSnapshotPipeline(
+      dateClient: dateClient,
+      persistenceClient: persistenceClient,
+      pricingClient: pricingClient
+    )
+
+    let result = await pipeline.load()
+    guard case let .fresh(payload) = result else {
+      Issue.record("Expected fresh result with today's data.")
+      return
+    }
+
+    #expect(payload.hourlyPrices.count == 24)
+    #expect(calendar.isDate(payload.dayStart, inSameDayAs: today))
+    #expect(await recorder.savedSnapshots.count == 1)
+    #expect(await recorder.loadCount == 1)
+    #expect(await recorder.pruneCalls == [30])
+  }
+
   private func makeDateClient(now: Date, timeZone: TimeZone = TimeZone(secondsFromGMT: .zero) ?? .current) -> DateClient {
     DateClient(
       now: { now },

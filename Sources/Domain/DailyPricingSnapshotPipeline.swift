@@ -46,6 +46,9 @@ struct DailyPricingSnapshotPipeline: Sendable {
                 loadedDays.append((dayStart, rawPrices))
                 usedCache = true
             case .failed:
+                guard loadedDays.isEmpty else {
+                    continue
+                }
                 return .failed
             }
         }
