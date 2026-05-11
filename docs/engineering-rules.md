@@ -144,6 +144,10 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - queda prohibido declarar un cambio como `hecho`, `validado` o equivalente si no existe un `BUILD SUCCEEDED` o `TEST SUCCEEDED` obtenido después de la última edición;
   - no se aceptan validaciones previas al último patch ni validaciones de otro scope;
   - si falla compilación, el estado obligatorio es `blocked` hasta corregirlo.
+- Regla de evidencia para warnings reportados por usuario (bloqueante):
+  - queda prohibido negar la existencia de un warning sin aportar evidencia textual del build (`archivo`, `línea` o mensaje exacto);
+  - si el usuario aporta archivo/línea concreta, la verificación debe incluir un segundo pase de búsqueda exacta sobre ese archivo/línea además del barrido general;
+  - si no hay evidencia suficiente en salida de comandos, la respuesta obligatoria es `pendiente de verificar`, nunca una negación categórica.
 - Regla de cierre (bloqueante):
   - queda prohibido marcar una tarea como `validada`, `done` o equivalente sin ejecutar `xcodebuild ... test` del scheme principal y obtener resultado global en verde (0 fallos).
   - ejecutar solo tests parciales (`-only-testing`) no autoriza el cierre de tarea; esos tests parciales solo complementan el diagnóstico.

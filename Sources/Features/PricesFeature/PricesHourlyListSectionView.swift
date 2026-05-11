@@ -72,15 +72,22 @@ struct PricesHourlyListSectionView: View {
 
     private var sectionedHourlyRows: some View {
         let sections = makeSections(from: hourlyPrices)
-        return VStack(alignment: .leading, spacing: PricesViewLayout.sectionSpacing) {
+        return LazyVStack(
+            alignment: .leading,
+            spacing: PricesViewLayout.sectionSpacing,
+            pinnedViews: [.sectionHeaders]
+        ) {
             ForEach(Array(sections.enumerated()), id: \.element.dayStart) { index, section in
-                VStack(alignment: .leading, spacing: PricesViewLayout.hourlyListSpacing) {
+                Section {
+                    hourlyRows(section.hourlyPrices, rowAccessibilityPrefix: "pricesHourlySection\(index)Row")
+                } header: {
                     Text(PricesViewFormatting.dayHeader(section.dayStart))
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 4)
+                        .background(Color(.systemBackground))
                         .accessibilityIdentifier("pricesHourlyHeader\(index)")
-
-                    hourlyRows(section.hourlyPrices, rowAccessibilityPrefix: "pricesHourlySection\(index)Row")
                 }
                 .accessibilityIdentifier("pricesHourlySection\(index)")
             }
