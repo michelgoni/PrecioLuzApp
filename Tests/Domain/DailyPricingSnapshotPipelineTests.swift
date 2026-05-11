@@ -4,10 +4,12 @@ import Testing
 @testable import PrecioLuzApp
 
 struct DailyPricingSnapshotPipelineTests {
+  private let madridTimeZone = TimeZone(identifier: "Europe/Madrid") ?? .current
+
   @Test("Pipeline returns fresh data, persists snapshot and prunes retention window")
   func freshResultPersistsAndPrunes() async throws {
     let recorder = PersistenceRecorder()
-    let now = Date(timeIntervalSince1970: 1_700_000_000)
+    let now = makeReferenceNowPreCutoff()
     let dateClient = makeDateClient(now: now)
     let timeZone = dateClient.timeZone()
     var calendar = dateClient.calendar()
@@ -53,7 +55,7 @@ struct DailyPricingSnapshotPipelineTests {
   @Test("Pipeline falls back to cached snapshot when fetch fails")
   func cachedFallbackWhenFetchFails() async throws {
     let recorder = PersistenceRecorder()
-    let now = Date(timeIntervalSince1970: 1_700_000_000)
+    let now = makeReferenceNowPreCutoff()
     let dateClient = makeDateClient(now: now)
     let timeZone = dateClient.timeZone()
     var calendar = dateClient.calendar()
@@ -95,7 +97,7 @@ struct DailyPricingSnapshotPipelineTests {
     }
 
     #expect(payload.dayStart == cachedSnapshot.dayStart)
-    #expect(payload.fetchedAt == cachedSnapshot.fetchedAt)
+    #expect(payload.fetchedAt == now)
     #expect(payload.hourlyPrices.count == cachedPrices.count)
     #expect(await recorder.loadCount == 1)
     #expect(await recorder.savedSnapshots.isEmpty)
@@ -104,7 +106,7 @@ struct DailyPricingSnapshotPipelineTests {
 
   @Test("Pipeline returns failed when fetch and cache both fail")
   func failedWhenNoCacheAvailable() async {
-    let now = Date(timeIntervalSince1970: 1_700_000_000)
+    let now = makeReferenceNowPreCutoff()
     let dateClient = makeDateClient(now: now)
 
     enum TestError: Error { case offline }
@@ -130,7 +132,7 @@ struct DailyPricingSnapshotPipelineTests {
     enum TestError: Error { case diskFailure }
 
     let recorder = PersistenceRecorder()
-    let now = Date(timeIntervalSince1970: 1_700_000_000)
+    let now = makeReferenceNowPreCutoff()
     let dateClient = makeDateClient(now: now)
     let timeZone = dateClient.timeZone()
     var calendar = dateClient.calendar()
@@ -168,12 +170,181 @@ struct DailyPricingSnapshotPipelineTests {
     #expect(await recorder.loadCount == 0)
   }
 
-  private func makeDateClient(now: Date) -> DateClient {
+  @Test("Pipeline fetches today and tomorrow when now is at or after 20:30 Europe/Madrid")
+  func postCutoffLoadsTwoDays() async throws {
+    let recorder = PersistenceRecorder()
+    let calendar: Calendar = {
+      var instance = Calendar(identifier: .gregorian)
+      instance.timeZone = madridTimeZone
+      return instance
+    }()
+    let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 5, day: 6, hour: 20, minute: 30)))
+    let today = calendar.startOfDay(for: now)
+    let tomorrow = try #require(calendar.date(byAdding: .day, value: 1, to: today))
+    let todayPrices = makeRawPrices(dayStart: today, timeZone: madridTimeZone)
+    let tomorrowPrices = makeRawPrices(dayStart: tomorrow, timeZone: madridTimeZone)
+
+    let dateClient = makeDateClient(now: now, timeZone: madridTimeZone)
+    let pricingClient = PricingClient { day, _ in
+      if calendar.isDate(day, inSameDayAs: today) {
+        return todayPrices
+      }
+      if calendar.isDate(day, inSameDayAs: tomorrow) {
+        return tomorrowPrices
+      }
+      return []
+    }
+    let persistenceClient = PersistenceClient(
+      loadSnapshot: { _, _ in nil },
+      saveSnapshot: { snapshot in
+        await recorder.recordSave(snapshot)
+      },
+      pruneSnapshots: { keepLastDays in
+        await recorder.recordPrune(keepLastDays)
+      }
+    )
+    let pipeline = DailyPricingSnapshotPipeline(
+      dateClient: dateClient,
+      persistenceClient: persistenceClient,
+      pricingClient: pricingClient
+    )
+
+    let result = await pipeline.load()
+    guard case let .fresh(payload) = result else {
+      Issue.record("Expected fresh result.")
+      return
+    }
+
+    #expect(payload.hourlyPrices.count == 48)
+    #expect(calendar.isDate(payload.dayStart, inSameDayAs: today))
+    #expect(await recorder.savedSnapshots.count == 2)
+    #expect(await recorder.pruneCalls == [30])
+  }
+
+  @Test("Pipeline returns cached when one of post-cutoff days falls back to cache")
+  func postCutoffWithMixedFreshAndCachedData() async throws {
+    let recorder = PersistenceRecorder()
+    let calendar: Calendar = {
+      var instance = Calendar(identifier: .gregorian)
+      instance.timeZone = madridTimeZone
+      return instance
+    }()
+    let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 5, day: 6, hour: 20, minute: 31)))
+    let today = calendar.startOfDay(for: now)
+    let tomorrow = try #require(calendar.date(byAdding: .day, value: 1, to: today))
+    let todayPrices = makeRawPrices(dayStart: today, timeZone: madridTimeZone)
+    let tomorrowPrices = makeRawPrices(dayStart: tomorrow, timeZone: madridTimeZone)
+
+    enum TestError: Error { case offline }
+    let dateClient = makeDateClient(now: now, timeZone: madridTimeZone)
+    let pricingClient = PricingClient { day, _ in
+      if calendar.isDate(day, inSameDayAs: tomorrow) {
+        throw TestError.offline
+      }
+      if calendar.isDate(day, inSameDayAs: today) {
+        return todayPrices
+      }
+      return []
+    }
+    let persistenceClient = PersistenceClient(
+      loadSnapshot: { day, _ in
+        await recorder.recordLoad()
+        guard calendar.isDate(day, inSameDayAs: tomorrow) else { return nil }
+        return .init(dayStart: tomorrow, fetchedAt: now.addingTimeInterval(-600), hourlyPrices: tomorrowPrices)
+      },
+      saveSnapshot: { snapshot in
+        await recorder.recordSave(snapshot)
+      },
+      pruneSnapshots: { keepLastDays in
+        await recorder.recordPrune(keepLastDays)
+      }
+    )
+    let pipeline = DailyPricingSnapshotPipeline(
+      dateClient: dateClient,
+      persistenceClient: persistenceClient,
+      pricingClient: pricingClient
+    )
+
+    let result = await pipeline.load()
+    guard case let .cached(payload) = result else {
+      Issue.record("Expected cached result.")
+      return
+    }
+
+    #expect(payload.hourlyPrices.count == 48)
+    #expect(await recorder.savedSnapshots.count == 1)
+    #expect(await recorder.loadCount == 1)
+    #expect(await recorder.pruneCalls == [30])
+  }
+
+  @Test("Pipeline keeps today prices when tomorrow fails without cache after cutoff")
+  func postCutoffKeepsTodayIfTomorrowFailsWithoutCache() async throws {
+    let recorder = PersistenceRecorder()
+    let calendar: Calendar = {
+      var instance = Calendar(identifier: .gregorian)
+      instance.timeZone = madridTimeZone
+      return instance
+    }()
+    let now = try #require(calendar.date(from: DateComponents(year: 2026, month: 5, day: 6, hour: 20, minute: 31)))
+    let today = calendar.startOfDay(for: now)
+    let tomorrow = try #require(calendar.date(byAdding: .day, value: 1, to: today))
+    let todayPrices = makeRawPrices(dayStart: today, timeZone: madridTimeZone)
+
+    enum TestError: Error { case offline }
+    let dateClient = makeDateClient(now: now, timeZone: madridTimeZone)
+    let pricingClient = PricingClient { day, _ in
+      if calendar.isDate(day, inSameDayAs: tomorrow) {
+        throw TestError.offline
+      }
+      if calendar.isDate(day, inSameDayAs: today) {
+        return todayPrices
+      }
+      return []
+    }
+    let persistenceClient = PersistenceClient(
+      loadSnapshot: { day, _ in
+        await recorder.recordLoad()
+        guard calendar.isDate(day, inSameDayAs: tomorrow) else { return nil }
+        return nil
+      },
+      saveSnapshot: { snapshot in
+        await recorder.recordSave(snapshot)
+      },
+      pruneSnapshots: { keepLastDays in
+        await recorder.recordPrune(keepLastDays)
+      }
+    )
+    let pipeline = DailyPricingSnapshotPipeline(
+      dateClient: dateClient,
+      persistenceClient: persistenceClient,
+      pricingClient: pricingClient
+    )
+
+    let result = await pipeline.load()
+    guard case let .fresh(payload) = result else {
+      Issue.record("Expected fresh result with today's data.")
+      return
+    }
+
+    #expect(payload.hourlyPrices.count == 24)
+    #expect(calendar.isDate(payload.dayStart, inSameDayAs: today))
+    #expect(await recorder.savedSnapshots.count == 1)
+    #expect(await recorder.loadCount == 1)
+    #expect(await recorder.pruneCalls == [30])
+  }
+
+  private func makeDateClient(now: Date, timeZone: TimeZone = TimeZone(secondsFromGMT: .zero) ?? .current) -> DateClient {
     DateClient(
       now: { now },
       calendar: { Calendar(identifier: .gregorian) },
-      timeZone: { TimeZone(secondsFromGMT: .zero) ?? .current }
+      timeZone: { timeZone }
     )
+  }
+
+  private func makeReferenceNowPreCutoff() -> Date {
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = TimeZone(secondsFromGMT: .zero) ?? .current
+    return calendar.date(from: DateComponents(year: 2026, month: 5, day: 6, hour: 12, minute: 0)) ?? Date(timeIntervalSince1970: 1_700_000_000)
   }
 
   private func makeRawPrices(dayStart: Date, timeZone: TimeZone) -> [PricingClient.HourPrice] {

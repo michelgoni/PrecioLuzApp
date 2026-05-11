@@ -97,10 +97,15 @@ struct AppShellView: View {
 
     private var tabView: some View {
         TabView(selection: tabSelection) {
-            PricesView(
-                onHourTapped: { store.send(.pricesHourTapped($0)) },
-                state: store.prices
-            )
+            NavigationStack {
+                PricesView(
+                    onHourTapped: { store.send(.pricesHourTapped($0)) },
+                    state: store.prices
+                )
+                .navigationTitle(String(localized: "tab.prices.title"))
+                .toolbarBackground(Color(.systemBackground), for: .navigationBar)
+                .toolbarBackground(.visible, for: .navigationBar)
+            }
                 .tabItem {
                     Label(AppTab.prices.title, systemImage: AppTab.prices.systemImage)
                         .accessibilityIdentifier("tabPrices")
@@ -135,54 +140,114 @@ struct AppShellView: View {
     }
 }
 
-#Preview("App shell - loading") {
+#Preview("App shell - prices") {
     AppShellView(
-        store: Store(
+        store: previewStore(
             initialState: AppFeature.State(
                 rootStatus: .loading,
                 selectedTab: .prices
             )
-        ) {
-            AppFeature()
-        }
+        )
     )
 }
 
 #Preview("App shell - error") {
     AppShellView(
-        store: Store(
+        store: previewStore(
             initialState: AppFeature.State(
                 rootStatus: .error,
                 selectedTab: .prices
             )
-        ) {
-            AppFeature()
-        }
+        )
     )
 }
 
 #Preview("App shell - chart") {
     AppShellView(
-        store: Store(
+        store: previewStore(
             initialState: AppFeature.State(
                 rootStatus: .content,
                 selectedTab: .chart
             )
-        ) {
-            AppFeature()
-        }
+        )
     )
 }
 
 #Preview("App shell - settings") {
     AppShellView(
-        store: Store(
+        store: previewStore(
             initialState: AppFeature.State(
                 rootStatus: .cached,
                 selectedTab: .settings
             )
-        ) {
-            AppFeature()
-        }
+        )
+    )
+}
+
+
+@MainActor
+private func previewStore(initialState: AppFeature.State) -> StoreOf<AppFeature> {
+    Store(initialState: initialState) {
+        AppFeature()
+    } withDependencies: {
+        $0.dateClient = DateClient(
+            now: { Date(timeIntervalSince1970: 1_700_000_000) },
+            calendar: { Calendar(identifier: .gregorian) },
+            timeZone: { TimeZone(identifier: "Europe/Madrid") ?? .current }
+        )
+        $0.notificationClient = .testValue
+        $0.persistenceClient = .testValue
+        $0.pricingClient = .testValue
+    }
+}
+
+private func makePricesHeadersPreviewState() -> PricesFeature.State {
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = TimeZone(identifier: "Europe/Madrid") ?? .current
+    let todayStart = calendar.startOfDay(for: Date(timeIntervalSince1970: 1_700_000_000))
+    let tomorrowStart = calendar.date(byAdding: .day, value: 1, to: todayStart) ?? todayStart
+
+    let prices = [
+        HourlyPrice(
+            classification: .mid,
+            date: calendar.date(byAdding: .hour, value: 20, to: todayStart) ?? todayStart,
+            daypart: .night,
+            eurPerKWh: 0.162
+        ),
+        HourlyPrice(
+            classification: .expensive,
+            date: calendar.date(byAdding: .hour, value: 21, to: todayStart) ?? todayStart,
+            daypart: .night,
+            eurPerKWh: 0.201
+        ),
+        HourlyPrice(
+            classification: .cheap,
+            date: calendar.date(byAdding: .hour, value: 0, to: tomorrowStart) ?? tomorrowStart,
+            daypart: .overnight,
+            eurPerKWh: 0.118
+        ),
+        HourlyPrice(
+            classification: .mid,
+            date: calendar.date(byAdding: .hour, value: 1, to: tomorrowStart) ?? tomorrowStart,
+            daypart: .overnight,
+            eurPerKWh: 0.133
+        ),
+    ]
+
+    return PricesFeature.State(
+        costCalculation: CostCalculationFeature.State(),
+        hourlyListPresentationMode: .withDateHeaders,
+        hourlyPrices: prices,
+        isFromCache: false,
+        isLoading: false,
+        summary: PriceSummary(
+            average: 0.181,
+            current: prices[0],
+            maximum: 0.201,
+            maximumHour: prices[1].date,
+            minimum: 0.162,
+            minimumHour: prices[0].date
+        ),
+        visibleHourlyPrices: prices
     )
 }

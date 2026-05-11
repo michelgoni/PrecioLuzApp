@@ -57,6 +57,7 @@
 "prices.hourly.current.badge" = "Now";
 "prices.hourly.empty" = "No hourly prices available";
 "prices.hourly.noRemainingToday" = "No remaining time slots today";
+"prices.hourly.nextDayAvailableAfter2030" = "Next-day prices will be available starting at 20:30";
 "prices.hourly.title" = "Hourly prices";
 "prices.summary.average" = "Average";
 "prices.summary.current" = "Current";

@@ -25,6 +25,7 @@ struct PricesView: View {
                         emptyMessage: state.hourlyPrices.isEmpty
                             ? "prices.hourly.empty"
                             : "prices.hourly.noRemainingToday",
+                        hourlyListPresentationMode: state.hourlyListPresentationMode,
                         hourlyPrices: state.visibleHourlyPrices,
                         onHourTapped: onHourTapped
                     )
@@ -54,7 +55,6 @@ struct PricesView: View {
             .foregroundStyle(.secondary)
             .accessibilityIdentifier("pricesSummaryEmpty")
     }
-
 }
 
 private struct PricesLoadingSkeletonView: View {
@@ -129,5 +129,12 @@ enum PricesViewFormatting {
 
     static func price(_ value: Double) -> String {
         value.formatted(.currency(code: "EUR").precision(.fractionLength(3)))
+    }
+
+    static func dayHeader(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "es_ES")
+        formatter.setLocalizedDateFormatFromTemplate("EEEE d MMMM")
+        return formatter.string(from: date).capitalized(with: formatter.locale)
     }
 }

@@ -4,7 +4,13 @@ import Foundation
 struct PricesFeature: Reducer {
     @ObservableState
     struct State: Equatable {
+        enum HourlyListPresentationMode: String, CaseIterable, Equatable {
+            case flatWithAvailabilityNotice
+            case withDateHeaders
+        }
+
         var costCalculation = CostCalculationFeature.State()
+        var hourlyListPresentationMode: HourlyListPresentationMode = .withDateHeaders
         var hourlyPrices: [HourlyPrice] = []
         var isFromCache = false
         var isLoading = true
