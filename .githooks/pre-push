@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PROJECT="PrecioLuzApp.xcodeproj"
+SCHEME="PrecioLuzApp"
+LOG_FILE="/tmp/precioluzapp-build.log"
+
+if ! command -v xcodebuild >/dev/null 2>&1; then
+  echo "[pre-push] xcodebuild no está disponible. Push bloqueado." >&2
+  exit 1
+fi
+
+run_build() {
+  local destination="$1"
+  xcodebuild -project "$PROJECT" -scheme "$SCHEME" -destination "$destination" build 2>&1 | tee "$LOG_FILE"
+}
+
+run_test() {
+  local destination="$1"
+  xcodebuild \
+    -project "$PROJECT" \
+    -scheme "$SCHEME" \
+    -destination "$destination" \
+    -parallel-testing-enabled NO \
+    clean \
+    -only-testing:PrecioLuzAppTests \
+    -skip-testing:PrecioLuzAppTests/Issue11SnapshotTests \
+    -skipMacroValidation \
+    test
+}
+
+DESTINATION_IN_USE="$(
+  xcodebuild -project "$PROJECT" -scheme "$SCHEME" -showdestinations 2>/dev/null \
+  | sed -n 's/.*platform:iOS Simulator, arch:[^,]*, id:\([^,]*\), OS:[^,]*, name:iPhone[^}]*}.*/platform=iOS Simulator,id=\1/p' \
+  | head -n 1
+)"
+
+if [[ -z "$DESTINATION_IN_USE" ]]; then
+  echo "[pre-push] No se encontró simulador iPhone concreto. Push bloqueado." >&2
+  exit 1
+fi
+
+echo "[pre-push] Ejecutando build en destino: $DESTINATION_IN_USE"
+run_build "$DESTINATION_IN_USE"
+
+if [[ -x "scripts/check_tca_warnings.sh" ]]; then
+  echo "[pre-push] Verificando warnings/deprecations de TCA..."
+  scripts/check_tca_warnings.sh --log "$LOG_FILE"
+fi
+
+echo "[pre-push] Ejecutando test suite gate de CI en: $DESTINATION_IN_USE"
+run_test "$DESTINATION_IN_USE"
+
+echo "[pre-push] OK: build + tests en verde."
