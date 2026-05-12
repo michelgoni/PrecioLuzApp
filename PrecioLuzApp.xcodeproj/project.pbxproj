@@ -95,7 +95,7 @@
 
 /* Begin PBXFileReference section */
 		06C01278E60DB2DB16B036AF /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
-		07E8C05629B788AE315B0D11 /* PrecioLuzAppTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PrecioLuzAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		07E8C05629B788AE315B0D11 /* PrecioLuzAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrecioLuzAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A1DBD42E1BBDDF4FD2891FE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		0BD95CAC54FDB663633913B0 /* PricesViewPreviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesViewPreviews.swift; sourceTree = "<group>"; };
 		0EC0E732B44B69678D9DFA62 /* SettingsNotificationsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotificationsSectionView.swift; sourceTree = "<group>"; };
@@ -126,9 +126,9 @@
 		642F4C674FBA509E43E81971 /* ChartInspectionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartInspectionCardView.swift; sourceTree = "<group>"; };
 		6B40F464A61A16FC1C739606 /* REEPublicationWindowPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = REEPublicationWindowPolicy.swift; sourceTree = "<group>"; };
 		6C2478FDC49D5ABE5B80426C /* settingsStates.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settingsStates.1.png; sourceTree = "<group>"; };
-		7107E689FEBFDF0CE85B5766 /* PrecioLuzAppUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PrecioLuzAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7107E689FEBFDF0CE85B5766 /* PrecioLuzAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrecioLuzAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		72C7481B9BEBDEA97D125614 /* PricingClientESIOSLiveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingClientESIOSLiveTests.swift; sourceTree = "<group>"; };
-		741F0D1CD612C8F05168C6B2 /* PrecioLuzApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PrecioLuzApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		741F0D1CD612C8F05168C6B2 /* PrecioLuzApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrecioLuzApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75905F6274FE9F8BFD18AA70 /* DomainModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainModels.swift; sourceTree = "<group>"; };
 		79A349F2AC054DD803DF26D6 /* PricesHourlyListSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesHourlyListSectionView.swift; sourceTree = "<group>"; };
 		7A0FD7C87035FCE9D4CF7334 /* SettingsDeniedPermissionsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDeniedPermissionsSectionView.swift; sourceTree = "<group>"; };
@@ -513,7 +513,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 2640;
 				TargetAttributes = {
 					32E35F92DD79330EC4DCEE4D = {
 						TestTargetID = 46AA7BEDF322E624DE3D0B75;
@@ -730,6 +730,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.michelgoni.PrecioLuzAppUITests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = PrecioLuzApp;
@@ -757,6 +758,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -788,8 +790,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = R55L2F35DV;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -803,6 +807,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -821,6 +826,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.michelgoni.PrecioLuzAppUITests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = PrecioLuzApp;
@@ -834,7 +840,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = R55L2F35DV;
 				INFOPLIST_FILE = Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -851,6 +856,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -882,8 +888,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = R55L2F35DV;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -904,6 +912,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -918,7 +927,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = R55L2F35DV;
 				INFOPLIST_FILE = Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (

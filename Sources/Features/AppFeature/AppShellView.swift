@@ -103,6 +103,7 @@ struct AppShellView: View {
                     state: store.prices
                 )
                 .navigationTitle(String(localized: "tab.prices.title"))
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbarBackground(Color(.systemBackground), for: .navigationBar)
                 .toolbarBackground(.visible, for: .navigationBar)
             }
@@ -112,12 +113,18 @@ struct AppShellView: View {
                 }
                 .tag(AppTab.prices)
 
-            ChartView(
-                store: store.scope(
-                    state: \.chart,
-                    action: \.chart
+            NavigationStack {
+                ChartView(
+                    store: store.scope(
+                        state: \.chart,
+                        action: \.chart
+                    )
                 )
-            )
+                .navigationTitle(String(localized: "tab.chart.title"))
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbarBackground(Color(.systemBackground), for: .navigationBar)
+                .toolbarBackground(.visible, for: .navigationBar)
+            }
                 .tabItem {
                     Label(AppTab.chart.title, systemImage: AppTab.chart.systemImage)
                         .accessibilityIdentifier("tabChart")
