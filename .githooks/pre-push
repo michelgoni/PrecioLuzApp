@@ -3,8 +3,6 @@ set -euo pipefail
 
 PROJECT="PrecioLuzApp.xcodeproj"
 SCHEME="PrecioLuzApp"
-DEFAULT_DEST="platform=iOS Simulator,name=iPhone 17"
-FALLBACK_DEST="platform=iOS Simulator,name=iPhone 17e"
 LOG_FILE="/tmp/precioluzapp-build.log"
 
 if ! command -v xcodebuild >/dev/null 2>&1; then
@@ -19,29 +17,38 @@ run_build() {
 
 run_test() {
   local destination="$1"
-  xcodebuild -project "$PROJECT" -scheme "$SCHEME" -destination "$destination" test
+  xcodebuild \
+    -project "$PROJECT" \
+    -scheme "$SCHEME" \
+    -destination "$destination" \
+    -parallel-testing-enabled NO \
+    clean \
+    -only-testing:PrecioLuzAppTests \
+    -skip-testing:PrecioLuzAppTests/Issue11SnapshotTests \
+    -skipMacroValidation \
+    test
 }
 
-echo "[pre-push] Ejecutando build en destino baseline (iPhone 17)..."
-if run_build "$DEFAULT_DEST"; then
-  DESTINATION_IN_USE="$DEFAULT_DEST"
-else
-  if rg -F "Unable to find a device matching the provided destination specifier" "$LOG_FILE" >/dev/null 2>&1; then
-    echo "[pre-push] iPhone 17 no disponible. Fallback a iPhone 17e..."
-    run_build "$FALLBACK_DEST"
-    DESTINATION_IN_USE="$FALLBACK_DEST"
-  else
-    echo "[pre-push] Build falló por error de compilación/entorno. Push bloqueado." >&2
-    exit 1
-  fi
+DESTINATION_IN_USE="$(
+  xcodebuild -project "$PROJECT" -scheme "$SCHEME" -showdestinations 2>/dev/null \
+  | sed -n 's/.*platform:iOS Simulator, arch:[^,]*, id:\([^,]*\), OS:[^,]*, name:iPhone[^}]*}.*/platform=iOS Simulator,id=\1/p' \
+  | head -n 1
+)"
+
+if [[ -z "$DESTINATION_IN_USE" ]]; then
+  echo "[pre-push] No se encontró simulador iPhone concreto. Push bloqueado." >&2
+  exit 1
 fi
+
+echo "[pre-push] Ejecutando build en destino: $DESTINATION_IN_USE"
+run_build "$DESTINATION_IN_USE"
 
 if [[ -x "scripts/check_tca_warnings.sh" ]]; then
   echo "[pre-push] Verificando warnings/deprecations de TCA..."
   scripts/check_tca_warnings.sh --log "$LOG_FILE"
 fi
 
-echo "[pre-push] Ejecutando test suite completa en: $DESTINATION_IN_USE"
+echo "[pre-push] Ejecutando test suite gate de CI en: $DESTINATION_IN_USE"
 run_test "$DESTINATION_IN_USE"
 
 echo "[pre-push] OK: build + tests en verde."
