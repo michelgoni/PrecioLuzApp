@@ -111,3 +111,81 @@
   - `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17' test -only-testing:PrecioLuzAppTests/SettingsFeatureTests`
 - Evidence:
   - [docs/evidence-issue34-settings-icons.png](/Users/michelgoni/Documents/repos/PrecioLuzApp/docs/evidence-issue34-settings-icons.png)
+
+## Issue #43 — Motion SwiftUI Functional Polish
+
+### Checkpoint 43A — Motion Foundation + Loading Skeleton (2026-05-13)
+- Scope:
+  - shared SwiftUI motion tokens and Reduce Motion-aware helpers added in `UIShared`.
+  - sober shimmer treatment applied to the existing prices loading skeleton.
+  - no new dependencies, no UIKit, no reducers changed.
+- Device:
+  - requested baseline `iPhone 17` was unavailable locally.
+  - fallback used: `iPhone 17 Pro Max` (`iOS 26.4`) via XcodeBuildMCP.
+- Validation:
+  - `build`: OK (`XcodeBuildMCP build_sim`, `BUILD SUCCEEDED`)
+  - `build + run`: OK (`XcodeBuildMCP build_run_sim`)
+  - `TCA warnings/deprecations`: `0`
+  - runtime log tail reviewed with no visible app output errors.
+- Evidence:
+  - pending user-provided dark skeleton evidence
+  - pending user-provided light skeleton evidence
+- Status:
+  - `waiting_user_review`
+
+### Checkpoint 43B — Prices Content Transition + Staggered Entrance (2026-05-13)
+- Scope:
+  - `loading -> content` transition softened in `PricesView` with fade/move and controlled trigger state.
+  - summary cards animated with staggered entrance in `PricesSummaryCardsView`.
+  - hourly rows animated with staggered entrance in `PricesHourlyListSectionView`.
+  - shared `StaggeredEntranceModifier` added in `UIShared` and wired to Reduce Motion.
+- Validation:
+  - `build`: OK (`XcodeBuildMCP build_sim`, `BUILD SUCCEEDED`)
+  - `TCA warnings/deprecations`: `0`
+- Evidence:
+  - pending manual visual review in simulator/canvas.
+- Status:
+  - `waiting_user_review`
+
+### Checkpoint 43C — Interaction Feedback in Prices + Calculation Modal (2026-05-13)
+- Scope:
+  - shared `PressedFeedbackButtonStyle` added in `UIShared`.
+  - hourly rows now use pressed feedback style for tactile tap response.
+  - preset cards now animate selection emphasis (scale/spring) and pressed feedback.
+  - estimated cost label in calculation sheet now uses numeric content transition.
+- Validation:
+  - `build`: OK (`XcodeBuildMCP build_sim`, `BUILD SUCCEEDED`)
+  - `TCA warnings/deprecations`: `0`
+- Evidence:
+  - pending manual visual review in simulator/canvas.
+- Status:
+  - `waiting_user_review`
+
+### Checkpoint 43D — Chart Motion for Daypart + Inspection (2026-05-13)
+- Scope:
+  - chart container now animates transition when daypart changes.
+  - inspected point marker now has stronger emphasis animation.
+  - inspection card now transitions in/out and animates numeric content updates.
+- Validation:
+  - `build`: OK (`XcodeBuildMCP build_sim`, `BUILD SUCCEEDED`)
+  - `TCA warnings/deprecations`: `0`
+- Evidence:
+  - pending manual visual review in simulator/canvas.
+- Status:
+  - `waiting_user_review`
+
+### Checkpoint 43E — Final Pass + Full Validation (2026-05-13)
+- Scope:
+  - final visual tuning pass completed with no extra ornamental animation added.
+  - snapshot baseline updated to reflect the final motion-aware prices content presentation.
+  - no functional contract changes, no new dependencies, no UIKit usage.
+- Validation:
+  - `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=PrecioLuz Clean iPhone 17' clean build`
+  - `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=PrecioLuz Clean iPhone 17' test -only-testing:PrecioLuzAppTests`
+  - `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=PrecioLuz Clean iPhone 17' test -only-testing:PrecioLuzAppUITests/PrecioLuzAppUITests/testTabNavigationIsStable -only-testing:PrecioLuzAppUITests/PrecioLuzAppUITests/testHourlyRowTapPresentsAndDismissesCalculationModal -only-testing:PrecioLuzAppUITests/PrecioLuzAppUITests/testChartDaypartSelectionAndInteractionIsStable -only-testing:PrecioLuzAppUITests/PrecioLuzAppUITests/testSettingsTabSmokeInteractionsAreStable`
+  - all commands completed with `BUILD SUCCEEDED` / `TEST SUCCEEDED`.
+- Evidence:
+  - updated snapshot: `Tests/Snapshots/__Snapshots__/Issue11SnapshotTests/assertIssue11Snapshot-of.2.png`
+  - external visual evidence image intentionally skipped per user decision in thread.
+- Status:
+  - `approved`

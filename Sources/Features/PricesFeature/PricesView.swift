@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct PricesView: View {
+    @State private var contentEntranceTriggered = false
+
     let onHourTapped: (HourlyPrice) -> Void
     let state: PricesFeature.State
 
@@ -9,13 +11,18 @@ struct PricesView: View {
             VStack(alignment: .leading, spacing: PricesViewLayout.verticalSpacing) {
                 if state.isLoading {
                     PricesLoadingSkeletonView()
+                        .transition(.opacity)
                 } else if state.isFromCache {
                     cacheBadge
+                        .transition(.opacity)
                 }
 
                 if !state.isLoading {
                     if let summary = state.summary {
-                        PricesSummaryCardsView(summary: summary)
+                        PricesSummaryCardsView(
+                            entranceTrigger: contentEntranceTriggered,
+                            summary: summary
+                        )
                     } else {
                         noSummaryView
                     }
@@ -25,17 +32,32 @@ struct PricesView: View {
                         emptyMessage: state.hourlyPrices.isEmpty
                             ? "prices.hourly.empty"
                             : "prices.hourly.noRemainingToday",
+                        entranceTrigger: contentEntranceTriggered,
                         hourlyListPresentationMode: state.hourlyListPresentationMode,
                         hourlyPrices: state.visibleHourlyPrices,
                         onHourTapped: onHourTapped
                     )
                     .padding(.top, PricesViewLayout.sectionSpacing)
+                    .transition(.opacity.combined(with: .move(edge: .bottom)))
                 }
             }
             .padding(PricesViewLayout.contentPadding)
         }
         .background(Color(.systemBackground))
         .accessibilityIdentifier("pricesScreen")
+        .animation(MotionTokens.standard, value: state.isLoading)
+        .onAppear {
+            if !state.isLoading {
+                contentEntranceTriggered = true
+            }
+        }
+        .onChange(of: state.isLoading) { _, isLoading in
+            if isLoading {
+                contentEntranceTriggered = false
+            } else {
+                contentEntranceTriggered = true
+            }
+        }
         .safeAreaPadding(.top, PricesViewLayout.safeAreaTopPadding)
     }
 
@@ -65,6 +87,7 @@ private struct PricesLoadingSkeletonView: View {
             RoundedRectangle(cornerRadius: PricesViewLayout.cardCornerRadius)
                 .fill(Color(.systemGray5))
                 .frame(height: PricesViewLayout.skeletonBadgeHeight)
+                .shimmer()
 
             VStack(spacing: PricesViewLayout.gridSpacing) {
                 ForEach(0..<2, id: \.self) { _ in
@@ -80,6 +103,7 @@ private struct PricesLoadingSkeletonView: View {
                     RoundedRectangle(cornerRadius: PricesViewLayout.cardCornerRadius)
                         .fill(Color(.systemGray5))
                         .frame(height: PricesViewLayout.skeletonRowHeight)
+                        .shimmer()
                 }
             }
         }
@@ -92,6 +116,7 @@ private struct PricesLoadingSkeletonView: View {
             .fill(Color(.systemGray5))
             .frame(maxWidth: .infinity)
             .frame(height: PricesViewLayout.skeletonCardHeight)
+            .shimmer()
     }
 }
 

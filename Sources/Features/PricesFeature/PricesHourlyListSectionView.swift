@@ -8,6 +8,7 @@ struct PricesHourlyListSectionView: View {
 
     let currentDate: Date?
     let emptyMessage: LocalizedStringResource
+    let entranceTrigger: Bool
     let hourlyListPresentationMode: PricesFeature.State.HourlyListPresentationMode
     let hourlyPrices: [HourlyPrice]
     let onHourTapped: (HourlyPrice) -> Void
@@ -15,12 +16,14 @@ struct PricesHourlyListSectionView: View {
     init(
         currentDate: Date?,
         emptyMessage: LocalizedStringResource = "prices.hourly.empty",
+        entranceTrigger: Bool,
         hourlyListPresentationMode: PricesFeature.State.HourlyListPresentationMode,
         hourlyPrices: [HourlyPrice],
         onHourTapped: @escaping (HourlyPrice) -> Void
     ) {
         self.currentDate = currentDate
         self.emptyMessage = emptyMessage
+        self.entranceTrigger = entranceTrigger
         self.hourlyListPresentationMode = hourlyListPresentationMode
         self.hourlyPrices = hourlyPrices
         self.onHourTapped = onHourTapped
@@ -64,8 +67,9 @@ struct PricesHourlyListSectionView: View {
                         isCurrent: currentDate == hourlyPrice.date
                     )
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(PressedFeedbackButtonStyle())
                 .accessibilityIdentifier("\(rowAccessibilityPrefix)\(index)")
+                .staggeredEntrance(index: index + 4, trigger: entranceTrigger)
             }
         }
     }

@@ -8,6 +8,14 @@ import SwiftUI
     )
 }
 
+#Preview("Prices loading shimmer") {
+    PricesView(
+        onHourTapped: { _ in },
+        state: .previewLoadingShimmer
+    )
+    .preferredColorScheme(.dark)
+}
+
 #Preview("Prices summary content") {
     PricesView(
         onHourTapped: { _ in },
@@ -44,6 +52,18 @@ import SwiftUI
 }
 
 private extension PricesFeature.State {
+    static var previewLoadingShimmer: Self {
+        PricesFeature.State(
+            costCalculation: CostCalculationFeature.State(),
+            hourlyListPresentationMode: .withDateHeaders,
+            hourlyPrices: [],
+            isFromCache: false,
+            isLoading: true,
+            summary: nil,
+            visibleHourlyPrices: []
+        )
+    }
+
     static var previewCached: Self {
         var state = previewContent
         state.isFromCache = true

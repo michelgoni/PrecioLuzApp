@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct PricesSummaryCardsView: View {
+    let entranceTrigger: Bool
     let summary: PriceSummary
 
     private struct SummaryItem: Identifiable {
@@ -14,8 +15,9 @@ struct PricesSummaryCardsView: View {
 
     var body: some View {
         LazyVGrid(columns: summaryColumns, spacing: PricesViewLayout.gridSpacing) {
-            ForEach(summaryItems) { item in
+            ForEach(Array(summaryItems.enumerated()), id: \.element.id) { index, item in
                 summaryCard(item: item)
+                    .staggeredEntrance(index: index, trigger: entranceTrigger)
             }
         }
         .accessibilityIdentifier("pricesSummaryGrid")

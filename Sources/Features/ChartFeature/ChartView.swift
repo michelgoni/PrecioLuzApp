@@ -19,20 +19,32 @@ struct ChartView: View {
 
                 ChartDaypartPickerView(selectedDaypart: selectedDaypartBinding)
 
-                if sortedFilteredPrices.isEmpty {
-                    ChartEmptyStateCardView()
-                } else {
-                    ChartDailySeriesCardView(
-                        inspectedHour: store.inspectedHour,
-                        onInspectedHourChanged: {
-                            store.send(.inspectedHourChanged($0))
-                        },
-                        prices: sortedFilteredPrices
-                    )
-                    if let inspectedHour = store.inspectedHour {
-                        ChartInspectionCardView(entry: inspectedHour)
+                ZStack {
+                    if sortedFilteredPrices.isEmpty {
+                        ChartEmptyStateCardView()
+                            .transition(.opacity)
+                    } else {
+                        VStack(alignment: .leading, spacing: UIConstants.verticalSpacing) {
+                            ChartDailySeriesCardView(
+                                inspectedHour: store.inspectedHour,
+                                onInspectedHourChanged: {
+                                    store.send(.inspectedHourChanged($0))
+                                },
+                                prices: sortedFilteredPrices
+                            )
+                            .id(store.selectedDaypart)
+                            .transition(.opacity.combined(with: .move(edge: .trailing)))
+
+                            if let inspectedHour = store.inspectedHour {
+                                ChartInspectionCardView(entry: inspectedHour)
+                                    .id(inspectedHour.date)
+                                    .transition(.opacity.combined(with: .move(edge: .bottom)))
+                            }
+                        }
                     }
                 }
+                .animation(MotionTokens.standard, value: store.selectedDaypart)
+                .animation(MotionTokens.gentleSpring, value: store.inspectedHour?.date)
             }
             .padding(.horizontal, UIConstants.horizontalPadding)
             .padding(.top, 20)

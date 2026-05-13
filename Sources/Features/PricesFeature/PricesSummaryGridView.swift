@@ -37,6 +37,7 @@ struct PricesSummaryGridView: View {
                 isSelected ? Color.accentColor.opacity(PricesViewLayout.cardBorderOpacity) : Color(.secondarySystemBackground),
                 in: RoundedRectangle(cornerRadius: PricesViewLayout.cardCornerRadius)
             )
+            .scaleEffect(isSelected ? 1 : 0.985)
             .overlay {
                 RoundedRectangle(cornerRadius: PricesViewLayout.cardCornerRadius)
                     .stroke(
@@ -44,8 +45,9 @@ struct PricesSummaryGridView: View {
                         lineWidth: PricesViewLayout.presetCardBorderWidth
                     )
             }
+            .animation(MotionTokens.gentleSpring, value: isSelected)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PressedFeedbackButtonStyle())
         .accessibilityIdentifier("pricesPresetCard-\(preset.kind.rawValue)")
         .accessibilityAddTraits(isSelected ? [.isSelected] : [])
     }
