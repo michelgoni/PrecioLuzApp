@@ -173,3 +173,19 @@
   - pending manual visual review in simulator/canvas.
 - Status:
   - `waiting_user_review`
+
+### Checkpoint 43E — Final Pass + Full Validation (2026-05-13)
+- Scope:
+  - final visual tuning pass completed with no extra ornamental animation added.
+  - snapshot baseline updated to reflect the final motion-aware prices content presentation.
+  - no functional contract changes, no new dependencies, no UIKit usage.
+- Validation:
+  - `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=PrecioLuz Clean iPhone 17' clean build`
+  - `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=PrecioLuz Clean iPhone 17' test -only-testing:PrecioLuzAppTests`
+  - `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=PrecioLuz Clean iPhone 17' test -only-testing:PrecioLuzAppUITests/PrecioLuzAppUITests/testTabNavigationIsStable -only-testing:PrecioLuzAppUITests/PrecioLuzAppUITests/testHourlyRowTapPresentsAndDismissesCalculationModal -only-testing:PrecioLuzAppUITests/PrecioLuzAppUITests/testChartDaypartSelectionAndInteractionIsStable -only-testing:PrecioLuzAppUITests/PrecioLuzAppUITests/testSettingsTabSmokeInteractionsAreStable`
+  - all commands completed with `BUILD SUCCEEDED` / `TEST SUCCEEDED`.
+- Evidence:
+  - updated snapshot: `Tests/Snapshots/__Snapshots__/Issue11SnapshotTests/assertIssue11Snapshot-of.2.png`
+  - external visual evidence image intentionally skipped per user decision in thread.
+- Status:
+  - `approved`
