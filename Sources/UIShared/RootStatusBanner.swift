@@ -97,6 +97,17 @@ struct ShimmerModifier: ViewModifier {
     }
 }
 
+struct PressedFeedbackButtonStyle: ButtonStyle {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .opacity(configuration.isPressed ? 0.94 : 1)
+            .reduceMotionAwareScale(configuration.isPressed && !reduceMotion ? MotionTokens.pressedScale : 1)
+            .animation(MotionTokens.quick, value: configuration.isPressed)
+    }
+}
+
 struct StaggeredEntranceModifier: ViewModifier {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 

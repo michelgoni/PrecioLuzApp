@@ -67,7 +67,7 @@ struct PricesHourlyListSectionView: View {
                         isCurrent: currentDate == hourlyPrice.date
                     )
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(PressedFeedbackButtonStyle())
                 .accessibilityIdentifier("\(rowAccessibilityPrefix)\(index)")
                 .staggeredEntrance(index: index + 4, trigger: entranceTrigger)
             }

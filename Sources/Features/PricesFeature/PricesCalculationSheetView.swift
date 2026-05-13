@@ -56,6 +56,8 @@ struct PricesCalculationSheetView: View {
                 Text(estimatedCostDescription)
                     .font(.title2.monospacedDigit().weight(.bold))
                     .foregroundStyle(.primary)
+                    .contentTransition(.numericText())
+                    .animation(MotionTokens.standard, value: estimatedCostDescription)
                     .accessibilityIdentifier("pricesCalculationEstimatedCost")
             }
             .frame(maxWidth: .infinity, alignment: .leading)

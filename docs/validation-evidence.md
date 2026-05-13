@@ -146,3 +146,17 @@
   - pending manual visual review in simulator/canvas.
 - Status:
   - `waiting_user_review`
+
+### Checkpoint 43C — Interaction Feedback in Prices + Calculation Modal (2026-05-13)
+- Scope:
+  - shared `PressedFeedbackButtonStyle` added in `UIShared`.
+  - hourly rows now use pressed feedback style for tactile tap response.
+  - preset cards now animate selection emphasis (scale/spring) and pressed feedback.
+  - estimated cost label in calculation sheet now uses numeric content transition.
+- Validation:
+  - `build`: OK (`XcodeBuildMCP build_sim`, `BUILD SUCCEEDED`)
+  - `TCA warnings/deprecations`: `0`
+- Evidence:
+  - pending manual visual review in simulator/canvas.
+- Status:
+  - `waiting_user_review`
