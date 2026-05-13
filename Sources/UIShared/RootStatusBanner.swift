@@ -97,6 +97,27 @@ struct ShimmerModifier: ViewModifier {
     }
 }
 
+struct StaggeredEntranceModifier: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    let index: Int
+    let trigger: Bool
+
+    func body(content: Content) -> some View {
+        content
+            .opacity(trigger ? 1 : 0)
+            .reduceMotionAwareOffset(y: trigger ? 0 : MotionTokens.standardOffset)
+            .animation(animation, value: trigger)
+    }
+
+    private var animation: Animation {
+        guard !reduceMotion else {
+            return MotionTokens.quick
+        }
+        return MotionTokens.gentleSpring.delay(Double(index) * MotionTokens.entranceDelayStep)
+    }
+}
+
 struct RootStatusBanner: View {
   let onRetry: () -> Void
   let status: RootStatus
@@ -211,6 +232,10 @@ private extension RootStatus {
 }
 
 extension View {
+    func staggeredEntrance(index: Int, trigger: Bool) -> some View {
+        modifier(StaggeredEntranceModifier(index: index, trigger: trigger))
+    }
+
     func reduceMotionAwareOffset(x: CGFloat = 0, y: CGFloat = 0) -> some View {
         modifier(ReduceMotionAwareOffsetModifier(x: x, y: y))
     }

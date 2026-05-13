@@ -132,3 +132,17 @@
   - pending user-provided light skeleton evidence
 - Status:
   - `waiting_user_review`
+
+### Checkpoint 43B — Prices Content Transition + Staggered Entrance (2026-05-13)
+- Scope:
+  - `loading -> content` transition softened in `PricesView` with fade/move and controlled trigger state.
+  - summary cards animated with staggered entrance in `PricesSummaryCardsView`.
+  - hourly rows animated with staggered entrance in `PricesHourlyListSectionView`.
+  - shared `StaggeredEntranceModifier` added in `UIShared` and wired to Reduce Motion.
+- Validation:
+  - `build`: OK (`XcodeBuildMCP build_sim`, `BUILD SUCCEEDED`)
+  - `TCA warnings/deprecations`: `0`
+- Evidence:
+  - pending manual visual review in simulator/canvas.
+- Status:
+  - `waiting_user_review`
