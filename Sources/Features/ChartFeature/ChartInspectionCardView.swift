@@ -17,6 +17,7 @@ struct ChartInspectionCardView: View {
                 Text(entry.date.formatted(.dateTime.hour().minute()))
                     .font(.headline)
                     .foregroundStyle(.primary)
+                    .contentTransition(.numericText())
             }
 
             Spacer(minLength: 0)
@@ -28,6 +29,7 @@ struct ChartInspectionCardView: View {
                 Text(PricesViewFormatting.price(entry.eurPerKWh))
                     .font(.headline)
                     .foregroundStyle(.primary)
+                    .contentTransition(.numericText())
             }
         }
         .padding(12)
@@ -36,5 +38,7 @@ struct ChartInspectionCardView: View {
                 .fill(Color(.secondarySystemBackground))
         )
         .accessibilityIdentifier("chartInspectionCard")
+        .animation(MotionTokens.standard, value: entry.date)
+        .animation(MotionTokens.standard, value: entry.eurPerKWh)
     }
 }

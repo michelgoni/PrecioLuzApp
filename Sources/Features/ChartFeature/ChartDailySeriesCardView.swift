@@ -2,6 +2,8 @@ import Charts
 import SwiftUI
 
 struct ChartDailySeriesCardView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     let inspectedHour: HourlyPrice?
     let onInspectedHourChanged: (HourlyPrice) -> Void
     let prices: [HourlyPrice]
@@ -52,13 +54,14 @@ struct ChartDailySeriesCardView: View {
                 )
                 .lineStyle(.init(lineWidth: 2))
                 .foregroundStyle(Color.orange)
+                .opacity(0.9)
 
                 PointMark(
                     x: .value(String(localized: "chart.axis.hour"), inspectedHour.date),
                     y: .value(String(localized: "chart.axis.price"), inspectedHour.eurPerKWh)
                 )
                 .symbol(.circle)
-                .symbolSize(80)
+                .symbolSize(inspectedMarkerSize)
                 .foregroundStyle(Color.orange)
             }
         }
@@ -102,6 +105,12 @@ struct ChartDailySeriesCardView: View {
             RoundedRectangle(cornerRadius: UIConstants.cornerRadius)
                 .fill(Color(.secondarySystemBackground))
         )
+        .animation(MotionTokens.standard, value: prices.map(\.date))
+        .animation(MotionTokens.gentleSpring, value: inspectedHour?.date)
+    }
+
+    private var inspectedMarkerSize: CGFloat {
+        reduceMotion ? 80 : 110
     }
 
     private var currentHourEntry: HourlyPrice? {

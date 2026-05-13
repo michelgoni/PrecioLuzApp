@@ -160,3 +160,16 @@
   - pending manual visual review in simulator/canvas.
 - Status:
   - `waiting_user_review`
+
+### Checkpoint 43D — Chart Motion for Daypart + Inspection (2026-05-13)
+- Scope:
+  - chart container now animates transition when daypart changes.
+  - inspected point marker now has stronger emphasis animation.
+  - inspection card now transitions in/out and animates numeric content updates.
+- Validation:
+  - `build`: OK (`XcodeBuildMCP build_sim`, `BUILD SUCCEEDED`)
+  - `TCA warnings/deprecations`: `0`
+- Evidence:
+  - pending manual visual review in simulator/canvas.
+- Status:
+  - `waiting_user_review`
