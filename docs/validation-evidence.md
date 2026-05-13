@@ -111,3 +111,24 @@
   - `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17' test -only-testing:PrecioLuzAppTests/SettingsFeatureTests`
 - Evidence:
   - [docs/evidence-issue34-settings-icons.png](/Users/michelgoni/Documents/repos/PrecioLuzApp/docs/evidence-issue34-settings-icons.png)
+
+## Issue #43 — Motion SwiftUI Functional Polish
+
+### Checkpoint 43A — Motion Foundation + Loading Skeleton (2026-05-13)
+- Scope:
+  - shared SwiftUI motion tokens and Reduce Motion-aware helpers added in `UIShared`.
+  - sober shimmer treatment applied to the existing prices loading skeleton.
+  - no new dependencies, no UIKit, no reducers changed.
+- Device:
+  - requested baseline `iPhone 17` was unavailable locally.
+  - fallback used: `iPhone 17 Pro Max` (`iOS 26.4`) via XcodeBuildMCP.
+- Validation:
+  - `build`: OK (`XcodeBuildMCP build_sim`, `BUILD SUCCEEDED`)
+  - `build + run`: OK (`XcodeBuildMCP build_run_sim`)
+  - `TCA warnings/deprecations`: `0`
+  - runtime log tail reviewed with no visible app output errors.
+- Evidence:
+  - pending user-provided dark skeleton evidence
+  - pending user-provided light skeleton evidence
+- Status:
+  - `waiting_user_review`

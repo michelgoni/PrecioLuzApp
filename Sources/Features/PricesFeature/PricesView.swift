@@ -65,6 +65,7 @@ private struct PricesLoadingSkeletonView: View {
             RoundedRectangle(cornerRadius: PricesViewLayout.cardCornerRadius)
                 .fill(Color(.systemGray5))
                 .frame(height: PricesViewLayout.skeletonBadgeHeight)
+                .shimmer()
 
             VStack(spacing: PricesViewLayout.gridSpacing) {
                 ForEach(0..<2, id: \.self) { _ in
@@ -80,6 +81,7 @@ private struct PricesLoadingSkeletonView: View {
                     RoundedRectangle(cornerRadius: PricesViewLayout.cardCornerRadius)
                         .fill(Color(.systemGray5))
                         .frame(height: PricesViewLayout.skeletonRowHeight)
+                        .shimmer()
                 }
             }
         }
@@ -92,6 +94,7 @@ private struct PricesLoadingSkeletonView: View {
             .fill(Color(.systemGray5))
             .frame(maxWidth: .infinity)
             .frame(height: PricesViewLayout.skeletonCardHeight)
+            .shimmer()
     }
 }
 
