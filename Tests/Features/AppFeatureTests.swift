@@ -9,6 +9,149 @@ private let testTimeZone = TimeZone(secondsFromGMT: .zero) ?? .current
 
 struct AppFeatureTests {
     @MainActor
+    @Test("AppFeature loads onboarding preference on appear")
+    func onAppearLoadsOnboardingPreference() async {
+        let store = TestStore(initialState: AppFeature.State()) {
+            AppFeature()
+        } withDependencies: {
+            $0.dateClient.now = { testNow }
+            $0.dateClient.timeZone = { testTimeZone }
+            $0.persistenceClient.loadOnboardingCompleted = { true }
+        }
+        store.exhaustivity = .off
+
+        await store.send(.onAppear) {
+            $0.rootStatus = .loading
+            $0.prices.isLoading = true
+        }
+        await store.receive(.onboardingPreferenceLoaded(true)) {
+            $0.onboardingStatus = .completed
+        }
+    }
+
+    @MainActor
+    @Test("AppFeature saves onboarding completion from final step")
+    func onboardingCompletionSavesPreference() async {
+        let recorder = OnboardingCompletionRecorder()
+        var initialState = AppFeature.State()
+        initialState.onboarding.currentStep = .complete
+        initialState.onboardingStatus = .required
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        } withDependencies: {
+            $0.persistenceClient.saveOnboardingCompleted = { await recorder.record($0) }
+        }
+
+        await store.send(.onboarding(.finishButtonTapped)) {
+            $0.onboardingStatus = .completed
+        }
+        await store.receive(.onboardingCompletionSaved)
+        let savedCompletion = await recorder.last
+        #expect(savedCompletion == true)
+    }
+
+    @MainActor
+    @Test("AppFeature enables recommended notifications when onboarding permission is granted")
+    func onboardingNotificationPermissionGranted() async {
+        let recorder = NotificationSettingsRecorder()
+        var initialState = AppFeature.State()
+        initialState.onboarding.currentStep = .notifications
+        initialState.settings.authorizationStatus = .notDetermined
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        } withDependencies: {
+            $0.notificationClient.requestAuthorization = { true }
+            $0.persistenceClient.saveNotificationSettings = { await recorder.record($0) }
+        }
+
+        await store.send(.onboarding(.notificationPermissionButtonTapped)) {
+            $0.onboarding.isRequestingNotificationPermission = true
+            $0.onboarding.notificationPermissionState = .requesting
+        }
+        await store.receive(.onboarding(.notificationPermissionResponse(true))) {
+            $0.onboarding.isRequestingNotificationPermission = false
+            $0.onboarding.notificationPermissionState = .granted
+            $0.settings.authorizationStatus = .authorized
+            $0.settings.notificationSettings.notificationsEnabled = true
+            $0.settings.notificationSettings.notifyDailyMinimum = true
+            $0.settings.notificationSettings.notifyDailyMaximum = true
+            $0.settings.notificationSettings.customThresholdEnabled = false
+        }
+        let savedSettings = await recorder.last
+        #expect(savedSettings?.notificationsEnabled == true)
+        #expect(savedSettings?.notifyDailyMinimum == true)
+        #expect(savedSettings?.notifyDailyMaximum == true)
+        #expect(savedSettings?.customThresholdEnabled == false)
+    }
+
+    @MainActor
+    @Test("AppFeature keeps onboarding finishable when notification permission is denied")
+    func onboardingNotificationPermissionDenied() async {
+        var initialState = AppFeature.State()
+        initialState.onboarding.currentStep = .notifications
+        initialState.settings.authorizationStatus = .notDetermined
+        initialState.settings.notificationSettings.notificationsEnabled = true
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        } withDependencies: {
+            $0.notificationClient.requestAuthorization = { false }
+        }
+
+        await store.send(.onboarding(.notificationPermissionButtonTapped)) {
+            $0.onboarding.isRequestingNotificationPermission = true
+            $0.onboarding.notificationPermissionState = .requesting
+        }
+        await store.receive(.onboarding(.notificationPermissionResponse(false))) {
+            $0.onboarding.isRequestingNotificationPermission = false
+            $0.onboarding.notificationPermissionState = .denied
+            $0.settings.authorizationStatus = .denied
+            $0.settings.notificationSettings.notificationsEnabled = false
+        }
+        await store.send(.onboarding(.continueButtonTapped)) {
+            $0.onboarding.currentStep = .complete
+        }
+    }
+
+    @MainActor
+    @Test("AppFeature does not request onboarding notification permission when already authorized")
+    func onboardingNotificationPermissionAlreadyAuthorized() async {
+        let recorder = NotificationSettingsRecorder()
+        let requestsRecorder = NotificationRequestsRecorder()
+        var initialState = AppFeature.State()
+        initialState.onboarding.currentStep = .notifications
+        initialState.settings.authorizationStatus = .authorized
+        initialState.prices.hourlyPrices = [HourlyPrice.mockFutureValue]
+        let store = TestStore(initialState: initialState) {
+            AppFeature()
+        } withDependencies: {
+            $0.dateClient.now = { testNow }
+            $0.dateClient.timeZone = { testTimeZone }
+            $0.notificationClient.requestAuthorization = {
+                Issue.record("Permission should not be requested when already authorized")
+                return false
+            }
+            $0.notificationClient.schedule = { requests in
+                await requestsRecorder.record(requests)
+            }
+            $0.persistenceClient.saveNotificationSettings = { await recorder.record($0) }
+        }
+
+        await store.send(.onboarding(.notificationPermissionButtonTapped)) {
+            $0.onboarding.notificationPermissionState = .granted
+            $0.settings.notificationSettings.notificationsEnabled = true
+            $0.settings.notificationSettings.notifyDailyMinimum = true
+            $0.settings.notificationSettings.notifyDailyMaximum = true
+            $0.settings.notificationSettings.customThresholdEnabled = false
+        }
+        let savedSettings = await recorder.last
+        let scheduledRequests = await requestsRecorder.last
+        #expect(savedSettings?.notificationsEnabled == true)
+        #expect(scheduledRequests.count == 2)
+        #expect(scheduledRequests.first?.id.contains("dailyMinimum") == true)
+        #expect(scheduledRequests.last?.id.contains("dailyMaximum") == true)
+    }
+
+    @MainActor
     @Test("AppFeature sets selected tab")
     func selectedTabChanged() async {
         var initialState = AppFeature.State()
@@ -656,6 +799,14 @@ private actor NotificationSettingsRecorder {
 
     func record(_ settings: NotificationSettings) {
         last = settings
+    }
+}
+
+private actor OnboardingCompletionRecorder {
+    private(set) var last: Bool?
+
+    func record(_ isCompleted: Bool) {
+        last = isCompleted
     }
 }
 

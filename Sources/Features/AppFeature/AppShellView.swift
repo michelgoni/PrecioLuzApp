@@ -8,10 +8,10 @@ struct AppShellView: View {
     var body: some View {
         ZStack {
             backgroundView
-            tabView
+            rootContent
         }
         .safeAreaInset(edge: .top) {
-            if store.rootStatus != .content {
+            if store.onboardingStatus == .completed && store.rootStatus != .content {
                 statusBannerOverlay
                     .padding(.horizontal, 16)
                     .padding(.top, 8)
@@ -93,6 +93,27 @@ struct AppShellView: View {
             get: { store.prices.costCalculation.selectedPresetKind },
             set: { store.send(.pricesPresetSelected($0)) }
         )
+    }
+
+    @ViewBuilder
+    private var rootContent: some View {
+        switch store.onboardingStatus {
+        case .completed:
+            tabView
+                .transition(.opacity)
+        case .required:
+            OnboardingView(
+                store: store.scope(
+                    state: \.onboarding,
+                    action: \.onboarding
+                )
+            )
+            .transition(.opacity)
+        case .unknown:
+            ProgressView()
+                .tint(.secondary)
+                .accessibilityIdentifier("appBootstrapLoadingView")
+        }
     }
 
     private var tabView: some View {
