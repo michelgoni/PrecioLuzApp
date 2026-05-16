@@ -94,34 +94,6 @@ Natural product evolutions include:
 - multi-hour calculation when an appliance cycle crosses hourly slots;
 - future integration with real measurements through smart plugs, Home Assistant, or compatible standards.
 
-## App Store positioning
-
-Recommended positioning:
-
-> Save attention, not only cents: check electricity prices, find the best hours, and get useful alerts from your iPhone.
-
-Subtitle candidates:
-
-- `Electricity prices and alerts`
-- `Find today’s cheapest hours`
-- `Decide when to use electricity`
-- `PVPC prices, charts, and alerts`
-
-Main promise:
-
-> Understand hourly electricity prices and make better decisions about when to use your appliances.
-
-See the extended strategy in [`docs/app-store-positioning.md`](docs/app-store-positioning.md).
-
-## Monetization direction
-
-The app is best suited to a `freemium` model:
-
-- a free version for daily price lookup, summaries, basic charts, and essential alerts;
-- a Pro version for advanced personalization, smart alerts, widgets, appliance profiles, extended history, and better cost estimates.
-
-The app should not monetize simple access to public hourly price data. Paid value should live in the decision layer: recommendations, personalization, automation, widgets, and analysis.
-
 ## Technical stack
 
 - `SwiftUI`
@@ -150,7 +122,7 @@ The shared Xcode scheme only stores `PRECIOLUZ_ENV_FILE=$(SRCROOT)/.env`, which 
 
 - [`AGENTS.md`](AGENTS.md) — project governance, boundaries, and priorities.
 - [`docs/product-spec.md`](docs/product-spec.md) — functional product contract.
-- [`docs/app-store-positioning.md`](docs/app-store-positioning.md) — positioning, ASO, screenshots, and monetization direction.
+- [`docs/app-store-positioning.md`](docs/app-store-positioning.md) — App Store positioning, ASO, screenshots, and monetization direction.
 - [`docs/ios-architecture.md`](docs/ios-architecture.md) — technical structure and planned responsibilities.
 - [`docs/engineering-rules.md`](docs/engineering-rules.md) — execution, validation, CI, and PR rules.
 - [`docs/ui-direction.md`](docs/ui-direction.md) — visual and UX direction.
