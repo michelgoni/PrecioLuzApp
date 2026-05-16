@@ -140,7 +140,13 @@ struct AppFeature: Reducer {
                     applyRecommendedOnboardingNotificationSettings(to: &state.settings)
                     state.onboarding.isRequestingNotificationPermission = false
                     state.onboarding.notificationPermissionState = .granted
-                    return saveNotificationSettingsEffect(state.settings.notificationSettings)
+                    return .merge(
+                        saveNotificationSettingsEffect(state.settings.notificationSettings),
+                        rescheduleNotificationsEffect(
+                            hourlyPrices: state.prices.hourlyPrices,
+                            settings: state.settings.notificationSettings
+                        )
+                    )
 
                 case .denied:
                     state.settings.notificationSettings.notificationsEnabled = false

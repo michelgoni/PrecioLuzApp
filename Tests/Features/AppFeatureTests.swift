@@ -116,15 +116,22 @@ struct AppFeatureTests {
     @Test("AppFeature does not request onboarding notification permission when already authorized")
     func onboardingNotificationPermissionAlreadyAuthorized() async {
         let recorder = NotificationSettingsRecorder()
+        let requestsRecorder = NotificationRequestsRecorder()
         var initialState = AppFeature.State()
         initialState.onboarding.currentStep = .notifications
         initialState.settings.authorizationStatus = .authorized
+        initialState.prices.hourlyPrices = [HourlyPrice.mockFutureValue]
         let store = TestStore(initialState: initialState) {
             AppFeature()
         } withDependencies: {
+            $0.dateClient.now = { testNow }
+            $0.dateClient.timeZone = { testTimeZone }
             $0.notificationClient.requestAuthorization = {
                 Issue.record("Permission should not be requested when already authorized")
                 return false
+            }
+            $0.notificationClient.schedule = { requests in
+                await requestsRecorder.record(requests)
             }
             $0.persistenceClient.saveNotificationSettings = { await recorder.record($0) }
         }
@@ -137,7 +144,11 @@ struct AppFeatureTests {
             $0.settings.notificationSettings.customThresholdEnabled = false
         }
         let savedSettings = await recorder.last
+        let scheduledRequests = await requestsRecorder.last
         #expect(savedSettings?.notificationsEnabled == true)
+        #expect(scheduledRequests.count == 2)
+        #expect(scheduledRequests.first?.id.contains("dailyMinimum") == true)
+        #expect(scheduledRequests.last?.id.contains("dailyMaximum") == true)
     }
 
     @MainActor
