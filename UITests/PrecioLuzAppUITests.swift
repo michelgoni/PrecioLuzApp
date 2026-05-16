@@ -175,9 +175,49 @@ final class PrecioLuzAppUITests: XCTestCase {
     XCTAssertTrue(thresholdStepper.isHittable)
   }
 
-  private func makeApp() -> XCUIApplication {
+  func testOnboardingFlowReachesMainTabs() throws {
+    let app = makeApp(onboardingCompleted: false)
+    app.launchArguments += ["-PrecioLuzResetOnboarding"]
+    app.launch()
+
+    XCTAssertTrue(app.descendants(matching: .any)["onboardingStepWelcome"].waitForExistence(timeout: 5))
+    app.buttons["onboardingPrimaryButton"].tap()
+    XCTAssertTrue(app.descendants(matching: .any)["onboardingStepHowItWorks"].waitForExistence(timeout: 3))
+    app.buttons["onboardingPrimaryButton"].tap()
+    XCTAssertTrue(app.descendants(matching: .any)["onboardingStepNotifications"].waitForExistence(timeout: 3))
+    app.buttons["onboardingPrimaryButton"].tap()
+    XCTAssertTrue(app.descendants(matching: .any)["onboardingStepComplete"].waitForExistence(timeout: 3))
+    app.buttons["onboardingPrimaryButton"].tap()
+
+    XCTAssertTrue(app.tabBars.firstMatch.waitForExistence(timeout: 5))
+  }
+
+  func testOnboardingSupportsSwipeNavigation() throws {
+    let app = makeApp(onboardingCompleted: false)
+    app.launchArguments += ["-PrecioLuzResetOnboarding"]
+    app.launch()
+
+    XCTAssertTrue(app.descendants(matching: .any)["onboardingStepWelcome"].waitForExistence(timeout: 5))
+    app.swipeLeft()
+    XCTAssertTrue(app.descendants(matching: .any)["onboardingStepHowItWorks"].waitForExistence(timeout: 3))
+    app.swipeLeft()
+    XCTAssertTrue(app.descendants(matching: .any)["onboardingStepNotifications"].waitForExistence(timeout: 3))
+    app.swipeRight()
+    XCTAssertTrue(app.descendants(matching: .any)["onboardingStepHowItWorks"].waitForExistence(timeout: 3))
+    app.swipeLeft()
+    XCTAssertTrue(app.descendants(matching: .any)["onboardingStepNotifications"].waitForExistence(timeout: 3))
+    app.swipeLeft()
+    XCTAssertTrue(app.descendants(matching: .any)["onboardingStepComplete"].waitForExistence(timeout: 3))
+    app.swipeLeft()
+    XCTAssertTrue(app.descendants(matching: .any)["onboardingStepComplete"].waitForExistence(timeout: 3))
+  }
+
+  private func makeApp(onboardingCompleted: Bool = true) -> XCUIApplication {
     let app = XCUIApplication()
     app.launchArguments += ["-AppleLanguages", "(es)", "-AppleLocale", "es_ES"]
+    if onboardingCompleted {
+      app.launchArguments += ["-PrecioLuzOnboardingCompleted"]
+    }
     return app
   }
 

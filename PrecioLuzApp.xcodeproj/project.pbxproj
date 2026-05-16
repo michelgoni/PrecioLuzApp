@@ -16,6 +16,7 @@
 		196585D072C3B209CF086B54 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0FB87B5ABC1BB2B2D7C7837C /* Localizable.strings */; };
 		1BF7BAEA7148C309B55B9DEE /* CostCalculationFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D0097CAC5D657E7AA186A3 /* CostCalculationFeature.swift */; };
 		1D424AF1182B4C4F8273ECA8 /* AppFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D4F8F5962D5F8A19F7EC79 /* AppFeatureTests.swift */; };
+		285C101699D38BB90E3DE311 /* OnboardingFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27E52CE1906660020462FE9 /* OnboardingFeatureTests.swift */; };
 		2ADAB557F766934A2E7E9453 /* SettingsDeniedPermissionsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0FD7C87035FCE9D4CF7334 /* SettingsDeniedPermissionsSectionView.swift */; };
 		2C2E3927E5CCDD448DEC562D /* SettingsRowLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D675B31FFCC68F4491EA8A80 /* SettingsRowLabel.swift */; };
 		2C7A88ECC9F97A3203DEB45D /* PricesFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4F1D582D8DBA50B34C8BD4 /* PricesFeatureTests.swift */; };
@@ -29,6 +30,7 @@
 		5A1A24247057150A4F915D15 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1DBD42E1BBDDF4FD2891FE /* SettingsView.swift */; };
 		5D279D6881FAF12A670D335F /* DomainModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A029A1E50E3C94217EFFCFD3 /* DomainModelsTests.swift */; };
 		5E5746E4E23EC6B3BD28CE34 /* DailyPricingSnapshotPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BBD1FCB478C16D91769556 /* DailyPricingSnapshotPipeline.swift */; };
+		5F8A32B63C6125F188C8F88F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC366745B4F795FF348674C /* OnboardingView.swift */; };
 		64480331687A48156A250C3C /* NotificationSchedulingPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153BCC42D73BBD8DD5292357 /* NotificationSchedulingPlanner.swift */; };
 		68B309C5FF0C727AAC50E095 /* Issue8AcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79D3713AFCF1EB48194466D /* Issue8AcceptanceTests.swift */; };
 		693300BDC4A7882348CC27BB /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C64AB47F534C3EF47DA37C60 /* ComposableArchitecture */; };
@@ -65,6 +67,7 @@
 		E0F1828F94AE4466F24D1C38 /* REEPublicationWindowPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B40F464A61A16FC1C739606 /* REEPublicationWindowPolicy.swift */; };
 		E4A687F3008BBA0F8B3C409C /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288DF63F4693A0161011B4A4 /* AppFeature.swift */; };
 		E4D16D99F8ECC1CCCDBC5AF2 /* PricesSummaryCardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9011A556C752E49F174F0AFE /* PricesSummaryCardsView.swift */; };
+		E4F2107B9928272D482EFFB3 /* OnboardingFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FF0F0AC907E230DA8236C5 /* OnboardingFeature.swift */; };
 		E6E7A2E30ED90CDEB11D9C79 /* RootStatusBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3602E82D1AA957F3DBC53EB5 /* RootStatusBanner.swift */; };
 		E853F5684632167738D06D19 /* SettingsNotificationsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC0E732B44B69678D9DFA62 /* SettingsNotificationsSectionView.swift */; };
 		EAA54D0786CB11AB8762B373 /* Issue5AcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD4ED9252AA55CABFF1E90B /* Issue5AcceptanceTests.swift */; };
@@ -115,12 +118,14 @@
 		369D5D2B2592842B8DB7FF51 /* PricingClientRealAPIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingClientRealAPIIntegrationTests.swift; sourceTree = "<group>"; };
 		4C472C577421FFAA1639BEBF /* SettingsAlertsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAlertsSectionView.swift; sourceTree = "<group>"; };
 		4C9D7D9690BD42C457418C6A /* pricesContent.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pricesContent.1.png; sourceTree = "<group>"; };
+		50FF0F0AC907E230DA8236C5 /* OnboardingFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFeature.swift; sourceTree = "<group>"; };
 		51625C05A57E37064CEBE3EF /* PrecioLuzAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrecioLuzAppUITests.swift; sourceTree = "<group>"; };
 		52A5F075A317A7D493C8A567 /* Issue11AcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue11AcceptanceTests.swift; sourceTree = "<group>"; };
 		54F12ACD9082A00AD5001375 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		59D4F8F5962D5F8A19F7EC79 /* AppFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeatureTests.swift; sourceTree = "<group>"; };
 		5A1D1D0EBF01088EFBD9E3B7 /* SettingsFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFeatureTests.swift; sourceTree = "<group>"; };
 		5CD7FDA5CB1305816A882113 /* PricingClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingClient.swift; sourceTree = "<group>"; };
+		5DC366745B4F795FF348674C /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		5DD080326EEB140FEF131A0A /* rootStatusBannerStates.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rootStatusBannerStates.1.png; sourceTree = "<group>"; };
 		613AC733428459896683DAAC /* ChartDaypartPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDaypartPickerView.swift; sourceTree = "<group>"; };
 		642F4C674FBA509E43E81971 /* ChartInspectionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartInspectionCardView.swift; sourceTree = "<group>"; };
@@ -149,6 +154,7 @@
 		ACFC1ACFFCB452F8053B28AD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C4DFEC270AECA2B51E278782 /* PricesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesView.swift; sourceTree = "<group>"; };
 		C679E8989B60162052A21292 /* SettingsThresholdSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsThresholdSectionView.swift; sourceTree = "<group>"; };
+		D27E52CE1906660020462FE9 /* OnboardingFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFeatureTests.swift; sourceTree = "<group>"; };
 		D55A21AF9891907D054C7D46 /* ChartFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartFeatureTests.swift; sourceTree = "<group>"; };
 		D675B31FFCC68F4491EA8A80 /* SettingsRowLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRowLabel.swift; sourceTree = "<group>"; };
 		D6D0097CAC5D657E7AA186A3 /* CostCalculationFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostCalculationFeature.swift; sourceTree = "<group>"; };
@@ -220,6 +226,15 @@
 				F2F3101824EFD6C34293D6BB /* UIShared */,
 			);
 			path = Sources;
+			sourceTree = "<group>";
+		};
+		34034A872DB9228AC77E85F5 /* OnboardingFeature */ = {
+			isa = PBXGroup;
+			children = (
+				50FF0F0AC907E230DA8236C5 /* OnboardingFeature.swift */,
+				5DC366745B4F795FF348674C /* OnboardingView.swift */,
+			);
+			path = OnboardingFeature;
 			sourceTree = "<group>";
 		};
 		39F6A07829376070483814D4 /* Domain */ = {
@@ -315,6 +330,7 @@
 				59D4F8F5962D5F8A19F7EC79 /* AppFeatureTests.swift */,
 				D55A21AF9891907D054C7D46 /* ChartFeatureTests.swift */,
 				1942F66E100388ADAE896898 /* CostCalculationFeatureTests.swift */,
+				D27E52CE1906660020462FE9 /* OnboardingFeatureTests.swift */,
 				9F4F1D582D8DBA50B34C8BD4 /* PricesFeatureTests.swift */,
 				5A1D1D0EBF01088EFBD9E3B7 /* SettingsFeatureTests.swift */,
 			);
@@ -357,6 +373,7 @@
 				ED1ECC1C6F8A1C31D20423AA /* AppFeature */,
 				684053EE052D29F6F64B571B /* ChartFeature */,
 				714D70219184D39FE9307DB1 /* CostCalculationFeature */,
+				34034A872DB9228AC77E85F5 /* OnboardingFeature */,
 				145FDD60AB67EA3614CCA713 /* PricesFeature */,
 				66119059AC9CAC55BF93D1D0 /* SettingsFeature */,
 			);
@@ -625,6 +642,8 @@
 				4C0BAE6A4CB9433F43182C37 /* DomainModels.swift in Sources */,
 				FFD909BEA040F73D5FEDDC2D /* NotificationClient.swift in Sources */,
 				64480331687A48156A250C3C /* NotificationSchedulingPlanner.swift in Sources */,
+				E4F2107B9928272D482EFFB3 /* OnboardingFeature.swift in Sources */,
+				5F8A32B63C6125F188C8F88F /* OnboardingView.swift in Sources */,
 				0707733D9FC9E87DBB20DE2B /* PersistenceClient.swift in Sources */,
 				D4F2BDEAF0E519BD8DCB871B /* PrecioLuzAppApp.swift in Sources */,
 				593628AFC7B815D234E34500 /* PricesCalculationSheetView.swift in Sources */,
@@ -665,6 +684,7 @@
 				68B309C5FF0C727AAC50E095 /* Issue8AcceptanceTests.swift in Sources */,
 				C41724ED25C88587D77820D1 /* Issue9AcceptanceTests.swift in Sources */,
 				D4CB180C3283A7E29F3AC3DD /* NotificationSchedulingPlannerTests.swift in Sources */,
+				285C101699D38BB90E3DE311 /* OnboardingFeatureTests.swift in Sources */,
 				2C7A88ECC9F97A3203DEB45D /* PricesFeatureTests.swift in Sources */,
 				897C53EF3046CAF8D5372B20 /* PricingClientESIOSLiveTests.swift in Sources */,
 				4EEE6FB604EC3E2E8F636CAC /* PricingClientRealAPIIntegrationTests.swift in Sources */,
@@ -723,6 +743,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = R55L2F35DV;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -818,6 +839,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = R55L2F35DV;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (

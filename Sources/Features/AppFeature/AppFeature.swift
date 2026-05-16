@@ -37,10 +37,18 @@ enum RootStatus: Equatable, Sendable {
     case loading
 }
 
+enum OnboardingStatus: Equatable, Sendable {
+    case completed
+    case required
+    case unknown
+}
+
 struct AppFeature: Reducer {
     @ObservableState
     struct State: Equatable {
         var chart = ChartFeature.State()
+        var onboarding = OnboardingFeature.State()
+        var onboardingStatus: OnboardingStatus = .unknown
         var prices = PricesFeature.State()
         var rootStatus: RootStatus = .loading
         var selectedTab: AppTab = .prices
@@ -54,6 +62,9 @@ struct AppFeature: Reducer {
         case notificationAuthorizationStatusLoaded(NotificationClient.AuthorizationStatus)
         case notificationPermissionRequestFinished(Bool)
         case notificationSettingsLoaded(NotificationSettings)
+        case onboarding(OnboardingFeature.Action)
+        case onboardingCompletionSaved
+        case onboardingPreferenceLoaded(Bool)
         case onAppear
         case pricesCalculationPlaceholderDismissed
         case pricesDurationHoursChanged(Double)
@@ -74,12 +85,17 @@ struct AppFeature: Reducer {
         case fetchAuthorizationStatus
         case loadSnapshot
         case loadSettings
+        case loadOnboardingPreference
         case requestNotificationPermission
         case rescheduleNotifications
+        case saveOnboardingCompletion
         case saveSettings
     }
 
     var body: some ReducerOf<Self> {
+        Scope(state: \.onboarding, action: \.onboarding) {
+            OnboardingFeature()
+        }
         Reduce { state, action in
             switch action {
             case .appDidBecomeActive:
@@ -89,7 +105,20 @@ struct AppFeature: Reducer {
                 applyChartAction(chartAction, to: &state.chart)
                 return .none
 
-            case .onAppear, .retryTapped:
+            case .onAppear:
+                prepareForSnapshotLoad(&state)
+                let loadEffects = Effect<Action>.merge(
+                    loadOnboardingPreferenceEffect(),
+                    loadNotificationAuthorizationStatusEffect(),
+                    loadNotificationSettingsEffect(),
+                    loadSnapshotEffect()
+                )
+                return .concatenate(
+                    cancelInFlightEffects(),
+                    loadEffects
+                )
+
+            case .retryTapped:
                 prepareForSnapshotLoad(&state)
                 let loadEffects = Effect<Action>.merge(
                     loadNotificationAuthorizationStatusEffect(),
@@ -100,6 +129,35 @@ struct AppFeature: Reducer {
                     cancelInFlightEffects(),
                     loadEffects
                 )
+
+            case .onboarding(.finishButtonTapped):
+                state.onboardingStatus = .completed
+                return saveOnboardingCompletedEffect(true)
+
+            case .onboarding(.notificationPermissionButtonTapped):
+                switch state.settings.authorizationStatus {
+                case .authorized:
+                    applyRecommendedOnboardingNotificationSettings(to: &state.settings)
+                    state.onboarding.isRequestingNotificationPermission = false
+                    state.onboarding.notificationPermissionState = .granted
+                    return saveNotificationSettingsEffect(state.settings.notificationSettings)
+
+                case .denied:
+                    state.settings.notificationSettings.notificationsEnabled = false
+                    state.onboarding.isRequestingNotificationPermission = false
+                    state.onboarding.notificationPermissionState = .denied
+                    return saveNotificationSettingsEffect(state.settings.notificationSettings)
+
+                case .notDetermined:
+                    return requestOnboardingNotificationPermissionEffect()
+                }
+
+            case .onboardingCompletionSaved:
+                return .none
+
+            case let .onboardingPreferenceLoaded(isCompleted):
+                state.onboardingStatus = isCompleted ? .completed : .required
+                return .none
 
             case .pricesCalculationPlaceholderDismissed:
                 state.prices.costCalculation.isPresented = false
@@ -181,6 +239,24 @@ struct AppFeature: Reducer {
                     )
                 )
 
+            case let .onboarding(.notificationPermissionResponse(isGranted)):
+                state.settings.authorizationStatus = isGranted ? .authorized : .denied
+                if isGranted {
+                    applyRecommendedOnboardingNotificationSettings(to: &state.settings)
+                } else {
+                    state.settings.notificationSettings.notificationsEnabled = false
+                }
+                return .merge(
+                    saveNotificationSettingsEffect(state.settings.notificationSettings),
+                    rescheduleNotificationsEffect(
+                        hourlyPrices: state.prices.hourlyPrices,
+                        settings: state.settings.notificationSettings
+                    )
+                )
+
+            case .onboarding:
+                return .none
+
             case let .snapshotResponse(result):
                 state.rootStatus = mapRootStatus(from: result)
                 updateFeatureStates(&state, from: result)
@@ -251,13 +327,23 @@ struct AppFeature: Reducer {
         }
     }
 
+    private func applyRecommendedOnboardingNotificationSettings(to state: inout SettingsFeature.State) {
+        state.authorizationStatus = .authorized
+        state.notificationSettings.notificationsEnabled = true
+        state.notificationSettings.notifyDailyMinimum = true
+        state.notificationSettings.notifyDailyMaximum = true
+        state.notificationSettings.customThresholdEnabled = false
+    }
+
     private func cancelInFlightEffects() -> Effect<Action> {
         .merge(
             .cancel(id: CancelID.fetchAuthorizationStatus),
             .cancel(id: CancelID.loadSettings),
+            .cancel(id: CancelID.loadOnboardingPreference),
             .cancel(id: CancelID.loadSnapshot),
             .cancel(id: CancelID.requestNotificationPermission),
-            .cancel(id: CancelID.rescheduleNotifications)
+            .cancel(id: CancelID.rescheduleNotifications),
+            .cancel(id: CancelID.saveOnboardingCompletion)
         )
     }
 
@@ -338,6 +424,14 @@ struct AppFeature: Reducer {
             await send(.notificationSettingsLoaded(loadedSettings ?? NotificationSettings.productDefaults))
         }
         .cancellable(id: CancelID.loadSettings, cancelInFlight: true)
+    }
+
+    private func loadOnboardingPreferenceEffect() -> Effect<Action> {
+        .run { [persistenceClient] send in
+            let isCompleted = (try? await persistenceClient.loadOnboardingCompleted()) ?? false
+            await send(.onboardingPreferenceLoaded(isCompleted))
+        }
+        .cancellable(id: CancelID.loadOnboardingPreference, cancelInFlight: true)
     }
 
     private func loadSnapshotEffect() -> Effect<Action> {
@@ -430,6 +524,14 @@ struct AppFeature: Reducer {
         .cancellable(id: CancelID.requestNotificationPermission, cancelInFlight: true)
     }
 
+    private func requestOnboardingNotificationPermissionEffect() -> Effect<Action> {
+        .run { [notificationClient] send in
+            let isGranted = (try? await notificationClient.requestAuthorization()) ?? false
+            await send(.onboarding(.notificationPermissionResponse(isGranted)))
+        }
+        .cancellable(id: CancelID.requestNotificationPermission, cancelInFlight: true)
+    }
+
     private func rescheduleNotificationsEffect(
         hourlyPrices: [HourlyPrice],
         settings: NotificationSettings
@@ -468,6 +570,14 @@ struct AppFeature: Reducer {
             try? await persistenceClient.saveNotificationSettings(settings)
         }
         .cancellable(id: CancelID.saveSettings, cancelInFlight: true)
+    }
+
+    private func saveOnboardingCompletedEffect(_ completed: Bool) -> Effect<Action> {
+        .run { [persistenceClient] send in
+            try? await persistenceClient.saveOnboardingCompleted(completed)
+            await send(.onboardingCompletionSaved)
+        }
+        .cancellable(id: CancelID.saveOnboardingCompletion, cancelInFlight: true)
     }
 
     private func scheduleNotificationsFromSnapshotEffect(

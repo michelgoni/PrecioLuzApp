@@ -87,13 +87,67 @@ struct Issue11SnapshotTests {
         assertIssue11Snapshot(of: applySnapshotEnvironment(to: container))
     }
 
+    @Test("Snapshot #11: onboarding screens remain visually stable")
+    func onboardingScreens() {
+        guard !isCI else {
+            return
+        }
+        let container = VStack(spacing: 16) {
+            OnboardingView(
+                store: Store(initialState: OnboardingFeature.State(currentStep: .welcome)) {
+                    OnboardingFeature()
+                }
+            )
+            .frame(height: 568)
+            OnboardingView(
+                store: Store(initialState: OnboardingFeature.State(currentStep: .howItWorks)) {
+                    OnboardingFeature()
+                }
+            )
+            .frame(height: 568)
+            OnboardingView(
+                store: Store(initialState: OnboardingFeature.State(currentStep: .notifications)) {
+                    OnboardingFeature()
+                }
+            )
+            .frame(height: 568)
+            OnboardingView(
+                store: Store(initialState: OnboardingFeature.State(currentStep: .complete)) {
+                    OnboardingFeature()
+                }
+            )
+            .frame(height: 568)
+        }
+
+        assertIssue11Snapshot(
+            of: applySnapshotEnvironment(to: container)
+                .preferredColorScheme(.dark),
+            named: "dark"
+        )
+        assertIssue11Snapshot(
+            of: applySnapshotEnvironment(to: container)
+                .preferredColorScheme(.light),
+            named: "light"
+        )
+    }
+
     private func applySnapshotEnvironment<Content: View>(to view: Content) -> some View {
         view
             .environment(\.locale, snapshotLocale)
             .environment(\.timeZone, snapshotTimeZone)
+            .preferredColorScheme(.light)
+            .transaction { transaction in
+                transaction.animation = nil
+            }
     }
 
-    private func assertIssue11Snapshot<Content: View>(of view: Content) {
+    private func assertIssue11Snapshot<Content: View>(
+        of view: Content,
+        named name: String? = nil,
+        file: StaticString = #filePath,
+        testName: String = #function,
+        line: UInt = #line
+    ) {
         let assertion = {
             assertSnapshot(
                 of: view,
@@ -101,7 +155,11 @@ struct Issue11SnapshotTests {
                     precision: 0.99,
                     perceptualPrecision: 0.98,
                     layout: .device(config: .iPhoneSe)
-                )
+                ),
+                named: name,
+                file: file,
+                testName: testName,
+                line: line
             )
         }
         if shouldRecordSnapshots {

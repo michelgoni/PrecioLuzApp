@@ -189,3 +189,27 @@
   - external visual evidence image intentionally skipped per user decision in thread.
 - Status:
   - `approved`
+
+## Onboarding Feature — 4-Step First Run Flow
+
+### Checkpoint ONB-A — Feature Implementation + Validation (2026-05-13)
+- Scope:
+  - added a 4-step SwiftUI onboarding flow before the main tab shell.
+  - wired onboarding state through `AppFeature` and `OnboardingFeature` using TCA.
+  - persisted completion with `UserDefaults` through `PersistenceClient`.
+  - added notification permission request handling from onboarding step 3.
+  - added localized Spanish/English copy, previews, snapshots, reducer tests, and UI smoke coverage.
+  - no new dependencies, no UIKit usage, no remote push notifications.
+- Validation:
+  - `xcodegen generate`: OK during project-file discovery; final `.pbxproj` kept as a minimal manual registration of the new files because `project.yml` did not require changes.
+  - `xcodebuild -quiet -scheme PrecioLuzApp -destination 'generic/platform=iOS Simulator' build`: OK.
+  - `xcodebuild -quiet -scheme PrecioLuzApp -destination 'platform=iOS Simulator,id=ED400BF3-3EB2-40E0-AC8F-2F195F6D9DD9' test -only-testing:PrecioLuzAppTests/OnboardingFeatureTests -only-testing:PrecioLuzAppTests/AppFeatureTests`: OK.
+  - `xcodebuild -quiet -scheme PrecioLuzApp -destination 'platform=iOS Simulator,id=ED400BF3-3EB2-40E0-AC8F-2F195F6D9DD9' test -only-testing:PrecioLuzAppTests/Issue11SnapshotTests/onboardingScreens`: OK.
+  - `xcodebuild -quiet -scheme PrecioLuzApp -destination 'platform=iOS Simulator,id=ED400BF3-3EB2-40E0-AC8F-2F195F6D9DD9' test -only-testing:PrecioLuzAppUITests/PrecioLuzAppUITests/testOnboardingFlowReachesMainTabs`: OK.
+  - `xcodebuild -quiet -scheme PrecioLuzApp -destination 'platform=iOS Simulator,id=ED400BF3-3EB2-40E0-AC8F-2F195F6D9DD9' test -only-testing:PrecioLuzAppUITests`: OK.
+  - `xcodebuild -quiet -scheme PrecioLuzApp -destination 'platform=iOS Simulator,id=ED400BF3-3EB2-40E0-AC8F-2F195F6D9DD9' test`: FAILED only on 3 pre-existing Issue 11 snapshot mismatches (`rootStatusBannerStates`, `pricesContent`, `settingsStates`); 114 tests passed and the new onboarding snapshot case passed.
+- Evidence:
+  - manual review path: launch with `-PrecioLuzResetOnboarding`, advance 4 steps, verify tabs.
+  - test-only bypass path: launch with `-PrecioLuzOnboardingCompleted`.
+- Status:
+  - `implemented`
