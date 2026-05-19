@@ -13,6 +13,10 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Si la rama activa es `main`, ejecutar `git pull --ff-only origin main` antes de empezar.
 - Si la rama activa es una feature branch, ejecutar `git fetch origin` y comprobar que la base esperada existe y está alineada con `origin/main` antes de editar.
 - Si la sincronización falla (conflictos, red, permisos o historial no fast-forward), bloquear la implementación y no continuar sobre un estado desactualizado.
+- Aislamiento por feature (obligatorio):
+  - cuando la tarea corresponda a una feature distinta de la rama activa, crear/cambiar a una rama dedicada antes de editar (`codex/<feature-slug>` por defecto);
+  - no mezclar en una misma rama cambios de features no relacionadas;
+  - si hay duda de alcance, detener implementación y aclarar alcance antes de seguir editando.
 
 ## Disciplina de alcance
 - No modificar más de una capa técnica a la vez salvo petición explícita o necesidad directa de integración.
@@ -64,6 +68,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - evitar magic numbers en layout/estilo (`padding`, `spacing`, `cornerRadius`, tamaños) dentro de vistas;
   - definir constantes con intención semántica (por ejemplo `Layout.contentPadding`, `Layout.cardCornerRadius`) en el scope más cercano razonable;
   - cuando el patrón se repita entre pantallas, promover esos tokens a un módulo compartido de design system.
+  - en SwiftUI, preferir la sintaxis abreviada de color (`.white`, `.black`, `.yellow`, etc.) frente a `Color.white`/`Color.black` cuando el tipo ya se infiere por contexto.
 - Orden y consistencia (cuando aplique):
   - Ordenar alfabéticamente `import`s.
   - Ordenar alfabéticamente las propiedades en `struct`s y `class`es si no existe un orden semántico más claro.
