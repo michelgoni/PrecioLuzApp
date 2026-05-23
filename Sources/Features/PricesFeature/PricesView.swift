@@ -18,6 +18,11 @@ struct PricesView: View {
                 }
 
                 if !state.isLoading {
+                    PricesMediumWidgetView(model: mediumWidgetModel)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.top, PricesViewLayout.widgetTopPadding)
+                        .transition(.opacity.combined(with: .move(edge: .top)))
+
                     if let summary = state.summary {
                         PricesSummaryCardsView(
                             entranceTrigger: contentEntranceTriggered,
@@ -76,6 +81,14 @@ struct PricesView: View {
             .font(.subheadline)
             .foregroundStyle(.secondary)
             .accessibilityIdentifier("pricesSummaryEmpty")
+    }
+
+    private var mediumWidgetModel: PricesMediumWidgetPresentationModel {
+        PricesMediumWidgetMapper.makeModel(
+            from: state.hourlyPrices,
+            now: state.summary?.current?.date ?? Date(),
+            calendar: .current
+        )
     }
 }
 
@@ -141,6 +154,7 @@ enum PricesViewLayout {
     static let skeletonRowHeight: CGFloat = 52
     static let summaryCardSpacing: CGFloat = 6
     static let verticalSpacing: CGFloat = 16
+    static let widgetTopPadding: CGFloat = 2
 }
 
 enum PricesViewFormatting {
