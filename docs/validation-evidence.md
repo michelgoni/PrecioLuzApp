@@ -87,6 +87,17 @@
   - `Tests/Snapshots/__Snapshots__/PricesMediumWidgetSnapshotTests/contentState.1.png`
   - `Tests/Snapshots/__Snapshots__/PricesMediumWidgetSnapshotTests/emptyState.1.png`
 
+### Checkpoint 11F — PricesView Previews for Medium Widget States (2026-05-24)
+- Scope:
+  - previews explícitas añadidas en `PricesViewPreviews` para estados de widget:
+    - `Prices widget content`
+    - `Prices widget empty`
+  - objetivo: facilitar validación manual del widget integrado en su contexto real de pantalla.
+- Validación ejecutada:
+  - `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' test | tee /tmp/issue11_11F_full_suite.log`
+- Resultado:
+  - suite completa en verde (`** TEST SUCCEEDED **`).
+
 ### Checkpoint 11D — Final Delivery Validation (2026-05-01)
 - Device baseline: `iPhone 17` (iOS Simulator).
 - Ejecución secuencial:
