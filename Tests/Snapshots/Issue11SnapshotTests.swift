@@ -60,6 +60,11 @@ struct Issue11SnapshotTests {
             of: applySnapshotEnvironment(to: view),
             named: "pricesWidgetContent"
         )
+        assertIssue11Snapshot(
+            of: applySnapshotEnvironment(to: view)
+                .preferredColorScheme(.dark),
+            named: "pricesWidgetContentDark"
+        )
     }
 
     @Test("Snapshot #11: prices view keeps medium widget empty state stable")
@@ -75,6 +80,11 @@ struct Issue11SnapshotTests {
         assertIssue11Snapshot(
             of: applySnapshotEnvironment(to: view),
             named: "pricesWidgetEmpty"
+        )
+        assertIssue11Snapshot(
+            of: applySnapshotEnvironment(to: view)
+                .preferredColorScheme(.dark),
+            named: "pricesWidgetEmptyDark"
         )
     }
 

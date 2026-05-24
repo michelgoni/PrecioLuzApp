@@ -134,6 +134,21 @@
   - `PricesMediumWidgetMapperTests`: OK (`5 tests`, `0 failures`, `** TEST SUCCEEDED **`).
   - suite completa en verde (`** TEST SUCCEEDED **`).
 
+### Checkpoint 11J — Dark Mode Snapshots for Integrated Medium Widget (2026-05-24)
+- Scope:
+  - ampliación de `Issue11SnapshotTests` para cubrir el widget medium integrado en `PricesView` también en dark mode:
+    - `pricesWidgetContentDark`
+    - `pricesWidgetEmptyDark`
+  - objetivo: blindar legibilidad/contraste del widget en tema oscuro con baseline visual versionado.
+- Validación ejecutada:
+  1. `SNAPSHOT_TESTING_RECORD=1 xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' -only-testing:PrecioLuzAppTests/Issue11SnapshotTests test | tee /tmp/issue11_11J_snapshots_record.log`
+  2. `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' -only-testing:PrecioLuzAppTests/Issue11SnapshotTests test | tee /tmp/issue11_11J_snapshots_assert.log`
+  3. `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' test | tee /tmp/issue11_11J_full_suite.log`
+- Resultado:
+  - snapshots dark nuevos grabados y verificados.
+  - `Issue11SnapshotTests`: OK (`6 tests`, `0 failures`, `** TEST SUCCEEDED **`).
+  - suite completa en verde (`** TEST SUCCEEDED **`).
+
 ### Checkpoint 11D — Final Delivery Validation (2026-05-01)
 - Device baseline: `iPhone 17` (iOS Simulator).
 - Ejecución secuencial:
