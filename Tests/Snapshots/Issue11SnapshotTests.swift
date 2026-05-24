@@ -46,6 +46,38 @@ struct Issue11SnapshotTests {
         assertIssue11Snapshot(of: applySnapshotEnvironment(to: view))
     }
 
+    @Test("Snapshot #11: prices view keeps medium widget content state stable")
+    func pricesWidgetContent() {
+        guard !isCI else {
+            return
+        }
+        let view = PricesView(
+            onHourTapped: { _ in },
+            state: .snapshotWidgetContent
+        )
+
+        assertIssue11Snapshot(
+            of: applySnapshotEnvironment(to: view),
+            named: "pricesWidgetContent"
+        )
+    }
+
+    @Test("Snapshot #11: prices view keeps medium widget empty state stable")
+    func pricesWidgetEmpty() {
+        guard !isCI else {
+            return
+        }
+        let view = PricesView(
+            onHourTapped: { _ in },
+            state: .snapshotWidgetEmpty
+        )
+
+        assertIssue11Snapshot(
+            of: applySnapshotEnvironment(to: view),
+            named: "pricesWidgetEmpty"
+        )
+    }
+
     @Test("Snapshot #11: settings denied and authorized states remain visually stable")
     func settingsStates() {
         guard !isCI else {
@@ -203,6 +235,21 @@ private extension PricesFeature.State {
                 minimumHour: prices[0].date
             ),
             visibleHourlyPrices: prices
+        )
+    }
+
+    static var snapshotWidgetContent: Self {
+        snapshotContent
+    }
+
+    static var snapshotWidgetEmpty: Self {
+        PricesFeature.State(
+            costCalculation: CostCalculationFeature.State(),
+            hourlyPrices: [],
+            isFromCache: false,
+            isLoading: false,
+            summary: nil,
+            visibleHourlyPrices: []
         )
     }
 }

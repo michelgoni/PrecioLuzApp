@@ -107,6 +107,20 @@
 - Resultado:
   - suite completa en verde (`** TEST SUCCEEDED **`).
 
+### Checkpoint 11H — Snapshot Integration of Medium Widget in PricesView (2026-05-24)
+- Scope:
+  - expansión de `Issue11SnapshotTests` con dos snapshots integrados de `PricesView`:
+    - `pricesWidgetContent`
+    - `pricesWidgetEmpty`
+  - objetivo: proteger regresiones visuales del widget medium en contexto real de pantalla.
+- Validación ejecutada:
+  1. `SNAPSHOT_TESTING_RECORD=1 xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' -only-testing:PrecioLuzAppTests/Issue11SnapshotTests test`
+  2. `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' -only-testing:PrecioLuzAppTests/Issue11SnapshotTests test`
+  3. `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' test`
+- Resultado:
+  - snapshots nuevos grabados y verificados.
+  - suite completa en verde (`** TEST SUCCEEDED **`).
+
 ### Checkpoint 11D — Final Delivery Validation (2026-05-01)
 - Device baseline: `iPhone 17` (iOS Simulator).
 - Ejecución secuencial:
