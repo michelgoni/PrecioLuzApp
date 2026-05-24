@@ -72,6 +72,21 @@
   - capturas versionadas de estados visuales críticos
   - trazabilidad de PR final lista para merge
 
+### Checkpoint 11E — Medium Widget Integration + UI Smoke (2026-05-24)
+- Scope:
+  - integración del `Medium Widget (2x4)` en la pantalla de precios (`PricesView`).
+  - `UI smoke` específico para presencia del widget en runtime real.
+  - regla de cierre reforzada en `docs/engineering-rules.md`: no cerrar miniincrementos con suites parciales (`-only-testing`) sin `TEST SUCCEEDED` de suite completa.
+- Validación ejecutada:
+  1. `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' -only-testing:PrecioLuzAppUITests/PrecioLuzAppUITests/testPricesScreenShowsMediumWidget test | tee /tmp/issue11_11E_ui_widget.log`
+  2. `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' test | tee /tmp/issue11_11E_full_suite.log`
+- Resultado:
+  - `UI smoke` widget: OK (`1 test`, `0 failures`, `** TEST SUCCEEDED **`).
+  - suite completa scheme principal: OK (`** TEST SUCCEEDED **`).
+- Evidencia visual/snapshot:
+  - `Tests/Snapshots/__Snapshots__/PricesMediumWidgetSnapshotTests/contentState.1.png`
+  - `Tests/Snapshots/__Snapshots__/PricesMediumWidgetSnapshotTests/emptyState.1.png`
+
 ### Checkpoint 11D — Final Delivery Validation (2026-05-01)
 - Device baseline: `iPhone 17` (iOS Simulator).
 - Ejecución secuencial:
