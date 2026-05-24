@@ -86,9 +86,10 @@ struct PricesView: View {
     }
 
     private var mediumWidgetModel: PricesMediumWidgetPresentationModel {
-        PricesMediumWidgetMapper.makeModel(
+        let fallbackNow = state.hourlyPrices.first?.date ?? Date()
+        return PricesMediumWidgetMapper.makeModel(
             from: state.hourlyPrices,
-            now: state.summary?.current?.date ?? Date(),
+            now: state.summary?.current?.date ?? fallbackNow,
             calendar: .current
         )
     }

@@ -98,6 +98,15 @@
 - Resultado:
   - suite completa en verde (`** TEST SUCCEEDED **`).
 
+### Checkpoint 11G — Robust `now` Fallback for Medium Widget Mapper (2026-05-24)
+- Scope:
+  - ajuste en `PricesView`: cuando `summary.current` no existe, el `now` enviado al mapper usa `state.hourlyPrices.first?.date` antes de caer a `Date()`.
+  - objetivo: evitar estado vacío accidental del widget con datos horarios presentes pero sin `summary`.
+- Validación ejecutada:
+  - `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' test | tee /tmp/issue11_11G_full_suite.log`
+- Resultado:
+  - suite completa en verde (`** TEST SUCCEEDED **`).
+
 ### Checkpoint 11D — Final Delivery Validation (2026-05-01)
 - Device baseline: `iPhone 17` (iOS Simulator).
 - Ejecución secuencial:
