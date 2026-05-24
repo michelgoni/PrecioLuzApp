@@ -65,6 +65,41 @@ struct PricesMediumWidgetMapperTests {
 
         #expect(heights.allSatisfy { $0 >= 0.2 })
     }
+
+    @Test("Widget mapper keeps stable normalized height when all values are equal")
+    func normalizesBarsForFlatSeries() {
+        let calendar = testCalendar
+        let now = calendar.date(from: DateComponents(year: 2026, month: 5, day: 21, hour: 10, minute: 0))!
+        let prices = [
+            makeHourlyPrice(calendar: calendar, day: 21, hour: 10, value: 0.111, classification: .cheap),
+            makeHourlyPrice(calendar: calendar, day: 21, hour: 11, value: 0.111, classification: .mid),
+            makeHourlyPrice(calendar: calendar, day: 21, hour: 12, value: 0.111, classification: .expensive)
+        ]
+
+        let model = PricesMediumWidgetMapper.makeModel(from: prices, now: now, calendar: calendar)
+        let heights = model.barSeries.map(\.normalizedHeight)
+
+        #expect(heights == [0.6, 0.6, 0.6])
+    }
+
+    @Test("Widget mapper sorts unsorted input before computing current and next hours")
+    func sortsInputBeforeComputingCurrentAndNextHours() {
+        let calendar = testCalendar
+        let now = calendar.date(from: DateComponents(year: 2026, month: 5, day: 21, hour: 10, minute: 30))!
+        let unsortedPrices = [
+            makeHourlyPrice(calendar: calendar, day: 21, hour: 12, value: 0.181, classification: .expensive),
+            makeHourlyPrice(calendar: calendar, day: 21, hour: 10, value: 0.129, classification: .cheap),
+            makeHourlyPrice(calendar: calendar, day: 21, hour: 11, value: 0.150, classification: .mid),
+            makeHourlyPrice(calendar: calendar, day: 21, hour: 13, value: 0.142, classification: .mid)
+        ]
+
+        let model = PricesMediumWidgetMapper.makeModel(from: unsortedPrices, now: now, calendar: calendar)
+
+        #expect(model.state == .content)
+        #expect(model.currentPriceText == "0,129")
+        #expect(model.nextHours.map(\.hourText) == ["11:00", "12:00", "13:00"])
+        #expect(model.nextHours.map(\.priceText) == ["0,150", "0,181", "0,142"])
+    }
 }
 
 private extension PricesMediumWidgetMapperTests {

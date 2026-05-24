@@ -121,6 +121,19 @@
   - snapshots nuevos grabados y verificados.
   - suite completa en verde (`** TEST SUCCEEDED **`).
 
+### Checkpoint 11I — Medium Widget Mapper Edge Cases (2026-05-24)
+- Scope:
+  - ampliación de `PricesMediumWidgetMapperTests` con dos casos de borde:
+    - serie plana: todas las barras deben mantener altura normalizada estable (`0.6`).
+    - entrada desordenada: el mapper debe ordenar por fecha antes de calcular `current` y `nextHours`.
+  - objetivo: blindar regresiones del modelo de presentación sin tocar la UI.
+- Validación ejecutada:
+  1. `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' -only-testing:PrecioLuzAppTests/PricesMediumWidgetMapperTests test | tee /tmp/issue11_11I_mapper_tests.log`
+  2. `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' test | tee /tmp/issue11_11I_full_suite.log`
+- Resultado:
+  - `PricesMediumWidgetMapperTests`: OK (`5 tests`, `0 failures`, `** TEST SUCCEEDED **`).
+  - suite completa en verde (`** TEST SUCCEEDED **`).
+
 ### Checkpoint 11D — Final Delivery Validation (2026-05-01)
 - Device baseline: `iPhone 17` (iOS Simulator).
 - Ejecución secuencial:
