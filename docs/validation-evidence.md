@@ -149,6 +149,18 @@
   - `Issue11SnapshotTests`: OK (`6 tests`, `0 failures`, `** TEST SUCCEEDED **`).
   - suite completa en verde (`** TEST SUCCEEDED **`).
 
+### Checkpoint 11K — Widget Medium Accessibility Semantics (2026-05-24)
+- Scope:
+  - mejoras de accesibilidad en `PricesMediumWidgetView` para evitar semántica dependiente solo de color:
+    - elementos decorativos ocultos a VoiceOver (`bolt`, `dot` de estado).
+    - barras del gráfico con `accessibilityLabel`/`accessibilityValue` y `accessibilityIdentifier`.
+    - celdas de próximas horas con etiqueta/valor semántico (hora + precio + clasificación) e identificador estable.
+  - objetivo: reforzar lectura asistida y trazabilidad en pruebas UI sin alterar layout.
+- Validación ejecutada:
+  - `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' test | tee /tmp/issue11_11K_full_suite.log`
+- Resultado:
+  - suite completa en verde (`** TEST SUCCEEDED **`).
+
 ### Checkpoint 11D — Final Delivery Validation (2026-05-01)
 - Device baseline: `iPhone 17` (iOS Simulator).
 - Ejecución secuencial:

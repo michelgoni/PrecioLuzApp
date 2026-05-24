@@ -110,6 +110,7 @@ struct PricesMediumWidgetView: View {
                 Image(systemName: "bolt.fill")
                     .font(.system(size: Layout.brandIconSize, weight: .semibold))
                     .foregroundStyle(.yellow)
+                    .accessibilityHidden(true)
 
                 Text(String(localized: "widget.medium.brand"))
                     .font(.caption2.weight(.bold))
@@ -149,6 +150,7 @@ struct PricesMediumWidgetView: View {
                 Circle()
                     .fill(currentSlotTint)
                     .frame(width: Layout.badgeDotSize, height: Layout.badgeDotSize)
+                    .accessibilityHidden(true)
                 Text(model.currentSlotLabel)
                     .font(.caption2.weight(.semibold))
                     .foregroundStyle(.white.opacity(Layout.primaryTextOpacity))
@@ -169,12 +171,18 @@ struct PricesMediumWidgetView: View {
                         .fill(color(for: entry.level).opacity(entry.level == .neutral ? Layout.neutralBarOpacity : 1))
                         .frame(maxWidth: .infinity)
                         .frame(height: max(Layout.minBarHeight, Layout.maxBarHeight * entry.normalizedHeight))
+                        .accessibilityElement()
+                        .accessibilityLabel("Nivel horario")
+                        .accessibilityValue(levelLabel(for: entry.level))
+                        .accessibilityIdentifier("pricesMediumWidgetBar\(index)")
                 }
             }
             .frame(height: Layout.maxBarHeight, alignment: .bottom)
+            .accessibilityElement(children: .contain)
+            .accessibilityLabel("Evolución de precios")
 
             HStack(spacing: Layout.nextHourSpacing) {
-                ForEach(model.nextHours.prefix(Layout.maxNextHours)) { hour in
+                ForEach(Array(model.nextHours.prefix(Layout.maxNextHours).enumerated()), id: \.element.id) { index, hour in
                     VStack(spacing: Layout.nextHourVerticalSpacing) {
                         Text(hour.hourText)
                             .font(.caption2.weight(.bold))
@@ -189,6 +197,10 @@ struct PricesMediumWidgetView: View {
                             .minimumScaleFactor(Layout.badgeScaleFactor)
                     }
                     .frame(maxWidth: .infinity)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("Próxima hora")
+                    .accessibilityValue("\(hour.hourText), \(hour.priceText), \(levelLabel(for: hour.level))")
+                    .accessibilityIdentifier("pricesMediumWidgetNextHour\(index)")
                 }
             }
             .padding(.horizontal, Layout.nextHoursHorizontalPadding)
@@ -220,6 +232,19 @@ struct PricesMediumWidgetView: View {
             return .orange
         case .neutral:
             return .white
+        }
+    }
+
+    private func levelLabel(for level: WidgetPriceLevel) -> String {
+        switch level {
+        case .cheap:
+            return String(localized: "prices.classification.cheap")
+        case .expensive:
+            return String(localized: "prices.classification.expensive")
+        case .mid:
+            return String(localized: "prices.classification.mid")
+        case .neutral:
+            return String(localized: "prices.classification.mid")
         }
     }
 }
