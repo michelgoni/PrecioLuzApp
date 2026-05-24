@@ -258,6 +258,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Antes de reportar un mini incremento como cerrado:
   - ejecutar **todas** las suites del scheme principal con este comando:
     - `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' test`
+  - no dar por cerrado el mini incremento si solo han pasado suites parciales (`-only-testing`); el cierre exige `** TEST SUCCEEDED **` del comando anterior.
   - ejecutar validación final de compilación/tests después del último cambio aplicado;
   - incluir en el resumen el comando ejecutado y su resultado literal (`BUILD SUCCEEDED` o `TEST SUCCEEDED`);
   - si no hay resultado literal de éxito, el incremento no puede marcarse como terminado.

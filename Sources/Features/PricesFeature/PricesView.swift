@@ -21,6 +21,8 @@ struct PricesView: View {
                     PricesMediumWidgetView(model: mediumWidgetModel)
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.top, PricesViewLayout.widgetTopPadding)
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("pricesMediumWidgetContainer")
                         .transition(.opacity.combined(with: .move(edge: .top)))
 
                     if let summary = state.summary {

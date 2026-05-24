@@ -17,6 +17,27 @@ final class PrecioLuzAppUITests: XCTestCase {
     XCTAssertTrue(tabButton(in: tabs, names: ["Ajustes", "tab.settings.title"]).exists)
   }
 
+  func testPricesScreenShowsMediumWidget() throws {
+    let app = makeApp()
+    app.launch()
+
+    let widget = app.otherElements["pricesMediumWidgetContainer"]
+    if widget.waitForExistence(timeout: 3) {
+      XCTAssertTrue(widget.exists)
+      return
+    }
+
+    for _ in 0..<4 {
+      app.swipeUp()
+      if widget.waitForExistence(timeout: 1) {
+        XCTAssertTrue(widget.exists)
+        return
+      }
+    }
+
+    XCTFail("Expected prices medium widget to be present in prices screen.")
+  }
+
   func testRootStatusBannerHidesWhenContentIsLoaded() throws {
     let app = makeApp()
     app.launch()
