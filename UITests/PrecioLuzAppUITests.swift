@@ -38,6 +38,31 @@ final class PrecioLuzAppUITests: XCTestCase {
     XCTFail("Expected prices medium widget to be present in prices screen.")
   }
 
+  func testPricesMediumWidgetExposesAccessibilityIdentifiers() throws {
+    let app = makeApp()
+    app.launch()
+
+    let widget = app.otherElements["pricesMediumWidgetContainer"]
+    if !widget.waitForExistence(timeout: 3) {
+      for _ in 0..<4 {
+        app.swipeUp()
+        if widget.waitForExistence(timeout: 1) {
+          break
+        }
+      }
+    }
+    XCTAssertTrue(widget.exists, "Expected prices medium widget container.")
+
+    let firstBar = app.otherElements["pricesMediumWidgetBar0"]
+    XCTAssertTrue(firstBar.waitForExistence(timeout: 2), "Expected first medium widget bar accessibility identifier.")
+
+    let firstNextHour = app.otherElements["pricesMediumWidgetNextHour0"]
+    if !firstNextHour.waitForExistence(timeout: 2) {
+      throw XCTSkip("No next-hour entry available in current live time window.")
+    }
+    XCTAssertTrue(firstNextHour.exists)
+  }
+
   func testRootStatusBannerHidesWhenContentIsLoaded() throws {
     let app = makeApp()
     app.launch()

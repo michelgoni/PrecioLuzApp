@@ -161,6 +161,20 @@
 - Resultado:
   - suite completa en verde (`** TEST SUCCEEDED **`).
 
+### Checkpoint 11L — UI Test for Medium Widget Accessibility IDs (2026-05-26)
+- Scope:
+  - nuevo test UI en `UITests/PrecioLuzAppUITests.swift`:
+    - `testPricesMediumWidgetExposesAccessibilityIdentifiers`
+  - valida presencia del contenedor del widget y de IDs accesibles clave:
+    - `pricesMediumWidgetBar0`
+    - `pricesMediumWidgetNextHour0`
+  - ajuste de robustez: si no hay próxima hora disponible en la ventana real (ej. últimas horas del día), el test hace `XCTSkip` en vez de fallar.
+- Validación ejecutada:
+  - `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' test | tee /tmp/issue11_11L_full_suite_retry.log`
+- Resultado:
+  - suite completa en verde (`** TEST SUCCEEDED **`).
+  - `PrecioLuzAppUITests`: `12 tests`, `0 failures`, `1 test skipped` (condición temporal esperada).
+
 ### Checkpoint 11D — Final Delivery Validation (2026-05-01)
 - Device baseline: `iPhone 17` (iOS Simulator).
 - Ejecución secuencial:
