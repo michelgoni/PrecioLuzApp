@@ -172,14 +172,14 @@ struct PricesMediumWidgetView: View {
                         .frame(maxWidth: .infinity)
                         .frame(height: max(Layout.minBarHeight, Layout.maxBarHeight * entry.normalizedHeight))
                         .accessibilityElement()
-                        .accessibilityLabel("Nivel horario")
+                        .accessibilityLabel(String(localized: "widget.medium.accessibility.bar.label"))
                         .accessibilityValue(levelLabel(for: entry.level))
                         .accessibilityIdentifier("pricesMediumWidgetBar\(index)")
                 }
             }
             .frame(height: Layout.maxBarHeight, alignment: .bottom)
             .accessibilityElement(children: .contain)
-            .accessibilityLabel("Evolución de precios")
+            .accessibilityLabel(String(localized: "widget.medium.accessibility.chart.label"))
 
             HStack(spacing: Layout.nextHourSpacing) {
                 ForEach(Array(model.nextHours.prefix(Layout.maxNextHours).enumerated()), id: \.element.id) { index, hour in
@@ -198,7 +198,7 @@ struct PricesMediumWidgetView: View {
                     }
                     .frame(maxWidth: .infinity)
                     .accessibilityElement(children: .ignore)
-                    .accessibilityLabel("Próxima hora")
+                    .accessibilityLabel(String(localized: "widget.medium.accessibility.nextHour.label"))
                     .accessibilityValue("\(hour.hourText), \(hour.priceText), \(levelLabel(for: hour.level))")
                     .accessibilityIdentifier("pricesMediumWidgetNextHour\(index)")
                 }

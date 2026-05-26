@@ -316,3 +316,19 @@
   - test-only bypass path: launch with `-PrecioLuzOnboardingCompleted`.
 - Status:
   - `implemented`
+
+## Issue #11 — Checkpoint 11M (Localization of Medium Widget accessibility labels) (2026-05-26)
+- Scope:
+  - localized medium widget accessibility literals in `PricesMediumWidgetView` using `String(localized:)`.
+  - added i18n keys in:
+    - `Resources/es.lproj/Localizable.strings`
+    - `Resources/en.lproj/Localizable.strings`
+- Validation:
+  - `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' test -only-testing:PrecioLuzAppTests | tee /tmp/issue11_11M_apptests_retry.log`
+    - Result: `** TEST SUCCEEDED **`
+  - `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' test -only-testing:PrecioLuzAppUITests | tee /tmp/issue11_11M_uitests_isolation.log`
+    - Result: `** TEST SUCCEEDED **` (12 executed, 1 skipped, 0 failures)
+  - Note:
+    - a monolithic full-suite run (`... test` including app+UI in one pass) was unstable due simulator launch preflight (`SBMainWorkspace Busy`), not product assertions; the stable sequential split above is the accepted validation evidence for this checkpoint.
+- Status:
+  - `implemented`

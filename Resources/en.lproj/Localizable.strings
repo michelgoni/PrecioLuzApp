@@ -112,6 +112,9 @@
 "tab.prices.title" = "Prices";
 "tab.settings.title" = "Settings";
 "widget.medium.brand" = "PRECIOLUZ";
+"widget.medium.accessibility.bar.label" = "Hourly level";
+"widget.medium.accessibility.chart.label" = "Price trend";
+"widget.medium.accessibility.nextHour.label" = "Next hour";
 "widget.medium.empty.slot" = "No slot";
 "widget.medium.empty.subtitle" = "Refresh to see the current price and the upcoming hours.";
 "widget.medium.empty.timeWindow" = "NO DATA";
