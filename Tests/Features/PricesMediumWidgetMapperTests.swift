@@ -100,6 +100,35 @@ struct PricesMediumWidgetMapperTests {
         #expect(model.nextHours.map(\.hourText) == ["11:00", "12:00", "13:00"])
         #expect(model.nextHours.map(\.priceText) == ["0,150", "0,181", "0,142"])
     }
+
+    @Test("Widget mapper formats hours using the injected pricing calendar time zone")
+    func formatsHoursUsingInjectedCalendarTimeZone() {
+        var honoluluCalendar = Calendar(identifier: .gregorian)
+        honoluluCalendar.timeZone = TimeZone(identifier: "Pacific/Honolulu")!
+        var utcCalendar = Calendar(identifier: .gregorian)
+        utcCalendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        let now = utcCalendar.date(from: DateComponents(year: 2026, month: 5, day: 21, hour: 10, minute: 0))!
+        let prices = [
+            HourlyPrice(
+                classification: .cheap,
+                date: now,
+                daypart: Daypart.from(date: now, calendar: honoluluCalendar),
+                eurPerKWh: 0.101
+            ),
+            HourlyPrice(
+                classification: .mid,
+                date: now.addingTimeInterval(3600),
+                daypart: Daypart.from(date: now.addingTimeInterval(3600), calendar: honoluluCalendar),
+                eurPerKWh: 0.121
+            )
+        ]
+
+        let model = PricesMediumWidgetMapper.makeModel(from: prices, now: now, calendar: honoluluCalendar)
+
+        #expect(model.state == .content)
+        #expect(model.timeWindowLabel.hasPrefix("00:00"))
+        #expect(model.nextHours.map(\.hourText) == ["01:00"])
+    }
 }
 
 private extension PricesMediumWidgetMapperTests {

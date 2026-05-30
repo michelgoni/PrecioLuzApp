@@ -31,13 +31,13 @@ enum PricesMediumWidgetMapper {
             currentSlotLabel: classificationLabel(currentHour.classification),
             nextHours: nextHours.map {
                 PricesMediumWidgetPresentationModel.NextHourEntry(
-                    hourText: formatHour($0.date),
+                    hourText: formatHour($0.date, calendar: calendar),
                     level: widgetLevel(from: $0.classification),
                     priceText: formatPriceValue($0.eurPerKWh)
                 )
             },
             state: .content,
-            timeWindowLabel: "\(formatHour(currentHour.date)) · \(String(localized: "prices.hourly.current.badge"))"
+            timeWindowLabel: "\(formatHour(currentHour.date, calendar: calendar)) · \(String(localized: "prices.hourly.current.badge"))"
         )
     }
 
@@ -52,12 +52,13 @@ enum PricesMediumWidgetMapper {
         }
     }
 
-    private static func formatHour(_ date: Date) -> String {
-        date.formatted(
-            .dateTime
-                .hour(.twoDigits(amPM: .omitted))
-                .minute(.twoDigits)
-        )
+    private static func formatHour(_ date: Date, calendar: Calendar) -> String {
+        let formatter = DateFormatter()
+        formatter.calendar = calendar
+        formatter.locale = Locale(identifier: "es_ES")
+        formatter.timeZone = calendar.timeZone
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: date)
     }
 
     private static func formatPriceValue(_ value: Double) -> String {
