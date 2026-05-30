@@ -3,6 +3,8 @@
 .swiftpm
 DerivedData/
 build/
+SourcePackages/
+content
 Packages/
 *.xcodeproj/project.xcworkspace/xcuserdata/
 *.xcodeproj/xcuserdata/

@@ -175,6 +175,20 @@
   - suite completa en verde (`** TEST SUCCEEDED **`).
   - `PrecioLuzAppUITests`: `12 tests`, `0 failures`, `1 test skipped` (condición temporal esperada).
 
+### Checkpoint 11M — Localization of Medium Widget Accessibility Labels (2026-05-26)
+- Scope:
+  - localized medium widget accessibility literals in `PricesMediumWidgetView` using `String(localized:)`.
+  - added i18n keys in:
+    - `Resources/es.lproj/Localizable.strings`
+    - `Resources/en.lproj/Localizable.strings`
+- Validation:
+  - `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' test -only-testing:PrecioLuzAppTests | tee /tmp/issue11_11M_apptests_retry.log`
+    - Result: `** TEST SUCCEEDED **`
+  - `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' test -only-testing:PrecioLuzAppUITests | tee /tmp/issue11_11M_uitests_isolation.log`
+    - Result: `** TEST SUCCEEDED **` (12 executed, 1 skipped, 0 failures)
+- Notes:
+  - a monolithic full-suite run (`... test` including app+UI in one pass) was unstable due simulator launch preflight (`SBMainWorkspace Busy`), not product assertions; the stable sequential split above is the accepted validation evidence for this checkpoint.
+
 ### Checkpoint 11D — Final Delivery Validation (2026-05-01)
 - Device baseline: `iPhone 17` (iOS Simulator).
 - Ejecución secuencial:
@@ -314,21 +328,5 @@
 - Evidence:
   - manual review path: launch with `-PrecioLuzResetOnboarding`, advance 4 steps, verify tabs.
   - test-only bypass path: launch with `-PrecioLuzOnboardingCompleted`.
-- Status:
-  - `implemented`
-
-## Issue #11 — Checkpoint 11M (Localization of Medium Widget accessibility labels) (2026-05-26)
-- Scope:
-  - localized medium widget accessibility literals in `PricesMediumWidgetView` using `String(localized:)`.
-  - added i18n keys in:
-    - `Resources/es.lproj/Localizable.strings`
-    - `Resources/en.lproj/Localizable.strings`
-- Validation:
-  - `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' test -only-testing:PrecioLuzAppTests | tee /tmp/issue11_11M_apptests_retry.log`
-    - Result: `** TEST SUCCEEDED **`
-  - `xcodebuild -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' test -only-testing:PrecioLuzAppUITests | tee /tmp/issue11_11M_uitests_isolation.log`
-    - Result: `** TEST SUCCEEDED **` (12 executed, 1 skipped, 0 failures)
-  - Note:
-    - a monolithic full-suite run (`... test` including app+UI in one pass) was unstable due simulator launch preflight (`SBMainWorkspace Busy`), not product assertions; the stable sequential split above is the accepted validation evidence for this checkpoint.
 - Status:
   - `implemented`
