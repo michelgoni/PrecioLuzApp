@@ -155,7 +155,8 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - si no hay evidencia suficiente en salida de comandos, la respuesta obligatoria es `pendiente de verificar`, nunca una negación categórica.
 - Regla de cierre (bloqueante):
   - queda prohibido marcar una tarea como `validada`, `done` o equivalente sin ejecutar `xcodebuild ... test` del scheme principal y obtener resultado global en verde (0 fallos).
-  - ejecutar solo tests parciales (`-only-testing`) no autoriza el cierre de tarea; esos tests parciales solo complementan el diagnóstico.
+  - queda prohibido hacer commit o push de fixes de código sin una ejecución local completa de `xcodebuild ... test` del scheme principal posterior al último cambio de código.
+  - ejecutar solo tests parciales (`-only-testing`) no autoriza el cierre de tarea ni el commit/push; esos tests parciales solo complementan el diagnóstico previo a la suite completa.
 - Destino de simulador por defecto (obligatorio):
   - usar `iPhone 17` como destino estándar en validaciones locales (`build`, `test`, `UI smoke`) mientras no se defina otro baseline de dispositivo en la documentación del proyecto;
   - no usar `iPhone 16` como destino por defecto;
@@ -283,6 +284,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - declarar una decisión explícita por comentario: `aplicar`, `aplicar con ajuste` o `no aplicar` con motivo técnico;
   - después de editar, listar de forma explícita qué se cambió (archivo y comportamiento afectado);
   - cerrar cada comentario con el estado de validación ejecutada (`build`, `lint`, `tests`, UI checks cuando aplique);
+  - si el comentario implica cambios de código, ejecutar la suite completa local del scheme principal antes de commitear o pushear el fix; los tests parciales solo sirven para diagnosticar el comentario, no para darlo por cerrado;
   - tras aplicar el fix, marcar el hilo como resuelto;
   - no dejar comentarios accionables sin respuesta ni hilos abiertos por omisión.
 - Si la `Pull Request` contiene código, el CI mínimo en `GitHub Actions` debe ejecutar al menos `build` y tests, y ambos deben estar en verde antes del merge.
