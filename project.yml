@@ -55,6 +55,8 @@ targets:
         product: Perception
       - package: SQLiteData
         product: SQLiteData
+      - target: PrecioLuzWidgetExtension
+        embed: true
     postBuildScripts:
       - name: Copy Local Debug Secrets
         outputFiles:
@@ -67,6 +69,24 @@ targets:
           if [ "$CONFIGURATION" = "Debug" ] && [ -f "$LOCAL_ENV_FILE" ]; then
             cp "$LOCAL_ENV_FILE" "$BUNDLED_ENV_FILE"
           fi
+
+  PrecioLuzWidgetExtension:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: Sources/Features/WidgetFeature/PricesMediumWidgetView.swift
+      - path: Widgets
+      - path: Resources
+        buildPhase: resources
+        excludes:
+          - Info.plist
+    settings:
+      base:
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: R55L2F35DV
+        PRODUCT_BUNDLE_IDENTIFIER: com.michelgoni.PrecioLuzApp.WidgetExtension
+        INFOPLIST_FILE: Widgets/Info.plist
 
   PrecioLuzAppTests:
     type: bundle.unit-test
@@ -101,6 +121,7 @@ schemes:
     build:
       targets:
         PrecioLuzApp: all
+        PrecioLuzWidgetExtension: all
         PrecioLuzAppTests: [test]
         PrecioLuzAppUITests: [test]
     run:

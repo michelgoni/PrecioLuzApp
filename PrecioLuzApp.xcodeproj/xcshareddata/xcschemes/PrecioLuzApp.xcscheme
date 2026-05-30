@@ -49,6 +49,20 @@
                ReferencedContainer = "container:PrecioLuzApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6ED014006D81B918EC5261F9"
+               BuildableName = "PrecioLuzWidgetExtension.appex"
+               BlueprintName = "PrecioLuzWidgetExtension"
+               ReferencedContainer = "container:PrecioLuzApp.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
