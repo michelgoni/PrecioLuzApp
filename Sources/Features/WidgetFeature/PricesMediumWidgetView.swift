@@ -182,7 +182,8 @@ struct PricesMediumWidgetView: View {
             .accessibilityLabel(String(localized: "widget.medium.accessibility.chart.label"))
 
             HStack(spacing: Layout.nextHourSpacing) {
-                ForEach(Array(model.nextHours.prefix(Layout.maxNextHours).enumerated()), id: \.element.id) { index, hour in
+                let visibleNextHours = Array(model.nextHours.prefix(Layout.maxNextHours).enumerated())
+                ForEach(visibleNextHours, id: \.element.id) { index, hour in
                     VStack(spacing: Layout.nextHourVerticalSpacing) {
                         Text(hour.hourText)
                             .font(.caption2.weight(.bold))

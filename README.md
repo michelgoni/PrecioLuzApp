@@ -1,60 +1,100 @@
 # PrecioLuzApp ⚡📱
 
-> A native iPhone app to understand electricity prices at a glance, explore daily trends, and get smart local alerts before expensive hours hit.
+> A native iPhone app that helps people in Spain decide **when it is worth using electricity** without reading complex price tables.
 
-## ✨ What is this project?
+`PrecioLuzApp` helps domestic users with PVPC or indexed electricity tariffs understand hourly electricity prices, spot the best hours of the day, and receive useful local alerts before expensive or convenient time slots arrive.
 
-`PrecioLuzApp` is an iPhone-first app focused on Spanish hourly electricity pricing.
+The product goal is not only to display prices. The goal is to turn hourly market data into simple everyday decisions.
 
-The goal is simple:
+## Value proposition
 
-- 🟢 show when electricity is cheap
-- 🟠 highlight mid-range hours
-- 🔴 warn when prices are expensive
-- 🧮 help users estimate appliance cost from a selected hour
-- 🔔 schedule local notifications for daily minimums, maximums, and custom thresholds
+- See the current electricity price in seconds.
+- Quickly identify cheap, mid-range, and expensive hours.
+- Compare the daily price curve by time segment.
+- Estimate appliance usage cost from a selected hour.
+- Receive local alerts for daily minimums, maximums, and custom thresholds.
+- Stay iPhone-first, privacy-conscious, and simple: no account and no backend in the base scope.
 
-This project is also intentionally being used as a learning playground for:
+## Target user
 
-- 🧩 The Composable Architecture (`TCA`)
-- 🍎 modern native iOS development
-- 🪟 SwiftUI-first UI patterns
-- 🧪 testable feature design
+`PrecioLuzApp` is designed for people in Spain who check electricity prices during the day and want to make better decisions about when to use appliances such as washing machines, dishwashers, water heaters, cooking devices, or climate control.
 
-## 📲 Planned app experience
+The main user job is simple:
 
-The app is designed around **three tabs**:
+> “I want to know at a glance whether now is a good time to use electricity or whether I should wait.”
+
+## Core app experience
+
+The app is organized around three tabs:
 
 ### 1. Prices ⏰
-- Daily summary cards for current, average, minimum, and maximum price
-- A 24-hour price list
-- Color-coded hourly slots for cheap, mid, and expensive periods
-- A modal cost calculator when the user taps a time slot
+
+Fast daily reading:
+
+- summary cards for current, average, minimum, and maximum price;
+- complete hourly price list;
+- visual classification for cheap, mid-range, and expensive slots;
+- current-hour highlighting;
+- access to an estimated appliance cost calculation from any selected hourly slot.
 
 ### 2. Chart 📈
-- A daily chart split into clear day sections
-- Fast visual comparison between time ranges
-- Hourly inspection for a selected time segment
+
+Visual price exploration:
+
+- native `Charts` daily graph;
+- fixed daypart segmentation: overnight, morning, afternoon, and night;
+- point inspection for a selected hour;
+- quick comparison between different parts of the day.
 
 ### 3. Settings ⚙️
-- Local notification toggles
-- Daily minimum alert
-- Daily maximum alert
-- Custom price-threshold alert
 
-## 🧠 Product direction
+Local alert control:
 
-The current product definition assumes:
+- notification enablement;
+- daily minimum alert;
+- daily maximum alert;
+- custom threshold alert in `€/kWh`.
 
-- 🇪🇸 Spanish market pricing with `ESIOS/PVPC` as the initial source of truth
-- 📆 up to `30 days` of local history
-- 🔔 local notifications only
-- 📱 iPhone-only scope for the base version
-- 🌙 a dark, modern, native iOS visual direction
+## Product differentiation
 
-## 🏗️ Tech direction
+Many tools show electricity prices. `PrecioLuzApp` aims to differentiate through:
 
-The project documentation currently defines this stack:
+- **immediate clarity**: hourly traffic-light semantics and daily summary without noise;
+- **actionable decisions**: knowing when to consume, not only how much electricity costs;
+- **native iOS quality**: SwiftUI, Charts, functional motion, and a modern dark visual direction;
+- **privacy and simplicity**: no login, no account, and no own backend in the base scope;
+- **local alerts**: daily utility without relying on remote push notifications.
+
+## Current scope
+
+The current implementation is positioned as an advanced MVP foundation:
+
+- ✅ iPhone project generated with `XcodeGen`;
+- ✅ architecture based on `SwiftUI`, `TCA`, and `Swift Concurrency`;
+- ✅ `Prices`, `Chart`, and `Settings` tabs;
+- ✅ domain models and injectable clients;
+- ✅ `REE/ESIOS` data integration through a local API key;
+- ✅ local persistence and recent history;
+- ✅ estimated appliance cost calculation;
+- ✅ local notifications for daily minimum, daily maximum, and threshold alerts;
+- ✅ resilience states: loading, empty, error, cached, and retry;
+- ✅ test coverage, snapshots, and UI smoke tests;
+- ✅ CI workflow for `build` and `test`.
+
+## Data and precision
+
+The app uses `REE/ESIOS` as the initial source of truth for Spanish hourly electricity prices.
+
+Appliance cost calculation is currently an estimate based on power and duration. This is valid for MVP validation, but it should not be presented as real measured consumption.
+
+Natural product evolutions include:
+
+- custom appliance profiles;
+- energy-per-cycle values entered from energy labels;
+- multi-hour calculation when an appliance cycle crosses hourly slots;
+- future integration with real measurements through smart plugs, Home Assistant, or compatible standards.
+
+## Technical stack
 
 - `SwiftUI`
 - `Swift Concurrency`
@@ -63,47 +103,35 @@ The project documentation currently defines this stack:
 - `URLSession`
 - `The Composable Architecture`
 - `sqlite-data`
+- `SnapshotTesting`
+- `XcodeGen`
 
-## 🔐 Local REE/ESIOS API key
+## Local REE/ESIOS API key
 
-Real REE/ESIOS data is loaded from the local `REE_API_KEY` secret. The key must not be committed.
+Real `REE/ESIOS` data is loaded from the local `REE_API_KEY` secret. The key must not be committed.
 
-For local development, create a repo-root `.env` file and add the `REE_API_KEY` entry with your local token.
+For local development, create a repo-root `.env` file:
 
-The shared Xcode scheme only stores `PRECIOLUZ_ENV_FILE=$(SRCROOT)/.env`, which is a non-secret path. Unit tests read that local file when the variable is not already present in the process environment.
+```env
+REE_API_KEY=your_local_token
+```
 
-For simulator Debug app runs, XcodeGen config copies the local `.env` into the built app bundle as `PrecioLuzLocal.env`. That generated bundle resource is local build output only; it is not tracked and is removed for non-Debug configurations.
+The shared Xcode scheme only stores `PRECIOLUZ_ENV_FILE=$(SRCROOT)/.env`, which is a non-secret local path. For simulator Debug runs, `XcodeGen` copies the local `.env` into the built app bundle as `PrecioLuzLocal.env`. That generated bundle resource is local build output only; it is not tracked and is removed for non-Debug configurations.
 
-## 🚧 Current status
+## Documentation
 
-Roadmap implementation is currently delivered through `Milestone 8` at local-repo level:
+- [`AGENTS.md`](AGENTS.md) — project governance, boundaries, and priorities.
+- [`docs/product-spec.md`](docs/product-spec.md) — functional product contract.
+- [`docs/app-store-positioning.md`](docs/app-store-positioning.md) — App Store positioning, ASO, screenshots, and monetization direction.
+- [`docs/ios-architecture.md`](docs/ios-architecture.md) — technical structure and planned responsibilities.
+- [`docs/engineering-rules.md`](docs/engineering-rules.md) — execution, validation, CI, and PR rules.
+- [`docs/ui-direction.md`](docs/ui-direction.md) — visual and UX direction.
+- [`docs/implementation-roadmap.md`](docs/implementation-roadmap.md) — implementation roadmap.
+- [`docs/validation-evidence.md`](docs/validation-evidence.md) — validation evidence.
+- [`docs/codex-project-prompt.md`](docs/codex-project-prompt.md) — lightweight execution prompt template.
 
-- ✅ iPhone Xcode project generated via `project.yml` (`XcodeGen`)
-- ✅ `TCA` + `sqlite-data` dependencies integrated
-- ✅ base `TabView` shell with `Precios`, `Gráfica`, `Ajustes`
-- ✅ SF Symbols configured for tabs (`eurosign.circle`, `chart.xyaxis.line`, `gearshape`)
-- ✅ localized tab titles via `Localizable.strings` (`es` and `en`)
-- ✅ domain models + injectable clients (`pricing`, `persistence`, `date`, `notifications`)
-- ✅ `Prices`, `Chart`, `Settings`, and `CostCalculation` features
-- ✅ resilience + QA hardening baseline (`offline/cached/error/retry`) with acceptance/snapshot/ui smoke coverage
-- ✅ baseline shell tests + TCA smoke tests
-- ✅ GitHub Actions CI workflow for `build` + `test`
-- ✅ validation evidence documented up to `Issue #11` final checkpoint in `docs/validation-evidence.md`
+## Product principle
 
-Pending roadmap work is now mainly integration traceability (`Done-Integrated`) and follow-up increments/issues after milestone closure.
+`PrecioLuzApp` should not feel like a price table. It should feel like a fast decision:
 
-## 📚 Documentation map
-
-If you want the full project definition, start here:
-
-- `AGENTS.md` — project governance, boundaries, and priorities
-- `docs/product-spec.md` — functional product contract
-- `docs/ios-architecture.md` — technical structure and planned folder responsibilities
-- `docs/engineering-rules.md` — execution rules for implementation work
-- `docs/ui-direction.md` — visual and UX direction
-- `docs/implementation-roadmap.md` — step-by-step delivery roadmap
-- `docs/codex-project-prompt.md` — lightweight execution prompt template
-
----
-
-Built with ⚡ energy data, 📱 native iOS ideas, and 🧠 a strong bias toward clarity.
+> “Use electricity now”, “wait”, or “choose this cheaper slot”.

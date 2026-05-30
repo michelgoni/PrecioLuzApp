@@ -199,13 +199,18 @@ struct Issue11SnapshotTests {
                     layout: .device(config: .iPhoneSe)
                 ),
                 named: name,
-                record: shouldRecordSnapshots,
                 file: file,
                 testName: testName,
                 line: line
             )
         }
-        assertion()
+        if shouldRecordSnapshots {
+            withSnapshotTesting(record: .all) {
+                assertion()
+            }
+        } else {
+            assertion()
+        }
     }
 }
 

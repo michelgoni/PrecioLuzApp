@@ -8,7 +8,9 @@ enum PricesMediumWidgetMapper {
     ) -> PricesMediumWidgetPresentationModel {
         let sortedPrices = hourlyPrices.sorted { $0.date < $1.date }
         guard
-            let currentHour = sortedPrices.first(where: { calendar.isDate($0.date, equalTo: now, toGranularity: .hour) }),
+            let currentHour = sortedPrices.first(
+                where: { calendar.isDate($0.date, equalTo: now, toGranularity: .hour) }
+            ),
             let currentIndex = sortedPrices.firstIndex(where: { $0.date == currentHour.date })
         else {
             return PricesMediumWidgetPresentationModel(
@@ -37,7 +39,10 @@ enum PricesMediumWidgetMapper {
                 )
             },
             state: .content,
-            timeWindowLabel: "\(formatHour(currentHour.date, calendar: calendar)) · \(String(localized: "prices.hourly.current.badge"))"
+            timeWindowLabel: [
+                formatHour(currentHour.date, calendar: calendar),
+                String(localized: "prices.hourly.current.badge")
+            ].joined(separator: " · ")
         )
     }
 
