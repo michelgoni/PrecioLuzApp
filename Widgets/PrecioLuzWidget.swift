@@ -16,10 +16,12 @@ struct PrecioLuzWidgetProvider: TimelineProvider {
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<PrecioLuzWidgetEntry>) -> Void) {
-        let now = Date()
-        let nextRefresh = Calendar.current.date(byAdding: .minute, value: 30, to: now) ?? now
-        let entry = PrecioLuzWidgetEntry(date: now, model: .previewContent)
-        completion(Timeline(entries: [entry], policy: .after(nextRefresh)))
+        let completion = PrecioLuzWidgetTimelineCompletion(completion)
+        Task {
+            let entry = await PrecioLuzWidgetTimelineLoader.makeEntry()
+            let timeline = Timeline(entries: [entry], policy: .after(entry.nextRefreshDate))
+            completion.callAsFunction(timeline)
+        }
     }
 }
 
@@ -72,4 +74,70 @@ private extension PricesMediumWidgetPresentationModel {
         state: .content,
         timeWindowLabel: "Hoy"
     )
+}
+
+private extension PrecioLuzWidgetEntry {
+    var nextRefreshDate: Date {
+        Calendar.current.date(byAdding: .minute, value: 30, to: date) ?? date
+    }
+}
+
+private final class PrecioLuzWidgetTimelineCompletion: @unchecked Sendable {
+    private let completion: (Timeline<PrecioLuzWidgetEntry>) -> Void
+
+    init(_ completion: @escaping (Timeline<PrecioLuzWidgetEntry>) -> Void) {
+        self.completion = completion
+    }
+
+    func callAsFunction(_ timeline: Timeline<PrecioLuzWidgetEntry>) {
+        completion(timeline)
+    }
+}
+
+private enum PrecioLuzWidgetTimelineLoader {
+    private static let timeZone = TimeZone(identifier: "Europe/Madrid") ?? .current
+
+    static func makeEntry(now: Date = Date()) async -> PrecioLuzWidgetEntry {
+        let model = await makeModel(now: now)
+        return PrecioLuzWidgetEntry(date: now, model: model)
+    }
+
+    private static func makeModel(now: Date) async -> PricesMediumWidgetPresentationModel {
+        do {
+            let calendar = pricingCalendar
+            let rawPrices = try await fetchRawPrices(now: now, calendar: calendar)
+            let hourlyPrices = HourlyPriceClassifier.classify(rawPrices, calendar: calendar)
+            return PricesMediumWidgetMapper.makeModel(
+                from: hourlyPrices,
+                now: now,
+                calendar: calendar
+            )
+        } catch {
+            return PricesMediumWidgetPresentationModel(
+                barSeries: [],
+                currentPriceText: "—",
+                currentSlotLabel: String(localized: "widget.medium.empty.slot"),
+                nextHours: [],
+                state: .empty,
+                timeWindowLabel: String(localized: "widget.medium.empty.timeWindow")
+            )
+        }
+    }
+
+    private static func fetchRawPrices(now: Date, calendar: Calendar) async throws -> [PricingClient.HourPrice] {
+        let policy = REEPublicationWindowPolicy(calendar: calendar, timeZone: timeZone)
+        let client = PricingClient.esiosLive()
+        let dayStarts = policy.dayStartsToLoad(now: now, requestedDay: nil)
+        var prices: [PricingClient.HourPrice] = []
+        for dayStart in dayStarts {
+            prices += try await client.fetchDailyPrices(dayStart, timeZone)
+        }
+        return prices.sorted { $0.date < $1.date }
+    }
+
+    private static var pricingCalendar: Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+        return calendar
+    }
 }

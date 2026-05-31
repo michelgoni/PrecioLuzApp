@@ -46,8 +46,8 @@ struct PricesMediumWidgetMapperTests {
         #expect(model.state == .content)
         #expect(model.barSeries.count == 12)
         #expect(model.nextHours.count == 3)
-        #expect(model.timeWindowLabel.contains("Ahora"))
-        #expect(model.currentSlotLabel == "Barato")
+        #expect(model.timeWindowLabel.contains(String(localized: "prices.hourly.current.badge")))
+        #expect(model.currentSlotLabel == String(localized: "prices.classification.cheap"))
     }
 
     @Test("Widget mapper normalizes bar heights with floor")

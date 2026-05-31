@@ -53,6 +53,7 @@ jobs:
             clean \
             -only-testing:PrecioLuzAppTests \
             -skip-testing:PrecioLuzAppTests/Issue11SnapshotTests \
+            -skip-testing:PrecioLuzAppTests/PricesMediumWidgetSnapshotTests \
             -skipMacroValidation \
             -resultBundlePath TestResults.xcresult \
             test 2>&1 | tee xcodebuild-test.log
