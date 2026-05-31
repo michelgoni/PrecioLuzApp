@@ -99,22 +99,23 @@ private enum PrecioLuzWidgetTimelineLoader {
         }
 
         let startDate = alignedHourDate(for: now, calendar: calendar) ?? now
-        let endDate = calendar.date(byAdding: .hour, value: 24, to: startDate) ?? startDate
-        var cursor = startDate
-        var entries: [PrecioLuzWidgetEntry] = []
+        let entryDates = hourlyPrices
+            .map(\.date)
+            .filter { $0 >= startDate }
+            .sorted()
 
-        while cursor <= endDate {
+        guard !entryDates.isEmpty else {
+            return [PrecioLuzWidgetEntry(date: now, model: makeEmptyModel())]
+        }
+
+        return entryDates.map { cursor in
             let model = PricesMediumWidgetMapper.makeModel(
                 from: hourlyPrices,
                 now: cursor,
                 calendar: calendar
             )
-            entries.append(PrecioLuzWidgetEntry(date: cursor, model: model))
-            guard let nextHour = calendar.date(byAdding: .hour, value: 1, to: cursor) else { break }
-            cursor = nextHour
+            return PrecioLuzWidgetEntry(date: cursor, model: model)
         }
-
-        return entries
     }
 
     private static func fetchHourlyPrices(now: Date, calendar: Calendar) async -> [HourlyPrice] {
