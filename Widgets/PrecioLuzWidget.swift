@@ -18,8 +18,8 @@ struct PrecioLuzWidgetProvider: TimelineProvider {
     func getTimeline(in context: Context, completion: @escaping (Timeline<PrecioLuzWidgetEntry>) -> Void) {
         let completion = PrecioLuzWidgetTimelineCompletion(completion)
         Task {
-            let entry = await PrecioLuzWidgetTimelineLoader.makeEntry()
-            let timeline = Timeline(entries: [entry], policy: .after(entry.nextRefreshDate))
+            let entries = await PrecioLuzWidgetTimelineLoader.makeHourlyEntries()
+            let timeline = Timeline(entries: entries, policy: .atEnd)
             completion.callAsFunction(timeline)
         }
     }
@@ -76,12 +76,6 @@ private extension PricesMediumWidgetPresentationModel {
     )
 }
 
-private extension PrecioLuzWidgetEntry {
-    var nextRefreshDate: Date {
-        Calendar.current.date(byAdding: .minute, value: 30, to: date) ?? date
-    }
-}
-
 private final class PrecioLuzWidgetTimelineCompletion: @unchecked Sendable {
     private let completion: (Timeline<PrecioLuzWidgetEntry>) -> Void
 
@@ -97,31 +91,51 @@ private final class PrecioLuzWidgetTimelineCompletion: @unchecked Sendable {
 private enum PrecioLuzWidgetTimelineLoader {
     private static let timeZone = TimeZone(identifier: "Europe/Madrid") ?? .current
 
-    static func makeEntry(now: Date = Date()) async -> PrecioLuzWidgetEntry {
-        let model = await makeModel(now: now)
-        return PrecioLuzWidgetEntry(date: now, model: model)
-    }
+    static func makeHourlyEntries(now: Date = Date()) async -> [PrecioLuzWidgetEntry] {
+        let calendar = pricingCalendar
+        let hourlyPrices = await fetchHourlyPrices(now: now, calendar: calendar)
+        guard !hourlyPrices.isEmpty else {
+            return [PrecioLuzWidgetEntry(date: now, model: makeEmptyModel())]
+        }
 
-    private static func makeModel(now: Date) async -> PricesMediumWidgetPresentationModel {
-        do {
-            let calendar = pricingCalendar
-            let rawPrices = try await fetchRawPrices(now: now, calendar: calendar)
-            let hourlyPrices = HourlyPriceClassifier.classify(rawPrices, calendar: calendar)
-            return PricesMediumWidgetMapper.makeModel(
+        let startDate = alignedHourDate(for: now, calendar: calendar) ?? now
+        let entryDates = hourlyPrices
+            .map(\.date)
+            .filter { $0 >= startDate }
+            .sorted()
+
+        guard !entryDates.isEmpty else {
+            return [PrecioLuzWidgetEntry(date: now, model: makeEmptyModel())]
+        }
+
+        return entryDates.map { cursor in
+            let model = PricesMediumWidgetMapper.makeModel(
                 from: hourlyPrices,
-                now: now,
+                now: cursor,
                 calendar: calendar
             )
-        } catch {
-            return PricesMediumWidgetPresentationModel(
-                barSeries: [],
-                currentPriceText: "—",
-                currentSlotLabel: String(localized: "widget.medium.empty.slot"),
-                nextHours: [],
-                state: .empty,
-                timeWindowLabel: String(localized: "widget.medium.empty.timeWindow")
-            )
+            return PrecioLuzWidgetEntry(date: cursor, model: model)
         }
+    }
+
+    private static func fetchHourlyPrices(now: Date, calendar: Calendar) async -> [HourlyPrice] {
+        do {
+            let rawPrices = try await fetchRawPrices(now: now, calendar: calendar)
+            return HourlyPriceClassifier.classify(rawPrices, calendar: calendar)
+        } catch {
+            return []
+        }
+    }
+
+    private static func makeEmptyModel() -> PricesMediumWidgetPresentationModel {
+        PricesMediumWidgetPresentationModel(
+            barSeries: [],
+            currentPriceText: "—",
+            currentSlotLabel: String(localized: "widget.medium.empty.slot"),
+            nextHours: [],
+            state: .empty,
+            timeWindowLabel: String(localized: "widget.medium.empty.timeWindow")
+        )
     }
 
     private static func fetchRawPrices(now: Date, calendar: Calendar) async throws -> [PricingClient.HourPrice] {
@@ -139,5 +153,10 @@ private enum PrecioLuzWidgetTimelineLoader {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = timeZone
         return calendar
+    }
+
+    private static func alignedHourDate(for date: Date, calendar: Calendar) -> Date? {
+        let components = calendar.dateComponents([.year, .month, .day, .hour], from: date)
+        return calendar.date(from: components)
     }
 }
