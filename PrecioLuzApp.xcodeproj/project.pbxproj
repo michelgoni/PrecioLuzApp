@@ -9,60 +9,86 @@
 /* Begin PBXBuildFile section */
 		00FB8BC052CFF7B1164C485D /* TCASmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F67521AA664F5FE9F1AC6AB8 /* TCASmokeTests.swift */; };
 		047E6887D249675B2877C50E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ACADDCB130E4F2949415F1B1 /* LaunchScreen.storyboard */; };
+		05BE722B13DE21F81D6971CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ACFC1ACFFCB452F8053B28AD /* Assets.xcassets */; };
 		0707733D9FC9E87DBB20DE2B /* PersistenceClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8560ED2DC8C618B58A3BF47D /* PersistenceClient.swift */; };
 		0CAD19E030D3F65C76FD2E39 /* AppShellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293BA0BC87789BB4B9D3F603 /* AppShellView.swift */; };
 		0FD89C910B403EC66F489D80 /* Issue11SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFBD3F0A411469C167A5075 /* Issue11SnapshotTests.swift */; };
 		12C86FE819461E72901F9029 /* PricesViewPreviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD95CAC54FDB663633913B0 /* PricesViewPreviews.swift */; };
+		13D06893845FDE23E9C38E59 /* contentState.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CD98217A963810D2D4B2079 /* contentState.1.png */; };
+		1804AFE66A039B4FCEDA41BF /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC366745B4F795FF348674C /* OnboardingView.swift */; };
 		196585D072C3B209CF086B54 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0FB87B5ABC1BB2B2D7C7837C /* Localizable.strings */; };
 		1BF7BAEA7148C309B55B9DEE /* CostCalculationFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D0097CAC5D657E7AA186A3 /* CostCalculationFeature.swift */; };
+		1C848093D6187BE2F10212E5 /* pricesWidgetContent.pricesWidgetContent.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C0D158E595F3588D0627D03 /* pricesWidgetContent.pricesWidgetContent.png */; };
 		1D424AF1182B4C4F8273ECA8 /* AppFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D4F8F5962D5F8A19F7EC79 /* AppFeatureTests.swift */; };
+		27074DE99DBC9A72CBAA5090 /* REEPublicationWindowPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B40F464A61A16FC1C739606 /* REEPublicationWindowPolicy.swift */; };
 		285C101699D38BB90E3DE311 /* OnboardingFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27E52CE1906660020462FE9 /* OnboardingFeatureTests.swift */; };
 		2ADAB557F766934A2E7E9453 /* SettingsDeniedPermissionsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0FD7C87035FCE9D4CF7334 /* SettingsDeniedPermissionsSectionView.swift */; };
 		2C2E3927E5CCDD448DEC562D /* SettingsRowLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D675B31FFCC68F4491EA8A80 /* SettingsRowLabel.swift */; };
 		2C7A88ECC9F97A3203DEB45D /* PricesFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4F1D582D8DBA50B34C8BD4 /* PricesFeatureTests.swift */; };
+		2D4BCBF1834AFF59D48EDA81 /* PricesMediumWidgetMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF32FEBCE3F17C77BB17D95 /* PricesMediumWidgetMapperTests.swift */; };
 		324A8B65E4B3AE6929DAC3AF /* PricingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD7FDA5CB1305816A882113 /* PricingClient.swift */; };
+		36E667760CDE3B2AF2FB73EA /* emptyState.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 7C7C06BD7AB07B86579D1E81 /* emptyState.1.png */; };
+		370F9A2A82C7EB72EE924590 /* onboardingScreens.dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 64B84354C1AC5423D05E8FF1 /* onboardingScreens.dark.png */; };
 		496689F53D5AA62269939AA6 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 15434F83F7C47328886E8E7C /* SnapshotTesting */; };
 		4C0BAE6A4CB9433F43182C37 /* DomainModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75905F6274FE9F8BFD18AA70 /* DomainModels.swift */; };
 		4EEE6FB604EC3E2E8F636CAC /* PricingClientRealAPIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369D5D2B2592842B8DB7FF51 /* PricingClientRealAPIIntegrationTests.swift */; };
+		4EEF7C317BE3005C6791C72F /* pricesWidgetEmpty.pricesWidgetEmpty.png in Resources */ = {isa = PBXBuildFile; fileRef = 79A1CB5ED2D8A36EE938B07D /* pricesWidgetEmpty.pricesWidgetEmpty.png */; };
+		547F9BDBD4D0E87A0B2CC386 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0FB87B5ABC1BB2B2D7C7837C /* Localizable.strings */; };
+		55287D5A2C01138829AE5E0B /* PricesMediumWidgetSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9858A700E9F5FAA7978AC931 /* PricesMediumWidgetSnapshotTests.swift */; };
 		565381298FCF678EFE583514 /* ChartEmptyStateCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31365554D523EA674F4D99AE /* ChartEmptyStateCardView.swift */; };
+		58081BCCC1EDD813714968C8 /* PrecioLuzWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 9244DF5E6676532B4A9C6B19 /* PrecioLuzWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		593628AFC7B815D234E34500 /* PricesCalculationSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CF32CE8FA1797C28B789D1 /* PricesCalculationSheetView.swift */; };
 		59B463544DEE1688110EA083 /* SettingsThresholdSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C679E8989B60162052A21292 /* SettingsThresholdSectionView.swift */; };
 		5A1A24247057150A4F915D15 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1DBD42E1BBDDF4FD2891FE /* SettingsView.swift */; };
 		5D279D6881FAF12A670D335F /* DomainModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A029A1E50E3C94217EFFCFD3 /* DomainModelsTests.swift */; };
 		5E5746E4E23EC6B3BD28CE34 /* DailyPricingSnapshotPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BBD1FCB478C16D91769556 /* DailyPricingSnapshotPipeline.swift */; };
-		5F8A32B63C6125F188C8F88F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC366745B4F795FF348674C /* OnboardingView.swift */; };
 		64480331687A48156A250C3C /* NotificationSchedulingPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153BCC42D73BBD8DD5292357 /* NotificationSchedulingPlanner.swift */; };
+		672E38D6AB00A3E9C8455ACD /* assertIssue11Snapshot-of.2.png in Resources */ = {isa = PBXBuildFile; fileRef = 23E3CFEB9A02BA9FA196BA42 /* assertIssue11Snapshot-of.2.png */; };
 		68B309C5FF0C727AAC50E095 /* Issue8AcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79D3713AFCF1EB48194466D /* Issue8AcceptanceTests.swift */; };
 		693300BDC4A7882348CC27BB /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C64AB47F534C3EF47DA37C60 /* ComposableArchitecture */; };
+		7033997E0C9BFD052B7F9C4F /* onboardingScreens.light.png in Resources */ = {isa = PBXBuildFile; fileRef = 60D1A5BD0097FD6161A98830 /* onboardingScreens.light.png */; };
 		70B0B868B612F11EC182DCD1 /* Issue11AcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A5F075A317A7D493C8A567 /* Issue11AcceptanceTests.swift */; };
 		710230124962E2BB85E1987F /* ClientDependenciesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9580A221A5C7CD6CCF6C022 /* ClientDependenciesTests.swift */; };
+		72CD1FB9DACA1870DBAC00C8 /* assertIssue11Snapshot-of.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AFD7870047757AEF4C00429 /* assertIssue11Snapshot-of.1.png */; };
+		746681CD9AEE0635DC1CE511 /* PricesMediumWidgetMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B57D29E42F0C0E044AFB2F /* PricesMediumWidgetMapper.swift */; };
 		74C87C125B8103E879B5E025 /* PerceptionCore in Frameworks */ = {isa = PBXBuildFile; productRef = 68F3E522A5B73E8D51220272 /* PerceptionCore */; };
 		7880C9163CD98D0FD0362EC9 /* SQLiteData in Frameworks */ = {isa = PBXBuildFile; productRef = 4188B8C7C367C21C44A8C549 /* SQLiteData */; };
 		800D4B667AA0009EDF34F4A4 /* CasePaths in Frameworks */ = {isa = PBXBuildFile; productRef = F3959B2AF0CD932CDFA800A1 /* CasePaths */; };
 		80BD3178175AB2DBD4009A5C /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C01278E60DB2DB16B036AF /* ChartView.swift */; };
 		8167C1ACA3993C022E94ADF6 /* settingsStates.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C2478FDC49D5ABE5B80426C /* settingsStates.1.png */; };
+		857B7D1018604267030D4F1C /* pricesWidgetContent.pricesWidgetContentDark.png in Resources */ = {isa = PBXBuildFile; fileRef = 94E79B93ED4FC98239FF69C3 /* pricesWidgetContent.pricesWidgetContentDark.png */; };
 		85ABD8BD485CCA4876B101A7 /* SettingsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CBEA5E1ECD0491F94E0DBA /* SettingsFeature.swift */; };
 		87A27EA53BFD0397DBAE5371 /* PrecioLuzAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51625C05A57E37064CEBE3EF /* PrecioLuzAppUITests.swift */; };
 		897C53EF3046CAF8D5372B20 /* PricingClientESIOSLiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C7481B9BEBDEA97D125614 /* PricingClientESIOSLiveTests.swift */; };
 		8BD5517225A03B27FCE93725 /* pricesContent.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C9D7D9690BD42C457418C6A /* pricesContent.1.png */; };
+		8D94D6685EF3ACB47B756A9D /* PricingClient+Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD501B84EE324C5F847DCA5 /* PricingClient+Dependencies.swift */; };
+		90DA5485732BAF6CDEC8E667 /* assertIssue11Snapshot-of.4.png in Resources */ = {isa = PBXBuildFile; fileRef = E5C3BE00B73A9FCDFB99A380 /* assertIssue11Snapshot-of.4.png */; };
 		92FBFFE0D2AAE87BCF1EAFC5 /* CostCalculationFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1942F66E100388ADAE896898 /* CostCalculationFeatureTests.swift */; };
+		95556E5DD99476C928D84993 /* pricesWidgetEmpty.pricesWidgetEmptyDark.png in Resources */ = {isa = PBXBuildFile; fileRef = 1C112DB6E3F9760A9907027C /* pricesWidgetEmpty.pricesWidgetEmptyDark.png */; };
 		9B13DE84E95AAB6D55816805 /* PricesFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A349262256B13A6827F96952 /* PricesFeature.swift */; };
 		9B97B0F81D357EC8B3FB0E2A /* ChartDailySeriesCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CD20A78360C41B3821FCCD /* ChartDailySeriesCardView.swift */; };
+		9C562B95321FA0BDCFA9906E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ACADDCB130E4F2949415F1B1 /* LaunchScreen.storyboard */; };
 		9C765BACC520E486AACA9600 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ACFC1ACFFCB452F8053B28AD /* Assets.xcassets */; };
 		9D1BFB5C87E001509F4A3B7E /* PricesHourlyListSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A349F2AC054DD803DF26D6 /* PricesHourlyListSectionView.swift */; };
 		A24CC7F8FF1B4D7C68C2979C /* SettingsAlertsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C472C577421FFAA1639BEBF /* SettingsAlertsSectionView.swift */; };
 		A6DDCFCA4E538C5A139C6CE2 /* REEPublicationWindowPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF90B581C5E6E3990A2B4E7 /* REEPublicationWindowPolicyTests.swift */; };
 		AE0C627B0ED689EA484A29AA /* Issue10AcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38B1972E86DEC1621A2B365 /* Issue10AcceptanceTests.swift */; };
 		B4A2DFD70536A676347158B4 /* ChartInspectionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642F4C674FBA509E43E81971 /* ChartInspectionCardView.swift */; };
+		B89F86072C5F1E3BC3F5D4A4 /* PricesMediumWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200C5166A30C94F4B9EAC771 /* PricesMediumWidgetView.swift */; };
 		BE6F8B2F22DC95595232845A /* DateClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98F488EF3222A15A96E4F3CF /* DateClient.swift */; };
+		C27BC48D55466940F869F76C /* DomainModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75905F6274FE9F8BFD18AA70 /* DomainModels.swift */; };
 		C38E3205CBA69E8FEEC1230F /* ChartFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC5C7E5F151FC11C56A3D19 /* ChartFeature.swift */; };
 		C41724ED25C88587D77820D1 /* Issue9AcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7744D261DCF1BFC35D37B5D /* Issue9AcceptanceTests.swift */; };
+		C7AAFC28F59E75125BB441A9 /* PrecioLuzWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C3087DA58E84D8B52712AE /* PrecioLuzWidget.swift */; };
 		CE2C0DE70A00C8DB9F34406B /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = B05968D2E8CFF8E01B748541 /* ComposableArchitecture */; };
 		D10A52D551C8B3E7C2FB7CDB /* ChartDaypartPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613AC733428459896683DAAC /* ChartDaypartPickerView.swift */; };
+		D3D7DADA4B38A2AA738AB80D /* assertIssue11Snapshot-of.3.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F1F17A9AF8FC6FD51C25836 /* assertIssue11Snapshot-of.3.png */; };
 		D439C31ED58457B59CB2F5D6 /* SettingsFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1D1D0EBF01088EFBD9E3B7 /* SettingsFeatureTests.swift */; };
 		D4CB180C3283A7E29F3AC3DD /* NotificationSchedulingPlannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276B03E4DEC212D3F4AC0C01 /* NotificationSchedulingPlannerTests.swift */; };
 		D4F2BDEAF0E519BD8DCB871B /* PrecioLuzAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA85C7AECFB312B3FB9D051 /* PrecioLuzAppApp.swift */; };
+		D7FF159A099DA76FA3AA186E /* PricingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD7FDA5CB1305816A882113 /* PricingClient.swift */; };
 		D90EA5BE4B99C91A0F417B30 /* PricesSummaryGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2770E992020BA0D8D63EE8EE /* PricesSummaryGridView.swift */; };
+		DABEE368CF1901AFFA359932 /* PricesMediumWidgetMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B57D29E42F0C0E044AFB2F /* PricesMediumWidgetMapper.swift */; };
 		DB0C5DE8895671AA9ABA9506 /* PricesPresetCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A951194E5023185C583A951 /* PricesPresetCatalog.swift */; };
 		E0F1828F94AE4466F24D1C38 /* REEPublicationWindowPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B40F464A61A16FC1C739606 /* REEPublicationWindowPolicy.swift */; };
 		E4A687F3008BBA0F8B3C409C /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288DF63F4693A0161011B4A4 /* AppFeature.swift */; };
@@ -70,6 +96,7 @@
 		E4F2107B9928272D482EFFB3 /* OnboardingFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FF0F0AC907E230DA8236C5 /* OnboardingFeature.swift */; };
 		E6E7A2E30ED90CDEB11D9C79 /* RootStatusBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3602E82D1AA957F3DBC53EB5 /* RootStatusBanner.swift */; };
 		E853F5684632167738D06D19 /* SettingsNotificationsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC0E732B44B69678D9DFA62 /* SettingsNotificationsSectionView.swift */; };
+		E95175B26E563AB2B64F63B4 /* PricesMediumWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200C5166A30C94F4B9EAC771 /* PricesMediumWidgetView.swift */; };
 		EAA54D0786CB11AB8762B373 /* Issue5AcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD4ED9252AA55CABFF1E90B /* Issue5AcceptanceTests.swift */; };
 		EED5F452F96BA33B52E73AF8 /* Perception in Frameworks */ = {isa = PBXBuildFile; productRef = A766A56786864703170D8E16 /* Perception */; };
 		F02EB597525D2E87BB6DF231 /* PricesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DFEC270AECA2B51E278782 /* PricesView.swift */; };
@@ -87,6 +114,13 @@
 			remoteGlobalIDString = 46AA7BEDF322E624DE3D0B75;
 			remoteInfo = PrecioLuzApp;
 		};
+		CFBA056DE41A1098A0CD8944 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3C6A2D67EBB3CA36D5B7363B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6ED014006D81B918EC5261F9;
+			remoteInfo = PrecioLuzWidgetExtension;
+		};
 		EC84DC7AFEDEA1153E989889 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3C6A2D67EBB3CA36D5B7363B /* Project object */;
@@ -96,25 +130,47 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		9BDCE02AFE1F3BF097F08DAA /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				58081BCCC1EDD813714968C8 /* PrecioLuzWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		06C01278E60DB2DB16B036AF /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
-		07E8C05629B788AE315B0D11 /* PrecioLuzAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrecioLuzAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		07E8C05629B788AE315B0D11 /* PrecioLuzAppTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PrecioLuzAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A1DBD42E1BBDDF4FD2891FE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		0AFD7870047757AEF4C00429 /* assertIssue11Snapshot-of.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "assertIssue11Snapshot-of.1.png"; sourceTree = "<group>"; };
 		0BD95CAC54FDB663633913B0 /* PricesViewPreviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesViewPreviews.swift; sourceTree = "<group>"; };
+		0C0D158E595F3588D0627D03 /* pricesWidgetContent.pricesWidgetContent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pricesWidgetContent.pricesWidgetContent.png; sourceTree = "<group>"; };
 		0EC0E732B44B69678D9DFA62 /* SettingsNotificationsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNotificationsSectionView.swift; sourceTree = "<group>"; };
 		153BCC42D73BBD8DD5292357 /* NotificationSchedulingPlanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSchedulingPlanner.swift; sourceTree = "<group>"; };
 		1942F66E100388ADAE896898 /* CostCalculationFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostCalculationFeatureTests.swift; sourceTree = "<group>"; };
 		1A951194E5023185C583A951 /* PricesPresetCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesPresetCatalog.swift; sourceTree = "<group>"; };
 		1AFBD3F0A411469C167A5075 /* Issue11SnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue11SnapshotTests.swift; sourceTree = "<group>"; };
+		1C112DB6E3F9760A9907027C /* pricesWidgetEmpty.pricesWidgetEmptyDark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pricesWidgetEmpty.pricesWidgetEmptyDark.png; sourceTree = "<group>"; };
+		1F1F17A9AF8FC6FD51C25836 /* assertIssue11Snapshot-of.3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "assertIssue11Snapshot-of.3.png"; sourceTree = "<group>"; };
 		1FC5C7E5F151FC11C56A3D19 /* ChartFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartFeature.swift; sourceTree = "<group>"; };
+		200C5166A30C94F4B9EAC771 /* PricesMediumWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesMediumWidgetView.swift; sourceTree = "<group>"; };
 		2271894EDF7E0F475C376F87 /* DailyPricingSnapshotPipelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyPricingSnapshotPipelineTests.swift; sourceTree = "<group>"; };
+		23E3CFEB9A02BA9FA196BA42 /* assertIssue11Snapshot-of.2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "assertIssue11Snapshot-of.2.png"; sourceTree = "<group>"; };
 		276B03E4DEC212D3F4AC0C01 /* NotificationSchedulingPlannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSchedulingPlannerTests.swift; sourceTree = "<group>"; };
 		2770E992020BA0D8D63EE8EE /* PricesSummaryGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesSummaryGridView.swift; sourceTree = "<group>"; };
 		288DF63F4693A0161011B4A4 /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
 		293BA0BC87789BB4B9D3F603 /* AppShellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShellView.swift; sourceTree = "<group>"; };
+		29B57D29E42F0C0E044AFB2F /* PricesMediumWidgetMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesMediumWidgetMapper.swift; sourceTree = "<group>"; };
 		31365554D523EA674F4D99AE /* ChartEmptyStateCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartEmptyStateCardView.swift; sourceTree = "<group>"; };
 		34CF32CE8FA1797C28B789D1 /* PricesCalculationSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesCalculationSheetView.swift; sourceTree = "<group>"; };
 		3602E82D1AA957F3DBC53EB5 /* RootStatusBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootStatusBanner.swift; sourceTree = "<group>"; };
+		36755E9832F3CF2534ACF89A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		369D5D2B2592842B8DB7FF51 /* PricingClientRealAPIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingClientRealAPIIntegrationTests.swift; sourceTree = "<group>"; };
 		4C472C577421FFAA1639BEBF /* SettingsAlertsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAlertsSectionView.swift; sourceTree = "<group>"; };
 		4C9D7D9690BD42C457418C6A /* pricesContent.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pricesContent.1.png; sourceTree = "<group>"; };
@@ -127,22 +183,30 @@
 		5CD7FDA5CB1305816A882113 /* PricingClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingClient.swift; sourceTree = "<group>"; };
 		5DC366745B4F795FF348674C /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		5DD080326EEB140FEF131A0A /* rootStatusBannerStates.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rootStatusBannerStates.1.png; sourceTree = "<group>"; };
+		60D1A5BD0097FD6161A98830 /* onboardingScreens.light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onboardingScreens.light.png; sourceTree = "<group>"; };
 		613AC733428459896683DAAC /* ChartDaypartPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDaypartPickerView.swift; sourceTree = "<group>"; };
 		642F4C674FBA509E43E81971 /* ChartInspectionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartInspectionCardView.swift; sourceTree = "<group>"; };
+		64B84354C1AC5423D05E8FF1 /* onboardingScreens.dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = onboardingScreens.dark.png; sourceTree = "<group>"; };
 		6B40F464A61A16FC1C739606 /* REEPublicationWindowPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = REEPublicationWindowPolicy.swift; sourceTree = "<group>"; };
 		6C2478FDC49D5ABE5B80426C /* settingsStates.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settingsStates.1.png; sourceTree = "<group>"; };
-		7107E689FEBFDF0CE85B5766 /* PrecioLuzAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrecioLuzAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7107E689FEBFDF0CE85B5766 /* PrecioLuzAppUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PrecioLuzAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		72C7481B9BEBDEA97D125614 /* PricingClientESIOSLiveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingClientESIOSLiveTests.swift; sourceTree = "<group>"; };
-		741F0D1CD612C8F05168C6B2 /* PrecioLuzApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrecioLuzApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		741F0D1CD612C8F05168C6B2 /* PrecioLuzApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PrecioLuzApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75905F6274FE9F8BFD18AA70 /* DomainModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainModels.swift; sourceTree = "<group>"; };
+		79A1CB5ED2D8A36EE938B07D /* pricesWidgetEmpty.pricesWidgetEmpty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pricesWidgetEmpty.pricesWidgetEmpty.png; sourceTree = "<group>"; };
 		79A349F2AC054DD803DF26D6 /* PricesHourlyListSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesHourlyListSectionView.swift; sourceTree = "<group>"; };
 		7A0FD7C87035FCE9D4CF7334 /* SettingsDeniedPermissionsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDeniedPermissionsSectionView.swift; sourceTree = "<group>"; };
+		7C7C06BD7AB07B86579D1E81 /* emptyState.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emptyState.1.png; sourceTree = "<group>"; };
 		8560ED2DC8C618B58A3BF47D /* PersistenceClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceClient.swift; sourceTree = "<group>"; };
 		85CBEA5E1ECD0491F94E0DBA /* SettingsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFeature.swift; sourceTree = "<group>"; };
 		9011A556C752E49F174F0AFE /* PricesSummaryCardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesSummaryCardsView.swift; sourceTree = "<group>"; };
+		9244DF5E6676532B4A9C6B19 /* PrecioLuzWidgetExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = PrecioLuzWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		94E79B93ED4FC98239FF69C3 /* pricesWidgetContent.pricesWidgetContentDark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pricesWidgetContent.pricesWidgetContentDark.png; sourceTree = "<group>"; };
 		95FAC4E48967C45F18FCE092 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		9858A700E9F5FAA7978AC931 /* PricesMediumWidgetSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesMediumWidgetSnapshotTests.swift; sourceTree = "<group>"; };
 		98F488EF3222A15A96E4F3CF /* DateClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateClient.swift; sourceTree = "<group>"; };
 		9BF90B581C5E6E3990A2B4E7 /* REEPublicationWindowPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = REEPublicationWindowPolicyTests.swift; sourceTree = "<group>"; };
+		9CD98217A963810D2D4B2079 /* contentState.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = contentState.1.png; sourceTree = "<group>"; };
 		9DEBD7F1E386956FE512E3D6 /* NotificationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationClient.swift; sourceTree = "<group>"; };
 		9EA85C7AECFB312B3FB9D051 /* PrecioLuzAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrecioLuzAppApp.swift; sourceTree = "<group>"; };
 		9F4F1D582D8DBA50B34C8BD4 /* PricesFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesFeatureTests.swift; sourceTree = "<group>"; };
@@ -159,7 +223,11 @@
 		D675B31FFCC68F4491EA8A80 /* SettingsRowLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRowLabel.swift; sourceTree = "<group>"; };
 		D6D0097CAC5D657E7AA186A3 /* CostCalculationFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostCalculationFeature.swift; sourceTree = "<group>"; };
 		D9580A221A5C7CD6CCF6C022 /* ClientDependenciesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientDependenciesTests.swift; sourceTree = "<group>"; };
+		E5C3BE00B73A9FCDFB99A380 /* assertIssue11Snapshot-of.4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "assertIssue11Snapshot-of.4.png"; sourceTree = "<group>"; };
+		E8C3087DA58E84D8B52712AE /* PrecioLuzWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrecioLuzWidget.swift; sourceTree = "<group>"; };
 		EAD4ED9252AA55CABFF1E90B /* Issue5AcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue5AcceptanceTests.swift; sourceTree = "<group>"; };
+		EBD501B84EE324C5F847DCA5 /* PricingClient+Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PricingClient+Dependencies.swift"; sourceTree = "<group>"; };
+		EEF32FEBCE3F17C77BB17D95 /* PricesMediumWidgetMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesMediumWidgetMapperTests.swift; sourceTree = "<group>"; };
 		F2BBD1FCB478C16D91769556 /* DailyPricingSnapshotPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyPricingSnapshotPipeline.swift; sourceTree = "<group>"; };
 		F38B1972E86DEC1621A2B365 /* Issue10AcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue10AcceptanceTests.swift; sourceTree = "<group>"; };
 		F67521AA664F5FE9F1AC6AB8 /* TCASmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCASmokeTests.swift; sourceTree = "<group>"; };
@@ -212,6 +280,7 @@
 				741F0D1CD612C8F05168C6B2 /* PrecioLuzApp.app */,
 				07E8C05629B788AE315B0D11 /* PrecioLuzAppTests.xctest */,
 				7107E689FEBFDF0CE85B5766 /* PrecioLuzAppUITests.xctest */,
+				9244DF5E6676532B4A9C6B19 /* PrecioLuzWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -255,6 +324,7 @@
 				275054B9F4F96A724F4116AA /* Sources */,
 				DA6AA6158E4981E3EAB7B4E6 /* Tests */,
 				E6E387E6F326D92A38D89B39 /* UITests */,
+				DB667259240F34E7C4CBDA29 /* Widgets */,
 				1C019852C6CE9F0C775EB817 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -314,6 +384,24 @@
 			path = CostCalculationFeature;
 			sourceTree = "<group>";
 		};
+		8378ED475BD914DE3DDA8796 /* PricesMediumWidgetSnapshotTests */ = {
+			isa = PBXGroup;
+			children = (
+				9CD98217A963810D2D4B2079 /* contentState.1.png */,
+				7C7C06BD7AB07B86579D1E81 /* emptyState.1.png */,
+			);
+			path = PricesMediumWidgetSnapshotTests;
+			sourceTree = "<group>";
+		};
+		8EF25F6961BE6FFE67EA2F84 /* WidgetFeature */ = {
+			isa = PBXGroup;
+			children = (
+				29B57D29E42F0C0E044AFB2F /* PricesMediumWidgetMapper.swift */,
+				200C5166A30C94F4B9EAC771 /* PricesMediumWidgetView.swift */,
+			);
+			path = WidgetFeature;
+			sourceTree = "<group>";
+		};
 		957A69449152EB3F501EA7CB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -332,6 +420,7 @@
 				1942F66E100388ADAE896898 /* CostCalculationFeatureTests.swift */,
 				D27E52CE1906660020462FE9 /* OnboardingFeatureTests.swift */,
 				9F4F1D582D8DBA50B34C8BD4 /* PricesFeatureTests.swift */,
+				EEF32FEBCE3F17C77BB17D95 /* PricesMediumWidgetMapperTests.swift */,
 				5A1D1D0EBF01088EFBD9E3B7 /* SettingsFeatureTests.swift */,
 			);
 			path = Features;
@@ -341,6 +430,7 @@
 			isa = PBXGroup;
 			children = (
 				1AFBD3F0A411469C167A5075 /* Issue11SnapshotTests.swift */,
+				9858A700E9F5FAA7978AC931 /* PricesMediumWidgetSnapshotTests.swift */,
 				D2948BD684EF522BFD18BE0A /* __Snapshots__ */,
 			);
 			path = Snapshots;
@@ -349,7 +439,17 @@
 		B7D1C31CE1B62D3EBBF9308C /* Issue11SnapshotTests */ = {
 			isa = PBXGroup;
 			children = (
+				0AFD7870047757AEF4C00429 /* assertIssue11Snapshot-of.1.png */,
+				23E3CFEB9A02BA9FA196BA42 /* assertIssue11Snapshot-of.2.png */,
+				1F1F17A9AF8FC6FD51C25836 /* assertIssue11Snapshot-of.3.png */,
+				E5C3BE00B73A9FCDFB99A380 /* assertIssue11Snapshot-of.4.png */,
+				64B84354C1AC5423D05E8FF1 /* onboardingScreens.dark.png */,
+				60D1A5BD0097FD6161A98830 /* onboardingScreens.light.png */,
 				4C9D7D9690BD42C457418C6A /* pricesContent.1.png */,
+				0C0D158E595F3588D0627D03 /* pricesWidgetContent.pricesWidgetContent.png */,
+				94E79B93ED4FC98239FF69C3 /* pricesWidgetContent.pricesWidgetContentDark.png */,
+				79A1CB5ED2D8A36EE938B07D /* pricesWidgetEmpty.pricesWidgetEmpty.png */,
+				1C112DB6E3F9760A9907027C /* pricesWidgetEmpty.pricesWidgetEmptyDark.png */,
 				5DD080326EEB140FEF131A0A /* rootStatusBannerStates.1.png */,
 				6C2478FDC49D5ABE5B80426C /* settingsStates.1.png */,
 			);
@@ -363,6 +463,7 @@
 				9DEBD7F1E386956FE512E3D6 /* NotificationClient.swift */,
 				8560ED2DC8C618B58A3BF47D /* PersistenceClient.swift */,
 				5CD7FDA5CB1305816A882113 /* PricingClient.swift */,
+				EBD501B84EE324C5F847DCA5 /* PricingClient+Dependencies.swift */,
 			);
 			path = Clients;
 			sourceTree = "<group>";
@@ -376,6 +477,7 @@
 				34034A872DB9228AC77E85F5 /* OnboardingFeature */,
 				145FDD60AB67EA3614CCA713 /* PricesFeature */,
 				66119059AC9CAC55BF93D1D0 /* SettingsFeature */,
+				8EF25F6961BE6FFE67EA2F84 /* WidgetFeature */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -384,6 +486,7 @@
 			isa = PBXGroup;
 			children = (
 				B7D1C31CE1B62D3EBBF9308C /* Issue11SnapshotTests */,
+				8378ED475BD914DE3DDA8796 /* PricesMediumWidgetSnapshotTests */,
 			);
 			path = __Snapshots__;
 			sourceTree = "<group>";
@@ -399,6 +502,15 @@
 				A88712C2E29DD2BF1891CE90 /* Snapshots */,
 			);
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		DB667259240F34E7C4CBDA29 /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				36755E9832F3CF2534ACF89A /* Info.plist */,
+				E8C3087DA58E84D8B52712AE /* PrecioLuzWidget.swift */,
+			);
+			path = Widgets;
 			sourceTree = "<group>";
 		};
 		DFA86CDEA19410470D2D3172 /* Clients */ = {
@@ -483,11 +595,13 @@
 				E4CBDD10F852FD4BB575CBBA /* Sources */,
 				1C48F42CBC811F9433751DF5 /* Resources */,
 				557C490DCEE95B75D383FFA1 /* Frameworks */,
+				9BDCE02AFE1F3BF097F08DAA /* Embed Foundation Extensions */,
 				B7931ECBFAFE249B3DD828B9 /* Copy Local Debug Secrets */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				55AFBEE49EA0B67D2AF61141 /* PBXTargetDependency */,
 			);
 			name = PrecioLuzApp;
 			packageProductDependencies = (
@@ -500,6 +614,25 @@
 			productName = PrecioLuzApp;
 			productReference = 741F0D1CD612C8F05168C6B2 /* PrecioLuzApp.app */;
 			productType = "com.apple.product-type.application";
+		};
+		6ED014006D81B918EC5261F9 /* PrecioLuzWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BA53F5B7680F69B7FD4FB79A /* Build configuration list for PBXNativeTarget "PrecioLuzWidgetExtension" */;
+			buildPhases = (
+				795D8AB517859806926068B5 /* Sources */,
+				501FD8EBF5385D17967F83F6 /* Resources */,
+				88833009D8C28B6A638A4051 /* Copy Local Debug Secrets */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PrecioLuzWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = PrecioLuzWidgetExtension;
+			productReference = 9244DF5E6676532B4A9C6B19 /* PrecioLuzWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		7875C704CB96C4EF901A5325 /* PrecioLuzAppTests */ = {
 			isa = PBXNativeTarget;
@@ -530,12 +663,16 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 2640;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					32E35F92DD79330EC4DCEE4D = {
 						TestTargetID = 46AA7BEDF322E624DE3D0B75;
 					};
 					46AA7BEDF322E624DE3D0B75 = {
+						DevelopmentTeam = R55L2F35DV;
+						ProvisioningStyle = Automatic;
+					};
+					6ED014006D81B918EC5261F9 = {
 						DevelopmentTeam = R55L2F35DV;
 						ProvisioningStyle = Automatic;
 					};
@@ -566,6 +703,7 @@
 				46AA7BEDF322E624DE3D0B75 /* PrecioLuzApp */,
 				7875C704CB96C4EF901A5325 /* PrecioLuzAppTests */,
 				32E35F92DD79330EC4DCEE4D /* PrecioLuzAppUITests */,
+				6ED014006D81B918EC5261F9 /* PrecioLuzWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -581,11 +719,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		501FD8EBF5385D17967F83F6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05BE722B13DE21F81D6971CE /* Assets.xcassets in Resources */,
+				9C562B95321FA0BDCFA9906E /* LaunchScreen.storyboard in Resources */,
+				547F9BDBD4D0E87A0B2CC386 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6F0948408F49256FE37FCEDB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72CD1FB9DACA1870DBAC00C8 /* assertIssue11Snapshot-of.1.png in Resources */,
+				672E38D6AB00A3E9C8455ACD /* assertIssue11Snapshot-of.2.png in Resources */,
+				D3D7DADA4B38A2AA738AB80D /* assertIssue11Snapshot-of.3.png in Resources */,
+				90DA5485732BAF6CDEC8E667 /* assertIssue11Snapshot-of.4.png in Resources */,
+				13D06893845FDE23E9C38E59 /* contentState.1.png in Resources */,
+				36E667760CDE3B2AF2FB73EA /* emptyState.1.png in Resources */,
+				370F9A2A82C7EB72EE924590 /* onboardingScreens.dark.png in Resources */,
+				7033997E0C9BFD052B7F9C4F /* onboardingScreens.light.png in Resources */,
 				8BD5517225A03B27FCE93725 /* pricesContent.1.png in Resources */,
+				1C848093D6187BE2F10212E5 /* pricesWidgetContent.pricesWidgetContent.png in Resources */,
+				857B7D1018604267030D4F1C /* pricesWidgetContent.pricesWidgetContentDark.png in Resources */,
+				4EEF7C317BE3005C6791C72F /* pricesWidgetEmpty.pricesWidgetEmpty.png in Resources */,
+				95556E5DD99476C928D84993 /* pricesWidgetEmpty.pricesWidgetEmptyDark.png in Resources */,
 				F1211AA198CEF903AF41A094 /* rootStatusBannerStates.1.png in Resources */,
 				8167C1ACA3993C022E94ADF6 /* settingsStates.1.png in Resources */,
 			);
@@ -594,6 +754,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		88833009D8C28B6A638A4051 /* Copy Local Debug Secrets */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Local Debug Secrets";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/PrecioLuzLocal.env",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "LOCAL_ENV_FILE=\"${SRCROOT}/.env\"\nBUNDLED_ENV_FILE=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/PrecioLuzLocal.env\"\nrm -f \"$BUNDLED_ENV_FILE\"\n\nif [ \"$CONFIGURATION\" = \"Debug\" ] && [ -f \"$LOCAL_ENV_FILE\" ]; then\n  cp \"$LOCAL_ENV_FILE\" \"$BUNDLED_ENV_FILE\"\nfi\n";
+		};
 		B7931ECBFAFE249B3DD828B9 /* Copy Local Debug Secrets */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -616,6 +795,19 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		795D8AB517859806926068B5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C27BC48D55466940F869F76C /* DomainModels.swift in Sources */,
+				C7AAFC28F59E75125BB441A9 /* PrecioLuzWidget.swift in Sources */,
+				DABEE368CF1901AFFA359932 /* PricesMediumWidgetMapper.swift in Sources */,
+				E95175B26E563AB2B64F63B4 /* PricesMediumWidgetView.swift in Sources */,
+				D7FF159A099DA76FA3AA186E /* PricingClient.swift in Sources */,
+				27074DE99DBC9A72CBAA5090 /* REEPublicationWindowPolicy.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		85049A299160F6F99D4B4D39 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -643,17 +835,20 @@
 				FFD909BEA040F73D5FEDDC2D /* NotificationClient.swift in Sources */,
 				64480331687A48156A250C3C /* NotificationSchedulingPlanner.swift in Sources */,
 				E4F2107B9928272D482EFFB3 /* OnboardingFeature.swift in Sources */,
-				5F8A32B63C6125F188C8F88F /* OnboardingView.swift in Sources */,
+				1804AFE66A039B4FCEDA41BF /* OnboardingView.swift in Sources */,
 				0707733D9FC9E87DBB20DE2B /* PersistenceClient.swift in Sources */,
 				D4F2BDEAF0E519BD8DCB871B /* PrecioLuzAppApp.swift in Sources */,
 				593628AFC7B815D234E34500 /* PricesCalculationSheetView.swift in Sources */,
 				9B13DE84E95AAB6D55816805 /* PricesFeature.swift in Sources */,
 				9D1BFB5C87E001509F4A3B7E /* PricesHourlyListSectionView.swift in Sources */,
+				746681CD9AEE0635DC1CE511 /* PricesMediumWidgetMapper.swift in Sources */,
+				B89F86072C5F1E3BC3F5D4A4 /* PricesMediumWidgetView.swift in Sources */,
 				DB0C5DE8895671AA9ABA9506 /* PricesPresetCatalog.swift in Sources */,
 				E4D16D99F8ECC1CCCDBC5AF2 /* PricesSummaryCardsView.swift in Sources */,
 				D90EA5BE4B99C91A0F417B30 /* PricesSummaryGridView.swift in Sources */,
 				F02EB597525D2E87BB6DF231 /* PricesView.swift in Sources */,
 				12C86FE819461E72901F9029 /* PricesViewPreviews.swift in Sources */,
+				8D94D6685EF3ACB47B756A9D /* PricingClient+Dependencies.swift in Sources */,
 				324A8B65E4B3AE6929DAC3AF /* PricingClient.swift in Sources */,
 				E0F1828F94AE4466F24D1C38 /* REEPublicationWindowPolicy.swift in Sources */,
 				E6E7A2E30ED90CDEB11D9C79 /* RootStatusBanner.swift in Sources */,
@@ -686,6 +881,8 @@
 				D4CB180C3283A7E29F3AC3DD /* NotificationSchedulingPlannerTests.swift in Sources */,
 				285C101699D38BB90E3DE311 /* OnboardingFeatureTests.swift in Sources */,
 				2C7A88ECC9F97A3203DEB45D /* PricesFeatureTests.swift in Sources */,
+				2D4BCBF1834AFF59D48EDA81 /* PricesMediumWidgetMapperTests.swift in Sources */,
+				55287D5A2C01138829AE5E0B /* PricesMediumWidgetSnapshotTests.swift in Sources */,
 				897C53EF3046CAF8D5372B20 /* PricingClientESIOSLiveTests.swift in Sources */,
 				4EEE6FB604EC3E2E8F636CAC /* PricingClientRealAPIIntegrationTests.swift in Sources */,
 				A6DDCFCA4E538C5A139C6CE2 /* REEPublicationWindowPolicyTests.swift in Sources */,
@@ -697,6 +894,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		55AFBEE49EA0B67D2AF61141 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6ED014006D81B918EC5261F9 /* PrecioLuzWidgetExtension */;
+			targetProxy = CFBA056DE41A1098A0CD8944 /* PBXContainerItemProxy */;
+		};
 		7376B076ED30D0BAAB5B727E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 46AA7BEDF322E624DE3D0B75 /* PrecioLuzApp */;
@@ -743,7 +945,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = R55L2F35DV;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -751,7 +952,6 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.michelgoni.PrecioLuzAppUITests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = PrecioLuzApp;
@@ -775,11 +975,28 @@
 			};
 			name = Release;
 		};
+		68F0BE8AF2BDE26FA576FC36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R55L2F35DV;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.michelgoni.PrecioLuzApp.WidgetExtension;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		7A662013F017281E28CAA71B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -811,7 +1028,6 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = R55L2F35DV;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -827,7 +1043,6 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -839,7 +1054,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = R55L2F35DV;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -847,10 +1061,27 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.michelgoni.PrecioLuzAppUITests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = PrecioLuzApp;
+			};
+			name = Release;
+		};
+		97197AAA5C4F5777B68239E7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R55L2F35DV;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.michelgoni.PrecioLuzApp.WidgetExtension;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -861,6 +1092,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R55L2F35DV;
 				INFOPLIST_FILE = Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -877,7 +1109,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -909,7 +1140,6 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = R55L2F35DV;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -932,7 +1162,6 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -947,6 +1176,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R55L2F35DV;
 				INFOPLIST_FILE = Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -994,6 +1224,15 @@
 			buildConfigurations = (
 				FB06B89154F5636A17941736 /* Debug */,
 				A8D0CE691CED97227609137D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BA53F5B7680F69B7FD4FB79A /* Build configuration list for PBXNativeTarget "PrecioLuzWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				68F0BE8AF2BDE26FA576FC36 /* Debug */,
+				97197AAA5C4F5777B68239E7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

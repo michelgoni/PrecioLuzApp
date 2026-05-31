@@ -14,9 +14,14 @@ if rg -n "REE_API_KEY" PrecioLuzApp.xcodeproj/xcshareddata >/dev/null 2>&1; then
 fi
 
 # 2) Detect hardcoded REE_API_KEY assignments in tracked files.
-if git grep -nE 'REE_API_KEY[[:space:]]*=' -- . ':(exclude).env' ':(exclude).env.*' >/dev/null 2>&1; then
+leaks="$(
+  git grep -nE 'REE_API_KEY[[:space:]]*=' -- . ':(exclude).env' ':(exclude).env.*' \
+    | grep -v 'REE_API_KEY=your_local_token' \
+    || true
+)"
+if [[ -n "$leaks" ]]; then
   echo "ERROR: Hardcoded REE_API_KEY assignment found in tracked files."
-  git grep -nE 'REE_API_KEY[[:space:]]*=' -- . ':(exclude).env' ':(exclude).env.*' || true
+  echo "$leaks"
   exit 3
 fi
 

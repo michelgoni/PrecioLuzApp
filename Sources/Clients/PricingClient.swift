@@ -1,4 +1,3 @@
-import ComposableArchitecture
 import Foundation
 
 struct PricingClient: Sendable {
@@ -9,14 +8,6 @@ extension PricingClient {
   struct HourPrice: Equatable, Sendable {
     var date: Date
     var eurPerKWh: Double
-  }
-}
-
-extension PricingClient: DependencyKey {
-  static let liveValue = PricingClient.esiosLive()
-
-  static let testValue = PricingClient { day, timeZone in
-    StubPricingModel.makeDailyPrices(for: day, timeZone: timeZone)
   }
 }
 
@@ -259,7 +250,7 @@ private enum EsiosPricingAPI {
   }
 }
 
-private enum StubPricingModel {
+enum StubPricingModel {
   static let basePriceEURPerKWh = 0.10
   static let hourlyStepEURPerKWh = 0.005
   static let hourlyCount = 24
@@ -274,12 +265,5 @@ private enum StubPricingModel {
       let price = basePriceEURPerKWh + Double(hour) * hourlyStepEURPerKWh
       return PricingClient.HourPrice(date: hourDate, eurPerKWh: price)
     }
-  }
-}
-
-extension DependencyValues {
-  var pricingClient: PricingClient {
-    get { self[PricingClient.self] }
-    set { self[PricingClient.self] = newValue }
   }
 }

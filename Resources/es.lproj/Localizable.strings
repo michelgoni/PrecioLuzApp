@@ -111,3 +111,11 @@
 "tab.chart.title" = "Gráfica";
 "tab.prices.title" = "Precios";
 "tab.settings.title" = "Ajustes";
+"widget.medium.brand" = "PRECIOLUZ";
+"widget.medium.accessibility.bar.label" = "Nivel horario";
+"widget.medium.accessibility.chart.label" = "Evolución de precios";
+"widget.medium.accessibility.nextHour.label" = "Próxima hora";
+"widget.medium.empty.slot" = "Sin tramo";
+"widget.medium.empty.subtitle" = "Actualiza para ver el precio actual y las próximas horas.";
+"widget.medium.empty.timeWindow" = "SIN DATOS";
+"widget.medium.empty.title" = "Aún sin precios";

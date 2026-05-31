@@ -13,6 +13,10 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
 - Si la rama activa es `main`, ejecutar `git pull --ff-only origin main` antes de empezar.
 - Si la rama activa es una feature branch, ejecutar `git fetch origin` y comprobar que la base esperada existe y está alineada con `origin/main` antes de editar.
 - Si la sincronización falla (conflictos, red, permisos o historial no fast-forward), bloquear la implementación y no continuar sobre un estado desactualizado.
+- Aislamiento por feature (obligatorio):
+  - cuando la tarea corresponda a una feature distinta de la rama activa, crear/cambiar a una rama dedicada antes de editar (`codex/<feature-slug>` por defecto);
+  - no mezclar en una misma rama cambios de features no relacionadas;
+  - si hay duda de alcance, detener implementación y aclarar alcance antes de seguir editando.
 
 ## Disciplina de alcance
 - No modificar más de una capa técnica a la vez salvo petición explícita o necesidad directa de integración.
@@ -64,6 +68,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - evitar magic numbers en layout/estilo (`padding`, `spacing`, `cornerRadius`, tamaños) dentro de vistas;
   - definir constantes con intención semántica (por ejemplo `Layout.contentPadding`, `Layout.cardCornerRadius`) en el scope más cercano razonable;
   - cuando el patrón se repita entre pantallas, promover esos tokens a un módulo compartido de design system.
+  - en SwiftUI, preferir la sintaxis abreviada de color (`.white`, `.black`, `.yellow`, etc.) frente a `Color.white`/`Color.black` cuando el tipo ya se infiere por contexto.
 - Orden y consistencia (cuando aplique):
   - Ordenar alfabéticamente `import`s.
   - Ordenar alfabéticamente las propiedades en `struct`s y `class`es si no existe un orden semántico más claro.
@@ -150,7 +155,9 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - si no hay evidencia suficiente en salida de comandos, la respuesta obligatoria es `pendiente de verificar`, nunca una negación categórica.
 - Regla de cierre (bloqueante):
   - queda prohibido marcar una tarea como `validada`, `done` o equivalente sin ejecutar `xcodebuild ... test` del scheme principal y obtener resultado global en verde (0 fallos).
-  - ejecutar solo tests parciales (`-only-testing`) no autoriza el cierre de tarea; esos tests parciales solo complementan el diagnóstico.
+  - queda prohibido hacer commit o push de fixes de código sin una ejecución local completa de `xcodebuild ... test` del scheme principal posterior al último cambio de código.
+  - ejecutar solo tests parciales (`-only-testing`) no autoriza el cierre de tarea ni el commit/push; esos tests parciales solo complementan el diagnóstico previo a la suite completa.
+  - si el cambio responde a comentarios de PR, conflicto o CI rojo, repetir la suite completa aunque ya haya pasado una suite parcial o una validación anterior del mismo branch.
 - Destino de simulador por defecto (obligatorio):
   - usar `iPhone 17` como destino estándar en validaciones locales (`build`, `test`, `UI smoke`) mientras no se defina otro baseline de dispositivo en la documentación del proyecto;
   - no usar `iPhone 16` como destino por defecto;
@@ -251,6 +258,9 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - `UI smoke tests` cuando aplique por wiring/flujo visible;
   - evidencia visual versionada (screenshot o preview documentada con limitación explícita).
 - Antes de reportar un mini incremento como cerrado:
+  - ejecutar **todas** las suites del scheme principal con este comando:
+    - `xcodebuild -project PrecioLuzApp.xcodeproj -scheme PrecioLuzApp -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max' test`
+  - no dar por cerrado el mini incremento si solo han pasado suites parciales (`-only-testing`); el cierre exige `** TEST SUCCEEDED **` del comando anterior.
   - ejecutar validación final de compilación/tests después del último cambio aplicado;
   - incluir en el resumen el comando ejecutado y su resultado literal (`BUILD SUCCEEDED` o `TEST SUCCEEDED`);
   - si no hay resultado literal de éxito, el incremento no puede marcarse como terminado.
@@ -275,6 +285,7 @@ Este documento convierte el marco de `AGENTS.md` en comportamiento técnico conc
   - declarar una decisión explícita por comentario: `aplicar`, `aplicar con ajuste` o `no aplicar` con motivo técnico;
   - después de editar, listar de forma explícita qué se cambió (archivo y comportamiento afectado);
   - cerrar cada comentario con el estado de validación ejecutada (`build`, `lint`, `tests`, UI checks cuando aplique);
+  - si el comentario implica cambios de código, ejecutar la suite completa local del scheme principal antes de commitear o pushear el fix; los tests parciales solo sirven para diagnosticar el comentario, no para darlo por cerrado;
   - tras aplicar el fix, marcar el hilo como resuelto;
   - no dejar comentarios accionables sin respuesta ni hilos abiertos por omisión.
 - Si la `Pull Request` contiene código, el CI mínimo en `GitHub Actions` debe ejecutar al menos `build` y tests, y ambos deben estar en verde antes del merge.

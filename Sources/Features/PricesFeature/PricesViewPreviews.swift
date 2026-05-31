@@ -30,6 +30,22 @@ import SwiftUI
     )
 }
 
+#Preview("Prices widget content") {
+    PricesView(
+        onHourTapped: { _ in },
+        state: .previewWidgetContent
+    )
+    .preferredColorScheme(.dark)
+}
+
+#Preview("Prices widget empty") {
+    PricesView(
+        onHourTapped: { _ in },
+        state: .previewWidgetEmpty
+    )
+    .preferredColorScheme(.dark)
+}
+
 #Preview("Prices hourly only") {
     PricesView(
         onHourTapped: { _ in },
@@ -113,6 +129,14 @@ private extension PricesFeature.State {
         var state = previewContent
         state.summary = nil
         return state
+    }
+
+    static var previewWidgetContent: Self {
+        previewContent
+    }
+
+    static var previewWidgetEmpty: Self {
+        previewHourlyOnly
     }
 
     static var previewCalculationSheet: Self {
