@@ -9,7 +9,7 @@ struct PricesHourlyListSectionView: View {
     let currentDate: Date?
     let emptyMessage: LocalizedStringResource
     let entranceTrigger: Bool
-    let hourlyListPresentationMode: PricesFeature.State.HourlyListPresentationMode
+    let hourlyListPresentationMode: HourlyListPresentationMode
     let hourlyPrices: [HourlyPrice]
     let onHourTapped: (HourlyPrice) -> Void
 
@@ -17,7 +17,7 @@ struct PricesHourlyListSectionView: View {
         currentDate: Date?,
         emptyMessage: LocalizedStringResource = "prices.hourly.empty",
         entranceTrigger: Bool,
-        hourlyListPresentationMode: PricesFeature.State.HourlyListPresentationMode,
+        hourlyListPresentationMode: HourlyListPresentationMode,
         hourlyPrices: [HourlyPrice],
         onHourTapped: @escaping (HourlyPrice) -> Void
     ) {

@@ -7,7 +7,17 @@ struct PricesView: View {
     let state: PricesFeature.State
 
     var body: some View {
-        ScrollView {
+        TimelineView(.periodic(from: Date(), by: Constants.timelineRefreshInterval)) { context in
+            content(timelineDate: context.date)
+        }
+    }
+
+    private func content(timelineDate: Date) -> some View {
+        let calendar = Calendar.current
+        let presentationNow = state.presentationNow(timelineDate: timelineDate, calendar: calendar)
+        let presentationHourlyPrices = state.presentationVisibleHourlyPrices(now: timelineDate, calendar: calendar)
+
+        return ScrollView {
             VStack(alignment: .leading, spacing: PricesViewLayout.verticalSpacing) {
                 if state.isLoading {
                     PricesLoadingSkeletonView()
@@ -17,36 +27,12 @@ struct PricesView: View {
                         .transition(.opacity)
                 }
 
-                if !state.isLoading {
-                    PricesMediumWidgetView(model: mediumWidgetModel)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.top, PricesViewLayout.widgetTopPadding)
-                        .accessibilityElement(children: .contain)
-                        .accessibilityIdentifier("pricesMediumWidgetContainer")
-                        .transition(.opacity.combined(with: .move(edge: .top)))
-
-                    if let summary = state.summary {
-                        PricesSummaryCardsView(
-                            entranceTrigger: contentEntranceTriggered,
-                            summary: summary
-                        )
-                    } else {
-                        noSummaryView
-                    }
-
-                    PricesHourlyListSectionView(
-                        currentDate: state.summary?.current?.date,
-                        emptyMessage: state.hourlyPrices.isEmpty
-                            ? "prices.hourly.empty"
-                            : "prices.hourly.noRemainingToday",
-                        entranceTrigger: contentEntranceTriggered,
-                        hourlyListPresentationMode: state.hourlyListPresentationMode,
-                        hourlyPrices: state.visibleHourlyPrices,
-                        onHourTapped: onHourTapped
-                    )
-                    .padding(.top, PricesViewLayout.sectionSpacing)
-                    .transition(.opacity.combined(with: .move(edge: .bottom)))
-                }
+                loadedContent(
+                    calendar: calendar,
+                    hourlyPrices: presentationHourlyPrices,
+                    now: presentationNow,
+                    timelineDate: timelineDate
+                )
             }
             .padding(PricesViewLayout.contentPadding)
         }
@@ -85,13 +71,60 @@ struct PricesView: View {
             .accessibilityIdentifier("pricesSummaryEmpty")
     }
 
-    private var mediumWidgetModel: PricesMediumWidgetPresentationModel {
-        let fallbackNow = state.hourlyPrices.first?.date ?? Date()
-        return PricesMediumWidgetMapper.makeModel(
+    @ViewBuilder
+    private func loadedContent(
+        calendar: Calendar,
+        hourlyPrices: [HourlyPrice],
+        now: Date,
+        timelineDate: Date
+    ) -> some View {
+        if !state.isLoading {
+            PricesMediumWidgetView(model: mediumWidgetModel(now: now, calendar: calendar))
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.top, PricesViewLayout.widgetTopPadding)
+                .accessibilityElement(children: .contain)
+                .accessibilityIdentifier("pricesMediumWidgetContainer")
+                .transition(.opacity.combined(with: .move(edge: .top)))
+
+            summaryContent
+
+            PricesHourlyListSectionView(
+                currentDate: state.presentationCurrentHourDate(now: timelineDate, calendar: calendar),
+                emptyMessage: state.hourlyPrices.isEmpty
+                    ? "prices.hourly.empty"
+                    : "prices.hourly.noRemainingToday",
+                entranceTrigger: contentEntranceTriggered,
+                hourlyListPresentationMode: state.hourlyListPresentationMode,
+                hourlyPrices: hourlyPrices,
+                onHourTapped: onHourTapped
+            )
+            .padding(.top, PricesViewLayout.sectionSpacing)
+            .transition(.opacity.combined(with: .move(edge: .bottom)))
+        }
+    }
+
+    private func mediumWidgetModel(now: Date, calendar: Calendar) -> PricesMediumWidgetPresentationModel {
+        PricesMediumWidgetMapper.makeModel(
             from: state.hourlyPrices,
-            now: state.summary?.current?.date ?? fallbackNow,
-            calendar: .current
+            now: now,
+            calendar: calendar
         )
+    }
+
+    private enum Constants {
+        static let timelineRefreshInterval: TimeInterval = 60
+    }
+
+    @ViewBuilder
+    private var summaryContent: some View {
+        if let summary = state.summary {
+            PricesSummaryCardsView(
+                entranceTrigger: contentEntranceTriggered,
+                summary: summary
+            )
+        } else {
+            noSummaryView
+        }
     }
 }
 

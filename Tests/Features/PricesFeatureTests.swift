@@ -169,6 +169,37 @@ struct PricesFeatureTests {
         }
     }
 
+    @Test("PricesFeature presentation hides past hours when current hour advances")
+    func presentationVisibleHoursFollowTimelineDate() {
+        let payload = DailyPricingSnapshotPayload.dayValue
+        var state = PricesFeature.State()
+        state.hourlyPrices = payload.hourlyPrices
+        state.visibleHourlyPrices = Array(payload.hourlyPrices[10...23])
+        let calendar = Calendar(identifier: .gregorian)
+        let now = payload.dayStart.addingTimeInterval((11 * 3_600) + 1_200)
+
+        let visiblePrices = state.presentationVisibleHourlyPrices(now: now, calendar: calendar)
+
+        #expect(visiblePrices == Array(payload.hourlyPrices[11...23]))
+        #expect(state.presentationCurrentHourDate(now: now, calendar: calendar) == payload.hourlyPrices[11].date)
+    }
+
+    @Test("PricesFeature presentation keeps stored visible hours for off-day fixtures")
+    func presentationVisibleHoursFallbackForOffDayFixtures() {
+        let payload = DailyPricingSnapshotPayload.dayValue
+        var state = PricesFeature.State()
+        state.hourlyPrices = payload.hourlyPrices
+        state.visibleHourlyPrices = Array(payload.hourlyPrices[10...23])
+        let calendar = Calendar(identifier: .gregorian)
+        let offDayNow = payload.dayStart.addingTimeInterval(48 * 3_600)
+
+        let presentationNow = state.presentationNow(timelineDate: offDayNow, calendar: calendar)
+        let visiblePrices = state.presentationVisibleHourlyPrices(now: offDayNow, calendar: calendar)
+
+        #expect(presentationNow == payload.hourlyPrices.first?.date)
+        #expect(visiblePrices == state.visibleHourlyPrices)
+    }
+
 }
 
 private extension DailyPricingSnapshotPayload {
