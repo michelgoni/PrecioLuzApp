@@ -72,16 +72,10 @@ extension PricesFeature.State {
     }
 
     func presentationNow(timelineDate: Date, calendar: Calendar) -> Date {
-        guard hasPrices(forSameDayAs: timelineDate, calendar: calendar) else {
-            return summary?.current?.date ?? hourlyPrices.first?.date ?? timelineDate
-        }
         return timelineDate
     }
 
     func presentationVisibleHourlyPrices(now: Date, calendar: Calendar) -> [HourlyPrice] {
-        guard hasPrices(forSameDayAs: now, calendar: calendar) else {
-            return visibleHourlyPrices
-        }
         let currentHourStart = calendar.dateInterval(of: .hour, for: now)?.start ?? now
         return hourlyPrices.filter { $0.date >= currentHourStart }
     }
@@ -89,10 +83,6 @@ extension PricesFeature.State {
     mutating func refreshVisibleHours(now: Date, calendar: Calendar) {
         let currentHourStart = calendar.dateInterval(of: .hour, for: now)?.start ?? now
         visibleHourlyPrices = hourlyPrices.filter { $0.date >= currentHourStart }
-    }
-
-    private func hasPrices(forSameDayAs date: Date, calendar: Calendar) -> Bool {
-        hourlyPrices.contains { calendar.isDate($0.date, inSameDayAs: date) }
     }
 
     private mutating func reconcileSelectedHour() {

@@ -5,10 +5,26 @@ struct PricesView: View {
 
     let onHourTapped: (HourlyPrice) -> Void
     let state: PricesFeature.State
+    let timelineDateOverride: Date?
 
+    init(
+        onHourTapped: @escaping (HourlyPrice) -> Void,
+        state: PricesFeature.State,
+        timelineDateOverride: Date? = nil
+    ) {
+        self.onHourTapped = onHourTapped
+        self.state = state
+        self.timelineDateOverride = timelineDateOverride
+    }
+
+    @ViewBuilder
     var body: some View {
-        TimelineView(.periodic(from: Date(), by: Constants.timelineRefreshInterval)) { context in
-            content(timelineDate: context.date)
+        if let timelineDateOverride {
+            content(timelineDate: timelineDateOverride)
+        } else {
+            TimelineView(.periodic(from: Date(), by: Constants.timelineRefreshInterval)) { context in
+                content(timelineDate: context.date)
+            }
         }
     }
 

@@ -184,8 +184,8 @@ struct PricesFeatureTests {
         #expect(state.presentationCurrentHourDate(now: now, calendar: calendar) == payload.hourlyPrices[11].date)
     }
 
-    @Test("PricesFeature presentation keeps stored visible hours for off-day fixtures")
-    func presentationVisibleHoursFallbackForOffDayFixtures() {
+    @Test("PricesFeature presentation hides stale off-day hours")
+    func presentationVisibleHoursHideStaleOffDayHours() {
         let payload = DailyPricingSnapshotPayload.dayValue
         var state = PricesFeature.State()
         state.hourlyPrices = payload.hourlyPrices
@@ -196,8 +196,8 @@ struct PricesFeatureTests {
         let presentationNow = state.presentationNow(timelineDate: offDayNow, calendar: calendar)
         let visiblePrices = state.presentationVisibleHourlyPrices(now: offDayNow, calendar: calendar)
 
-        #expect(presentationNow == payload.hourlyPrices.first?.date)
-        #expect(visiblePrices == state.visibleHourlyPrices)
+        #expect(presentationNow == offDayNow)
+        #expect(visiblePrices.isEmpty)
     }
 
 }
