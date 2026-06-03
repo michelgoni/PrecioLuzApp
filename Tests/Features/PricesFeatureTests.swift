@@ -184,6 +184,23 @@ struct PricesFeatureTests {
         #expect(state.presentationCurrentHourDate(now: now, calendar: calendar) == payload.hourlyPrices[11].date)
     }
 
+    @Test("PricesFeature presentation summary follows timeline date")
+    func presentationSummaryFollowsTimelineDate() {
+        let payload = DailyPricingSnapshotPayload.dayValue
+        var state = PricesFeature.State()
+        state.hourlyPrices = payload.hourlyPrices
+        state.summary = payload.summary
+        let calendar = Calendar(identifier: .gregorian)
+        let now = payload.dayStart.addingTimeInterval((11 * 3_600) + 1_200)
+
+        let summary = state.presentationSummary(now: now, calendar: calendar)
+
+        #expect(summary?.current == payload.hourlyPrices[11])
+        #expect(summary?.average == payload.summary?.average)
+        #expect(summary?.maximum == payload.summary?.maximum)
+        #expect(summary?.minimum == payload.summary?.minimum)
+    }
+
     @Test("PricesFeature presentation hides stale off-day hours")
     func presentationVisibleHoursHideStaleOffDayHours() {
         let payload = DailyPricingSnapshotPayload.dayValue

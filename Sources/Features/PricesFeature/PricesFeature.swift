@@ -71,6 +71,12 @@ extension PricesFeature.State {
         hourlyPrices.first { calendar.isDate($0.date, equalTo: now, toGranularity: .hour) }?.date
     }
 
+    func presentationSummary(now: Date, calendar: Calendar) -> PriceSummary? {
+        guard var summary else { return nil }
+        summary.current = hourlyPrices.first { $0.isSameHour(as: now, calendar: calendar) }
+        return summary
+    }
+
     func presentationNow(timelineDate: Date, calendar: Calendar) -> Date {
         return timelineDate
     }

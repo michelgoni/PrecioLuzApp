@@ -102,7 +102,7 @@ struct PricesView: View {
                 .accessibilityIdentifier("pricesMediumWidgetContainer")
                 .transition(.opacity.combined(with: .move(edge: .top)))
 
-            summaryContent
+            summaryContent(now: now, calendar: calendar)
 
             PricesHourlyListSectionView(
                 currentDate: state.presentationCurrentHourDate(now: timelineDate, calendar: calendar),
@@ -132,8 +132,8 @@ struct PricesView: View {
     }
 
     @ViewBuilder
-    private var summaryContent: some View {
-        if let summary = state.summary {
+    private func summaryContent(now: Date, calendar: Calendar) -> some View {
+        if let summary = state.presentationSummary(now: now, calendar: calendar) {
             PricesSummaryCardsView(
                 entranceTrigger: contentEntranceTriggered,
                 summary: summary
