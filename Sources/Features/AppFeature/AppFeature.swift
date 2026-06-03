@@ -99,7 +99,10 @@ struct AppFeature: Reducer {
         Reduce { state, action in
             switch action {
             case .appDidBecomeActive:
-                return loadNotificationAuthorizationStatusEffect()
+                return .merge(
+                    loadNotificationAuthorizationStatusEffect(),
+                    loadSnapshotEffect()
+                )
 
             case let .chart(chartAction):
                 applyChartAction(chartAction, to: &state.chart)
