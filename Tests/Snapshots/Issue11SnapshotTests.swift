@@ -40,7 +40,8 @@ struct Issue11SnapshotTests {
         }
         let view = PricesView(
             onHourTapped: { _ in },
-            state: .snapshotContent
+            state: .snapshotContent,
+            timelineDateOverride: .issue11SnapshotTimelineDate
         )
 
         assertIssue11Snapshot(of: applySnapshotEnvironment(to: view))
@@ -53,7 +54,8 @@ struct Issue11SnapshotTests {
         }
         let view = PricesView(
             onHourTapped: { _ in },
-            state: .snapshotWidgetContent
+            state: .snapshotWidgetContent,
+            timelineDateOverride: .issue11SnapshotTimelineDate
         )
 
         assertIssue11Snapshot(
@@ -74,7 +76,8 @@ struct Issue11SnapshotTests {
         }
         let view = PricesView(
             onHourTapped: { _ in },
-            state: .snapshotWidgetEmpty
+            state: .snapshotWidgetEmpty,
+            timelineDateOverride: .issue11SnapshotTimelineDate
         )
 
         assertIssue11Snapshot(
@@ -212,6 +215,10 @@ struct Issue11SnapshotTests {
             assertion()
         }
     }
+}
+
+private extension Date {
+    static let issue11SnapshotTimelineDate = Date(timeIntervalSince1970: 1_700_003_600)
 }
 
 private extension PricesFeature.State {

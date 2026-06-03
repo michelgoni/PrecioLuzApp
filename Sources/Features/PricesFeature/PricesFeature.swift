@@ -1,14 +1,14 @@
 import ComposableArchitecture
 import Foundation
 
+enum HourlyListPresentationMode: String, CaseIterable, Equatable {
+    case flatWithAvailabilityNotice
+    case withDateHeaders
+}
+
 struct PricesFeature: Reducer {
     @ObservableState
     struct State: Equatable {
-        enum HourlyListPresentationMode: String, CaseIterable, Equatable {
-            case flatWithAvailabilityNotice
-            case withDateHeaders
-        }
-
         var costCalculation = CostCalculationFeature.State()
         var hourlyListPresentationMode: HourlyListPresentationMode = .withDateHeaders
         var hourlyPrices: [HourlyPrice] = []
@@ -65,6 +65,25 @@ extension PricesFeature.State {
 
     func isVisibleHour(_ hour: HourlyPrice) -> Bool {
         visibleHourlyPrices.contains { $0.date == hour.date }
+    }
+
+    func presentationCurrentHourDate(now: Date, calendar: Calendar) -> Date? {
+        hourlyPrices.first { calendar.isDate($0.date, equalTo: now, toGranularity: .hour) }?.date
+    }
+
+    func presentationSummary(now: Date, calendar: Calendar) -> PriceSummary? {
+        guard var summary else { return nil }
+        summary.current = hourlyPrices.first { $0.isSameHour(as: now, calendar: calendar) }
+        return summary
+    }
+
+    func presentationNow(timelineDate: Date, calendar: Calendar) -> Date {
+        return timelineDate
+    }
+
+    func presentationVisibleHourlyPrices(now: Date, calendar: Calendar) -> [HourlyPrice] {
+        let currentHourStart = calendar.dateInterval(of: .hour, for: now)?.start ?? now
+        return hourlyPrices.filter { $0.date >= currentHourStart }
     }
 
     mutating func refreshVisibleHours(now: Date, calendar: Calendar) {

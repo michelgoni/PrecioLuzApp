@@ -169,6 +169,54 @@ struct PricesFeatureTests {
         }
     }
 
+    @Test("PricesFeature presentation hides past hours when current hour advances")
+    func presentationVisibleHoursFollowTimelineDate() {
+        let payload = DailyPricingSnapshotPayload.dayValue
+        var state = PricesFeature.State()
+        state.hourlyPrices = payload.hourlyPrices
+        state.visibleHourlyPrices = Array(payload.hourlyPrices[10...23])
+        let calendar = Calendar(identifier: .gregorian)
+        let now = payload.dayStart.addingTimeInterval((11 * 3_600) + 1_200)
+
+        let visiblePrices = state.presentationVisibleHourlyPrices(now: now, calendar: calendar)
+
+        #expect(visiblePrices == Array(payload.hourlyPrices[11...23]))
+        #expect(state.presentationCurrentHourDate(now: now, calendar: calendar) == payload.hourlyPrices[11].date)
+    }
+
+    @Test("PricesFeature presentation summary follows timeline date")
+    func presentationSummaryFollowsTimelineDate() {
+        let payload = DailyPricingSnapshotPayload.dayValue
+        var state = PricesFeature.State()
+        state.hourlyPrices = payload.hourlyPrices
+        state.summary = payload.summary
+        let calendar = Calendar(identifier: .gregorian)
+        let now = payload.dayStart.addingTimeInterval((11 * 3_600) + 1_200)
+
+        let summary = state.presentationSummary(now: now, calendar: calendar)
+
+        #expect(summary?.current == payload.hourlyPrices[11])
+        #expect(summary?.average == payload.summary?.average)
+        #expect(summary?.maximum == payload.summary?.maximum)
+        #expect(summary?.minimum == payload.summary?.minimum)
+    }
+
+    @Test("PricesFeature presentation hides stale off-day hours")
+    func presentationVisibleHoursHideStaleOffDayHours() {
+        let payload = DailyPricingSnapshotPayload.dayValue
+        var state = PricesFeature.State()
+        state.hourlyPrices = payload.hourlyPrices
+        state.visibleHourlyPrices = Array(payload.hourlyPrices[10...23])
+        let calendar = Calendar(identifier: .gregorian)
+        let offDayNow = payload.dayStart.addingTimeInterval(48 * 3_600)
+
+        let presentationNow = state.presentationNow(timelineDate: offDayNow, calendar: calendar)
+        let visiblePrices = state.presentationVisibleHourlyPrices(now: offDayNow, calendar: calendar)
+
+        #expect(presentationNow == offDayNow)
+        #expect(visiblePrices.isEmpty)
+    }
+
 }
 
 private extension DailyPricingSnapshotPayload {

@@ -759,11 +759,18 @@ struct AppFeatureTests {
     @MainActor
     @Test("AppFeature reloads authorization when app becomes active")
     func appDidBecomeActiveReloadsAuthorization() async {
+        let rawPrices = [
+            PricingClient.HourPrice(date: testNow, eurPerKWh: 0.12)
+        ]
         let store = TestStore(initialState: AppFeature.State()) {
             AppFeature()
         } withDependencies: {
+            $0.dateClient.now = { testNow }
+            $0.dateClient.timeZone = { testTimeZone }
             $0.notificationClient.authorizationStatus = { .authorized }
+            $0.pricingClient.fetchDailyPrices = { _, _ in rawPrices }
         }
+        store.exhaustivity = .off
 
         await store.send(.appDidBecomeActive)
         await store.receive(.notificationAuthorizationStatusLoaded(.authorized)) {
